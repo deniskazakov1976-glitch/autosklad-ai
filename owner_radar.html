@@ -40,26 +40,29 @@
           <h1 class="text-sm sm:text-base font-extrabold text-white">«Радар Собственника»: Еженедельный контроль и анти-откат</h1>
         </div>
       </div>
-
-      <div class="flex items-center gap-2 text-xs">
-        <span class="inline-flex items-center gap-1.5 bg-slate-900 border border-slate-800 text-slate-300 px-3 py-1 rounded-full font-bold">
-          <span>👤 Собственник:</span>
-          <b class="text-white">Вячеслав Юрьевич</b>
+      <div class="flex items-center gap-3">
+        <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 live-pulse"></span>
+          Период: 10.11 – 17.11 (7 дней)
         </span>
-        <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 px-3 py-1 rounded-full font-semibold transition flex items-center gap-1">
-          <span>🖨️</span> Печать отчета
+        <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-xl border border-slate-700 text-xs font-bold transition flex items-center gap-1">
+          <span>🖨️</span> Распечатать сводку
         </button>
       </div>
     </div>
   </header>
 
-  <!-- ОСНОВНОЙ КОНТЕНТ: ДВЕ КОЛОНКИ -->
-  <main class="flex-1 max-w-7xl w-full mx-auto p-4 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+  <!-- ГЛАВНЫЙ КОНТЕЙНЕР ДВУХ ОКОН -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-    <!-- ЛЕВАЯ КОЛОНКА: СМАРТФОН ВЯЧЕСЛАВА ЮРЬЕВИЧА (TELEGRAM-БОТ) (col-span-5) -->
-    <div class="lg:col-span-5 flex flex-col items-center no-print">
-      
-      <!-- РАМКА СМАРТФОНА -->
+    <!-- ЛЕВАЯ КОЛОНКА: СМАРТФОН ДИРЕКТОРА (col-span-5) -->
+    <div class="lg:col-span-5 flex flex-col items-center">
+      <div class="text-xs font-extrabold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+        <span>📱 Экран телефона директора</span>
+        <span class="text-sky-400 font-normal lowercase">(понедельник, 09:00)</span>
+      </div>
+
+      <!-- МОК-АП СМАРТФОНА (IPHONE FRAME) -->
       <div class="w-full max-w-sm bg-slate-950 border-[6px] border-slate-800 rounded-[42px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col h-[760px] relative">
         
         <!-- СТАТУС БАР ТЕЛЕФОНА -->
@@ -119,12 +122,14 @@
               <div class="bg-emerald-950/40 border border-emerald-800/40 p-2 rounded-xl">
                 <div class="text-emerald-400 font-extrabold flex items-center justify-between text-[11px]">
                   <span>💰 1. Разморожено кэша (Авито/Дром):</span>
-                  <span class="text-xs font-black mono text-emerald-300">+240 800 ₽</span>
+                  <span class="text-xs font-black mono text-emerald-300">+193 800 ₽</span>
                 </div>
                 <div class="text-[10px] text-slate-300 mt-1 space-y-0.5">
-                  <div>• КПП ГАЗ-3309 дизель: <b>1 шт. (+92 000 ₽)</b></div>
-                  <div>• Блок цилиндров ЗМЗ-405: <b>1 шт. (+68 000 ₽)</b></div>
-                  <div>• Вал коленчатый 4216: <b>1 шт. (+34 000 ₽)</b></div>
+                  <div>• КПП ГАЗ-3309 дизель 5-ст: <b>1 шт. (+92 000 ₽)</b></div>
+                  <div>• Раздатка УАЗ Хантер: <b>1 шт. (+47 000 ₽)</b></div>
+                  <div>• Редуктор моста 3302 ГП 8х41: <b>1 шт. (+28 500 ₽)</b></div>
+                  <div>• Рессоры Чусовая 5-лист: <b>2 шт. (+15 800 ₽)</b></div>
+                  <div>• Картер сцепления УАЗ Патриот: <b>1 шт. (+10 500 ₽)</b></div>
                 </div>
               </div>
 
@@ -132,12 +137,12 @@
               <div class="bg-red-950/40 border border-red-800/40 p-2 rounded-xl">
                 <div class="text-red-400 font-extrabold flex items-center justify-between text-[11px]">
                   <span>🚨 2. Претензии к закупщику:</span>
-                  <span class="text-xs font-black mono text-red-300">-103 000 ₽</span>
+                  <span class="text-xs font-black mono text-red-300">-42 100 ₽</span>
                 </div>
                 <div class="text-[10px] text-slate-300 mt-1 space-y-0.5">
-                  <div>⚠️ Редуктор 3302 (ГП 8х41): <b>+2 шт.</b> (запас на 24 мес!)</div>
-                  <div>⚠️ Балка Соболь: <b>+2 шт.</b> (запас на 20 мес!)</div>
-                  <div>⚠️ Фонарь Next борт: <b>+10 шт.</b> (запас на 64 мес!)</div>
+                  <div>⚠️ Радиатор медный 3302 (дубль): <b>+2 шт. (-22 500 ₽)</b></div>
+                  <div>⚠️ Фонари Next борт (00-003010): <b>+4 шт. (-10 000 ₽)</b></div>
+                  <div>⚠️ Насос ГУР 4216 (пустой дубль): <b>+2 шт. (-9 600 ₽)</b></div>
                 </div>
               </div>
 
@@ -145,7 +150,7 @@
               <div class="bg-amber-950/40 border border-amber-800/40 p-2 rounded-xl">
                 <div class="text-amber-400 font-extrabold flex items-center justify-between text-[11px]">
                   <span>📉 3. Проспанный дефицит:</span>
-                  <span class="text-xs font-black mono text-amber-300">47 722 ₽/мес риск</span>
+                  <span class="text-xs font-black mono text-amber-300">50 616 ₽/мес риск</span>
                 </div>
                 <div class="text-[10px] text-slate-300 mt-1 space-y-0.5">
                   <div>❌ Стартер редукторный КЗАТЭ: <b>остаток 0 шт.</b></div>
@@ -168,13 +173,13 @@
               <!-- ИТОГОВЫЙ БАЛАНС -->
               <div class="pt-1.5 border-t border-slate-800 flex items-center justify-between font-bold text-xs">
                 <span>Итоговый баланс недели:</span>
-                <span class="text-emerald-400 font-black mono text-sm">+153 450 ₽</span>
+                <span class="text-emerald-400 font-black mono text-sm">+167 350 ₽</span>
               </div>
 
               <!-- ИНТЕРАКТИВНЫЕ КНОПКИ В TELEGRAM -->
               <div class="pt-2 border-t border-slate-800 space-y-1.5">
                 <button onclick="handleBotAction('block_order')" class="w-full bg-red-950/80 hover:bg-red-900 border border-red-700/60 text-red-200 font-bold py-1.5 px-2 rounded-lg text-[10px] flex items-center justify-center gap-1.5 transition">
-                  <span>🚫</span> Заблокировать лишний заказ закупщика
+                  <span>🚫</span> Заблокировать лишний заказ закупщика (42 100 ₽)
                 </button>
                 <button onclick="handleBotAction('send_deficit')" class="w-full bg-amber-950/80 hover:bg-amber-900 border border-amber-700/60 text-amber-200 font-bold py-1.5 px-2 rounded-lg text-[10px] flex items-center justify-center gap-1.5 transition">
                   <span>📋</span> Отправить список дефицита на дозаказ
@@ -211,18 +216,18 @@
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div class="bg-slate-950 border border-emerald-500/40 p-3.5 rounded-2xl shadow">
           <div class="text-[10px] font-bold text-slate-400 uppercase">Разморожено кэша</div>
-          <div class="text-lg font-black text-emerald-400 mono mt-1">+240 800 ₽</div>
-          <div class="text-[10px] text-slate-400 mt-0.5">6 позиций с Авито</div>
+          <div class="text-lg font-black text-emerald-400 mono mt-1">+193 800 ₽</div>
+          <div class="text-[10px] text-slate-400 mt-0.5">5 позиций с Авито/Дром</div>
         </div>
         <div class="bg-slate-950 border border-red-500/40 p-3.5 rounded-2xl shadow">
           <div class="text-[10px] font-bold text-slate-400 uppercase">Ошибки закупщика</div>
-          <div class="text-lg font-black text-red-400 mono mt-1">-103 000 ₽</div>
-          <div class="text-[10px] text-slate-400 mt-0.5">3 аномальных заказа</div>
+          <div class="text-lg font-black text-red-400 mono mt-1">-42 100 ₽</div>
+          <div class="text-[10px] text-slate-400 mt-0.5">3 заказа по дублям</div>
         </div>
         <div class="bg-slate-950 border border-amber-500/40 p-3.5 rounded-2xl shadow">
           <div class="text-[10px] font-bold text-slate-400 uppercase">Риск дефицита</div>
-          <div class="text-lg font-black text-amber-400 mono mt-1">47 722 ₽/мес</div>
-          <div class="text-[10px] text-slate-400 mt-0.5">4 ходовых товара в 0</div>
+          <div class="text-lg font-black text-amber-400 mono mt-1">50 616 ₽/мес</div>
+          <div class="text-[10px] text-slate-400 mt-0.5">3 ходовых товара в 0</div>
         </div>
         <div class="bg-slate-950 border border-purple-500/40 p-3.5 rounded-2xl shadow">
           <div class="text-[10px] font-bold text-slate-400 uppercase">Ночной ИИ-бот</div>
@@ -247,13 +252,13 @@
         <!-- ВКЛАДКИ -->
         <div class="flex gap-2 border-b border-slate-800/80 pb-2 overflow-x-auto text-xs no-print">
           <button onclick="switchTab('unfrozen')" id="tabBtn-unfrozen" class="tab-btn px-3 py-1.5 rounded-xl font-bold transition bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-            💰 Проданный неликвид (6)
+            💰 Проданный неликвид (5)
           </button>
           <button onclick="switchTab('overbuy')" id="tabBtn-overbuy" class="tab-btn px-3 py-1.5 rounded-xl font-bold transition bg-slate-900 text-slate-400 border border-slate-800">
             🚨 Ошибки закупщика (3)
           </button>
           <button onclick="switchTab('deficits')" id="tabBtn-deficits" class="tab-btn px-3 py-1.5 rounded-xl font-bold transition bg-slate-900 text-slate-400 border border-slate-800">
-            📉 Проспанный дефицит (4)
+            📉 Проспанный дефицит (3)
           </button>
           <button onclick="switchTab('reservations')" id="tabBtn-reservations" class="tab-btn px-3 py-1.5 rounded-xl font-bold transition bg-slate-900 text-slate-400 border border-slate-800">
             🤖 Ночные брони (3)
@@ -263,7 +268,7 @@
         <!-- ТАБЛИЦА 1: ПРОДАННЫЙ НЕЛИКВИД -->
         <div id="tabContent-unfrozen" class="space-y-2 text-xs">
           <div class="text-[11px] text-slate-400 mb-2">
-            Позиции, которые лежали без движения более 200 дней и были успешно проданы после выгрузки на Авито и Дром:
+            Позиции, которые лежали без движения более 300 дней и были успешно проданы после выгрузки на Авито и Дром:
           </div>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
@@ -285,29 +290,22 @@
                   <td class="p-2.5 text-center text-slate-400">520 дней</td>
                 </tr>
                 <tr>
-                  <td class="p-2.5 mono text-orange-400">00-003004</td>
-                  <td class="p-2.5 text-white font-bold">Блок цилиндров ЗМЗ-405 Евро-3 голый (d=95.5)</td>
-                  <td class="p-2.5 text-center mono text-emerald-400">1 шт. (в 0)</td>
-                  <td class="p-2.5 text-right mono font-black text-emerald-300">68 000 ₽</td>
-                  <td class="p-2.5 text-center text-slate-400">480 дней</td>
+                  <td class="p-2.5 mono text-orange-400">00-003005</td>
+                  <td class="p-2.5 text-white font-bold">Раздаточная коробка УАЗ 31519 Хантер косозубая</td>
+                  <td class="p-2.5 text-center mono text-emerald-400">1 шт.</td>
+                  <td class="p-2.5 text-right mono font-black text-emerald-300">47 000 ₽</td>
+                  <td class="p-2.5 text-center text-slate-400">390 дней</td>
                 </tr>
                 <tr>
-                  <td class="p-2.5 mono text-orange-400">00-003003</td>
-                  <td class="p-2.5 text-white font-bold">Вал коленчатый (коленвал) УМЗ-4216 под сальник</td>
+                  <td class="p-2.5 mono text-orange-400">00-003001</td>
+                  <td class="p-2.5 text-white font-bold">Редуктор заднего моста ГАЗ-3302 ГП 8х41 (4.3)</td>
                   <td class="p-2.5 text-center mono text-emerald-400">1 шт.</td>
-                  <td class="p-2.5 text-right mono font-black text-emerald-300">34 000 ₽</td>
-                  <td class="p-2.5 text-center text-slate-400">340 дней</td>
-                </tr>
-                <tr>
-                  <td class="p-2.5 mono text-orange-400">00-003009</td>
-                  <td class="p-2.5 text-white font-bold">Дверь передняя левая ГАЗель Бизнес катафорез</td>
-                  <td class="p-2.5 text-center mono text-emerald-400">1 шт.</td>
-                  <td class="p-2.5 text-right mono font-black text-emerald-300">19 500 ₽</td>
-                  <td class="p-2.5 text-center text-slate-400">380 дней</td>
+                  <td class="p-2.5 text-right mono font-black text-emerald-300">28 500 ₽</td>
+                  <td class="p-2.5 text-center text-slate-400">410 дней</td>
                 </tr>
                 <tr>
                   <td class="p-2.5 mono text-orange-400">00-003007</td>
-                  <td class="p-2.5 text-white font-bold">Рессора задняя ГАЗ-3302 5-листовая усиленная</td>
+                  <td class="p-2.5 text-white font-bold">Рессора задняя ГАЗ-3302 5-листовая усиленная Чусовая</td>
                   <td class="p-2.5 text-center mono text-emerald-400">2 шт.</td>
                   <td class="p-2.5 text-right mono font-black text-emerald-300">15 800 ₽</td>
                   <td class="p-2.5 text-center text-slate-400">310 дней</td>
@@ -316,7 +314,7 @@
                   <td class="p-2.5 mono text-orange-400">00-003008</td>
                   <td class="p-2.5 text-white font-bold">Картер сцепления (колокол) УАЗ Патриот ЗМЗ-409</td>
                   <td class="p-2.5 text-center mono text-emerald-400">1 шт.</td>
-                  <td class="p-2.5 text-right mono font-black text-emerald-300">11 500 ₽</td>
+                  <td class="p-2.5 text-right mono font-black text-emerald-300">10 500 ₽</td>
                   <td class="p-2.5 text-center text-slate-400">365 дней</td>
                 </tr>
               </tbody>
@@ -324,14 +322,14 @@
           </div>
           <div class="bg-emerald-950/30 border border-emerald-800/40 p-3 rounded-xl flex items-center justify-between text-xs font-bold text-emerald-300 mt-2">
             <span>Итого возвращено в оборот живых денег:</span>
-            <span class="text-base font-black mono">+240 800 ₽</span>
+            <span class="text-base font-black mono">+193 800 ₽</span>
           </div>
         </div>
 
         <!-- ТАБЛИЦА 2: ОШИБКИ ЗАКУПЩИКА -->
         <div id="tabContent-overbuy" class="space-y-2 text-xs hidden">
           <div class="text-[11px] text-slate-400 mb-2">
-            Позиции, по которым закупщик оформил новую поставку, несмотря на то что товар уже лежал на полке с избытком более 4–6 месяцев:
+            Позиции, по которым закупщик оформил новую поставку по дублям или сверх нормы, заморозив оборотные средства зря:
           </div>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
@@ -341,44 +339,44 @@
                   <th class="p-2.5">Наименование</th>
                   <th class="p-2.5 text-center">Дозаказано</th>
                   <th class="p-2.5 text-right">Заморожено кэша</th>
-                  <th class="p-2.5 text-center">Запас на складе</th>
+                  <th class="p-2.5">Причина выявления (Анти-откат)</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-800/60 font-medium">
                 <tr>
-                  <td class="p-2.5 mono text-red-400">00-003001</td>
-                  <td class="p-2.5 text-white font-bold">Редуктор заднего моста ГАЗ-3302 ГП 8х41</td>
+                  <td class="p-2.5 mono text-red-400">00-001088</td>
+                  <td class="p-2.5 text-white font-bold">Радиатор охлаждения ГАЗ-3302 медный 3-х рядный</td>
                   <td class="p-2.5 text-center mono text-red-400">+2 шт.</td>
-                  <td class="p-2.5 text-right mono font-black text-red-300">-42 000 ₽</td>
-                  <td class="p-2.5 text-center text-amber-400 font-bold">на 24.0 мес.!</td>
-                </tr>
-                <tr>
-                  <td class="p-2.5 mono text-red-400">00-003006</td>
-                  <td class="p-2.5 text-white font-bold">Балка передней подвески Соболь 2752 голая</td>
-                  <td class="p-2.5 text-center mono text-red-400">+2 шт.</td>
-                  <td class="p-2.5 text-right mono font-black text-red-300">-35 000 ₽</td>
-                  <td class="p-2.5 text-center text-amber-400 font-bold">на 20.0 мес.!</td>
+                  <td class="p-2.5 text-right mono font-black text-red-300">-22 500 ₽</td>
+                  <td class="p-2.5 text-amber-300">Заказ по дублю 1С (на складе уже лежало 3 шт. радиаторов по 00-001089)</td>
                 </tr>
                 <tr>
                   <td class="p-2.5 mono text-red-400">00-003010</td>
                   <td class="p-2.5 text-white font-bold">Фонарь задний светодиодный ГАЗель Next борт</td>
-                  <td class="p-2.5 text-center mono text-red-400">+10 шт.</td>
-                  <td class="p-2.5 text-right mono font-black text-red-300">-26 000 ₽</td>
-                  <td class="p-2.5 text-center text-amber-400 font-bold">на 64.0 мес.!</td>
+                  <td class="p-2.5 text-center mono text-red-400">+4 шт.</td>
+                  <td class="p-2.5 text-right mono font-black text-red-300">-10 000 ₽</td>
+                  <td class="p-2.5 text-amber-300">Аномальный перезакуп (запас без движения превышал 40 месяцев)</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 mono text-red-400">00-001041</td>
+                  <td class="p-2.5 text-white font-bold">Насос ГУР ГАЗель Бизнес, Next (УМЗ 4216) ШНКФ</td>
+                  <td class="p-2.5 text-center mono text-red-400">+2 шт.</td>
+                  <td class="p-2.5 text-right mono font-black text-red-300">-9 600 ₽</td>
+                  <td class="p-2.5 text-amber-300">Заказ по пустой карточке-дублю (на складе уже лежало 4 шт. по 00-001042/1043)</td>
                 </tr>
               </tbody>
             </table>
           </div>
           <div class="bg-red-950/30 border border-red-800/40 p-3 rounded-xl flex items-center justify-between text-xs font-bold text-red-300 mt-2">
             <span>Итого необоснованно заморожено закупщиком:</span>
-            <span class="text-base font-black mono">-103 000 ₽</span>
+            <span class="text-base font-black mono">-42 100 ₽</span>
           </div>
         </div>
 
         <!-- ТАБЛИЦА 3: ПРОСПАННЫЙ ДЕФИЦИТ -->
         <div id="tabContent-deficits" class="space-y-2 text-xs hidden">
           <div class="text-[11px] text-slate-400 mb-2">
-            Ходовые позиции с высоким спросом, которые закончились до 0–1 шт., а заказ поставщику не был отправлен:
+            Ходовые позиции с высоким спросом, которые закончились до 0 шт., а заказ поставщику не был отправлен вовремя:
           </div>
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
@@ -394,28 +392,21 @@
               <tbody class="divide-y divide-slate-800/60 font-medium">
                 <tr>
                   <td class="p-2.5 mono text-amber-400">00-002004</td>
-                  <td class="p-2.5 text-white font-bold">Стартер редукторный ГАЗ, УАЗ дв. ЗМЗ 406/405/409</td>
+                  <td class="p-2.5 text-white font-bold">Стартер редукторный ГАЗ, УАЗ дв. ЗМЗ 406/405/409 КЗАТЭ</td>
                   <td class="p-2.5 text-center mono font-black text-red-400">0 шт.</td>
                   <td class="p-2.5 text-center text-slate-300">4.3 шт./мес</td>
                   <td class="p-2.5 text-right mono font-black text-amber-300">29 683 ₽/мес</td>
                 </tr>
                 <tr>
-                  <td class="p-2.5 mono text-amber-400">00-004002</td>
-                  <td class="p-2.5 text-white font-bold">Амортизатор передний ГАЗ-3302 масляный СААЗ</td>
-                  <td class="p-2.5 text-center mono font-black text-amber-400">1 шт.</td>
-                  <td class="p-2.5 text-center text-slate-300">4.5 шт./мес</td>
-                  <td class="p-2.5 text-right mono font-black text-amber-300">7 425 ₽/мес</td>
-                </tr>
-                <tr>
                   <td class="p-2.5 mono text-amber-400">00-002003</td>
-                  <td class="p-2.5 text-white font-bold">Крестовина карданного вала УАЗ Патриот</td>
+                  <td class="p-2.5 text-white font-bold">Крестовина карданного вала УАЗ Патриот, Хантер</td>
                   <td class="p-2.5 text-center mono font-black text-red-400">0 шт.</td>
                   <td class="p-2.5 text-center text-slate-300">5.3 шт./мес</td>
                   <td class="p-2.5 text-right mono font-black text-amber-300">6 133 ₽/мес</td>
                 </tr>
                 <tr>
                   <td class="p-2.5 mono text-amber-400">00-001151</td>
-                  <td class="p-2.5 text-white font-bold">Цилиндр сцепления рабочий (РЦС) 3302 чугун</td>
+                  <td class="p-2.5 text-white font-bold">Цилиндр сцепления рабочий (РЦС) 3302, Соболь чугун</td>
                   <td class="p-2.5 text-center mono font-black text-red-400">0 шт.</td>
                   <td class="p-2.5 text-center text-slate-300">3.5 шт./мес</td>
                   <td class="p-2.5 text-right mono font-black text-amber-300">4 480 ₽/мес</td>
@@ -425,7 +416,7 @@
           </div>
           <div class="bg-amber-950/30 border border-amber-800/40 p-3 rounded-xl flex items-center justify-between text-xs font-bold text-amber-300 mt-2">
             <span>Общий риск потерь выручки из-за пустого склада:</span>
-            <span class="text-base font-black mono">47 722 ₽/мес</span>
+            <span class="text-base font-black mono">40 297 ₽/мес (до 50 616 ₽ с сопутствующими)</span>
           </div>
         </div>
 
@@ -482,7 +473,7 @@
   </main>
 
   <script>
-    const RADAR_DATA = {"timestamp": "2026-11-17 16:46:28", "owner_name": "Вячеслав Юрьевич", "period": "Неделя 2 vs Неделя 1 (7 дней)", "metrics": {"unfrozen_cash_rub": 240800.0, "overbuy_waste_rub": 103000.0, "lost_revenue_risk_rub": 47721.666666666664, "night_bot_revenue_rub": 15650.0, "net_financial_impact_rub": 153450.0}, "dead_stock_sales": [{"code": "00-003002", "name": "КПП ГАЗ-3309 дизель 5-ступ в сборе", "canonical_title": "Коробка передач (КПП) ГАЗ-3309, 33081 дизель 5-ст", "oem": "33091700010", "days_no_movement": 520, "stock_prev": 2.0, "stock_curr": 1.0, "qty_sold": 1.0, "price_retail": 92000.0, "cash_freed_rub": 92000.0}, {"code": "00-003004", "name": "Блок цилиндров ЗМЗ-405 Евро-3 голый", "canonical_title": "Блок цилиндров ЗМЗ-405 Евро-3 голый (d=95.5)", "oem": "405241002010", "days_no_movement": 480, "stock_prev": 1.0, "stock_curr": 0.0, "qty_sold": 1.0, "price_retail": 68000.0, "cash_freed_rub": 68000.0}, {"code": "00-003003", "name": "Вал коленчатый УМЗ-4216 под сальник с вкладышами", "canonical_title": "Вал коленчатый (коленвал) УМЗ-4216 под сальник", "oem": "42161005011", "days_no_movement": 340, "stock_prev": 3.0, "stock_curr": 2.0, "qty_sold": 1.0, "price_retail": 34000.0, "cash_freed_rub": 34000.0}, {"code": "00-003009", "name": "Дверь передняя левая ГАЗель Бизнес оригинальный катафорез", "canonical_title": "Дверь передняя левая ГАЗель Бизнес катафорез", "oem": "33026100015", "days_no_movement": 380, "stock_prev": 4.0, "stock_curr": 3.0, "qty_sold": 1.0, "price_retail": 19500.0, "cash_freed_rub": 19500.0}, {"code": "00-003007", "name": "Рессора задняя ГАЗ-3302 5-листовая усиленная Чусовая", "canonical_title": "Рессора задняя ГАЗ-3302 5-листовая усиленная", "oem": "3302291201002", "days_no_movement": 310, "stock_prev": 8.0, "stock_curr": 6.0, "qty_sold": 2.0, "price_retail": 7900.0, "cash_freed_rub": 15800.0}, {"code": "00-003008", "name": "Картер сцепления УАЗ дв. 409 Патриот (колокол)", "canonical_title": "Картер сцепления (колокол) УАЗ Патриот дв. ЗМЗ-409", "oem": "4091601015", "days_no_movement": 365, "stock_prev": 3.0, "stock_curr": 2.0, "qty_sold": 1.0, "price_retail": 11500.0, "cash_freed_rub": 11500.0}], "overbuy_alerts": [{"code": "00-003001", "name": "Редуктор заднего моста ГАЗ-3302 Волга ГП 8х41", "canonical_title": "Редуктор заднего моста ГАЗ-3302 ГП 8х41 (4.3)", "oem": "3302240201010", "days_no_movement": 410, "stock_prev": 4.0, "stock_curr": 6.0, "qty_added": 2.0, "price_purchase": 21000.0, "waste_cost_rub": 42000.0, "months_of_supply": 24.0, "reason": "Товар без движения более полугода"}, {"code": "00-003006", "name": "Балка передней подвески Соболь 2752 голая", "canonical_title": "Балка передней подвески Соболь 2752, 2217 голая", "oem": "27522904012", "days_no_movement": 295, "stock_prev": 3.0, "stock_curr": 5.0, "qty_added": 2.0, "price_purchase": 17500.0, "waste_cost_rub": 35000.0, "months_of_supply": 20.0, "reason": "Товар без движения более полугода"}, {"code": "00-003010", "name": "Фонарь задний светодиодный ГАЗель Next борт", "canonical_title": "Фонарь задний светодиодный ГАЗель Next борт", "oem": "A21R233716010", "days_no_movement": 285, "stock_prev": 6.0, "stock_curr": 16.0, "qty_added": 10.0, "price_purchase": 2600.0, "waste_cost_rub": 26000.0, "months_of_supply": 64.0, "reason": "Товар без движения более полугода"}], "new_deficits": [{"code": "00-002004", "name": "Стартер редукторный УАЗ, ГАЗ дв. 409, 405, 406 КЗАТЭ", "canonical_title": "Стартер редукторный ГАЗ, УАЗ дв. ЗМЗ 406, 405, 409", "oem": "57323708", "sales_12m": 52.0, "monthly_demand": 4.3, "stock_prev": 3.0, "stock_curr": 0.0, "price_retail": 6850.0, "monthly_lost_revenue_rub": 29683.0}, {"code": "00-004002", "name": "Амортизатор передний ГАЗ-3302 масляный СААЗ", "canonical_title": "Амортизатор передний ГАЗ-3302 масляный СААЗ", "oem": "33022905006", "sales_12m": 54.0, "monthly_demand": 4.5, "stock_prev": 12.0, "stock_curr": 1.0, "price_retail": 1650.0, "monthly_lost_revenue_rub": 7425.0}, {"code": "00-002003", "name": "Крестовина карданного вала УАЗ Патриот усиленная", "canonical_title": "Крестовина карданного вала УАЗ Патриот, Хантер", "oem": "31602201025", "sales_12m": 64.0, "monthly_demand": 5.3, "stock_prev": 1.0, "stock_curr": 0.0, "price_retail": 1150.0, "monthly_lost_revenue_rub": 6133.0}, {"code": "00-001151", "name": "рабочий цилиндр сцепления 3302 чугун", "canonical_title": "Цилиндр сцепления рабочий (РЦС) ГАЗ-3302, Соболь", "oem": "33021602510", "sales_12m": 42.0, "monthly_demand": 3.5, "stock_prev": 6.0, "stock_curr": 0.0, "price_retail": 1280.0, "monthly_lost_revenue_rub": 4480.0}], "night_reservations": [{"res_id": "RES-20261117-001", "created_at": "2026-11-17 23:22:15", "client_name": "Сергей", "client_phone": "+7 (912) 345-67-89", "canonical_title": "Стартер редукторный ГАЗ, УАЗ дв. ЗМЗ 406, 405, 409", "source_1c_codes": "00-002004", "qty": 1, "price": 6850.0}, {"res_id": "RES-20261117-002", "created_at": "2026-11-17 01:14:40", "client_name": "Алексей", "client_phone": "+7 (908) 221-44-55", "canonical_title": "Насос ГУР ГАЗель Бизнес, Next (УМЗ 4216) ШНКФ", "source_1c_codes": "00-001041, 00-001042", "qty": 1, "price": 6950.0}, {"res_id": "RES-20261117-003", "created_at": "2026-11-17 04:45:10", "client_name": "Дмитрий", "client_phone": "+7 (950) 443-12-80", "canonical_title": "Колодки тормозные передние ГАЗель Next, Бизнес", "source_1c_codes": "00-002001", "qty": 1, "price": 1850.0}]};
+    const RADAR_DATA = {"timestamp": "2026-11-17 16:59:21", "owner_name": "Вячеслав Юрьевич", "period": "Неделя 2 vs Неделя 1 (7 дней)", "metrics": {"unfrozen_cash_rub": 193800.0, "overbuy_waste_rub": 42100.0, "lost_revenue_risk_rub": 40030.0, "night_bot_revenue_rub": 15650.0, "net_financial_impact_rub": 167350.0}, "dead_stock_sales": [{"code": "00-003002", "name": "КПП ГАЗ-3309 дизель 5-ступ в сборе", "canonical_title": "Коробка передач (КПП) ГАЗ-3309, 33081 дизель 5-ст", "oem": "33091700010", "days_no_movement": 520, "stock_prev": 2.0, "stock_curr": 1.0, "qty_sold": 1.0, "price_retail": 92000.0, "cash_freed_rub": 92000.0}, {"code": "00-003005", "name": "Раздаточная коробка УАЗ Хантер косозубая", "canonical_title": "Раздаточная коробка УАЗ 31519 Хантер косозубая", "oem": "315191800020", "days_no_movement": 390, "stock_prev": 2.0, "stock_curr": 1.0, "qty_sold": 1.0, "price_retail": 47000.0, "cash_freed_rub": 47000.0}, {"code": "00-003001", "name": "Редуктор заднего моста ГАЗ-3302 Волга ГП 8х41", "canonical_title": "Редуктор заднего моста ГАЗ-3302 ГП 8х41 (4.3)", "oem": "3302240201010", "days_no_movement": 410, "stock_prev": 4.0, "stock_curr": 3.0, "qty_sold": 1.0, "price_retail": 28500.0, "cash_freed_rub": 28500.0}, {"code": "00-003007", "name": "Рессора задняя ГАЗ-3302 5-листовая усиленная Чусовая", "canonical_title": "Рессора задняя ГАЗ-3302 5-листовая усиленная", "oem": "3302291201002", "days_no_movement": 310, "stock_prev": 8.0, "stock_curr": 6.0, "qty_sold": 2.0, "price_retail": 7900.0, "cash_freed_rub": 15800.0}, {"code": "00-003008", "name": "Картер сцепления УАЗ дв. 409 Патриот (колокол)", "canonical_title": "Картер сцепления (колокол) УАЗ Патриот дв. ЗМЗ-409", "oem": "4091601015", "days_no_movement": 365, "stock_prev": 3.0, "stock_curr": 2.0, "qty_sold": 1.0, "price_retail": 10500.0, "cash_freed_rub": 10500.0}], "overbuy_alerts": [{"code": "00-001088", "name": "Радиатор охлаждения Газель Бизнес 3-х рядный медный", "canonical_title": "Радиатор охлаждения ГАЗ-3302 медный 3-х рядный", "oem": "3302130101033", "stock_prev": 0.0, "stock_curr": 3.0, "qty_added": 2.0, "price_purchase": 11250.0, "waste_cost_rub": 22500.0, "reason": "Заказ по дублю 1С (на складе уже лежало 3 шт. радиаторов по 00-001089)"}, {"code": "00-003010", "name": "Фонарь задний светодиодный ГАЗель Next борт", "canonical_title": "Фонарь задний светодиодный ГАЗель Next борт", "oem": "A21R233716010", "stock_prev": 6.0, "stock_curr": 10.0, "qty_added": 4.0, "price_purchase": 2500.0, "waste_cost_rub": 10000.0, "reason": "Аномальный перезакуп (запас без движения превышал 40 месяцев)"}, {"code": "00-001041", "name": "ГУР 4216 борисов ориг", "canonical_title": "Насос ГУР ГАЗель Бизнес, Next (УМЗ 4216) ШНКФ", "oem": "ШHKФ453471125", "stock_prev": 0.0, "stock_curr": 2.0, "qty_added": 2.0, "price_purchase": 4800.0, "waste_cost_rub": 9600.0, "reason": "Заказ по пустой карточке-дублю 1С (на складе уже лежало 4 шт. по 00-001042/1043)"}], "new_deficits": [{"code": "00-002004", "name": "Стартер редукторный УАЗ, ГАЗ дв. 409, 405, 406 КЗАТЭ", "canonical_title": "Стартер редукторный ГАЗ, УАЗ дв. ЗМЗ 406, 405, 409", "oem": "57323708", "sales_12m": 52.0, "monthly_demand": 4.3, "stock_curr": 0.0, "price_retail": 6850.0, "monthly_lost_revenue_rub": 29455.0}, {"code": "00-002003", "name": "Крестовина карданного вала УАЗ Патриот усиленная", "canonical_title": "Крестовина карданного вала УАЗ Патриот, Хантер", "oem": "31602201025", "sales_12m": 64.0, "monthly_demand": 5.3, "stock_curr": 0.0, "price_retail": 1150.0, "monthly_lost_revenue_rub": 6095.0}, {"code": "00-001151", "name": "рабочий цилиндр сцепления 3302 чугун", "canonical_title": "Цилиндр сцепления рабочий (РЦС) ГАЗ-3302, Соболь", "oem": "33021602510", "sales_12m": 42.0, "monthly_demand": 3.5, "stock_curr": 0.0, "price_retail": 1280.0, "monthly_lost_revenue_rub": 4480.0}], "night_reservations": [{"res_id": "RES-20261117-001", "created_at": "2026-11-17 23:22:15", "client_name": "Сергей", "client_phone": "+7 (912) 345-67-89", "canonical_title": "Стартер редукторный ГАЗ, УАЗ дв. ЗМЗ 406, 405, 409", "source_1c_codes": "00-002004", "qty": 1, "price": 6850.0}, {"res_id": "RES-20261117-002", "created_at": "2026-11-17 01:14:40", "client_name": "Алексей", "client_phone": "+7 (908) 221-44-55", "canonical_title": "Насос ГУР ГАЗель Бизнес, Next (УМЗ 4216) ШНКФ", "source_1c_codes": "00-001041, 00-001042", "qty": 1, "price": 6950.0}, {"res_id": "RES-20261117-003", "created_at": "2026-11-17 04:45:10", "client_name": "Дмитрий", "client_phone": "+7 (950) 443-12-80", "canonical_title": "Колодки тормозные передние ГАЗель Next, Бизнес", "source_1c_codes": "00-002001", "qty": 1, "price": 1850.0}]};
 
     function switchTab(tabId) {
       const tabs = ['unfrozen', 'overbuy', 'deficits', 'reservations'];
@@ -504,28 +495,28 @@
       const fbText = document.getElementById('userFeedbackText');
 
       if (action === 'block_order') {
-        fbText.textContent = "🚫 Заблокировать заказ закупщика на 103 000 ₽";
+        fbText.textContent = "🚫 Заблокировать лишний заказ закупщика на 42 100 ₽";
         fbMsg.classList.remove('hidden');
         setTimeout(() => {
-          alert("✅ Команда принята!\n\nЗаказ поставщику #ЗП-842 на сумму 103 000 ₽ (Редуктор 3302, Балка Соболь, Фонари Next) заблокирован в 1С до согласования с Вячеславом Юрьевичем.");
+          alert("✅ Команда принята!\n\nЗаказ поставщику на сумму 42 100 ₽ (Радиатор медный 3302, Фонари Next, Насос ГУР 4216) заблокирован в 1С до согласования с Вячеславом Юрьевичем.");
         }, 200);
       } else if (action === 'send_deficit') {
         fbText.textContent = "📋 Сформировать срочный заказ на дефицит";
         fbMsg.classList.remove('hidden');
         setTimeout(() => {
-          alert("✅ Срочный лист дефицита сформирован!\n\nЗакупщику отправлено уведомление в Telegram: срочно заказать Стартер 406/409 (5 шт.), Амортизаторы 3302 (10 шт.), Крестовины Патриот (10 шт.), РЦС (6 шт.).");
+          alert("✅ Срочный лист дефицита сформирован!\n\nЗакупщику отправлено уведомление в Telegram: срочно заказать Стартер 406/409 КЗАТЭ (5 шт.), Крестовины Патриот (10 шт.), РЦС 3302 чугун (6 шт.).");
         }, 200);
       } else if (action === 'discount_promo') {
         fbText.textContent = "🏷️ Уценить остаток неликвида на -10%";
         fbMsg.classList.remove('hidden');
         setTimeout(() => {
-          alert("✅ Скидка 10% применена!\n\nЦены на 10 зависших позиций снижены в фиде автозагрузки Авито (avito_feed.xml) с бейджем «Распродажа складских запасов».");
+          alert("✅ Скидка 10% применена!\n\nЦены на зависшие позиции снижены в фиде автозагрузки Авито (avito_feed.xml) с бейджем «Распродажа складских запасов».");
         }, 200);
       }
     }
 
     function copyTelegramDigest() {
-      const text = `🛡️ РАДАР СОБСТВЕННИКА: НЕДЕЛЬНЫЙ РАЗБОР\n👤 Лично для: Вячеслава Юрьевича\n💰 1. Разморожено кэша: +240 800 ₽ (КПП, Блок ЗМЗ-405, Коленвал 4216)\n🚨 2. Ошибки закупщика: -103 000 ₽ (Редуктор запас 24 мес, Балка 20 мес, Фонари 64 мес)\n📉 3. Дефицит ходовых: риск 47 722 ₽/мес (Стартер 0 шт, Крестовина 0 шт)\n🤖 4. Ночной ИИ-бот: +15 650 ₽ (3 брони с 23:00 до 08:00)\n━━━━━━━━━━━━━━━━━━\n📊 Чистый баланс недели: +153 450 ₽\n📞 Поддержка: +7 (902) 802-82-46`;
+      const text = `🛡️ РАДАР СОБСТВЕННИКА: НЕДЕЛЬНЫЙ РАЗБОР\n👤 Лично для: Вячеслава Юрьевича\n💰 1. Разморожено кэша: +193 800 ₽ (КПП 3309, Раздатка Хантер, Редуктор 3302, Рессоры, Картер УАЗ)\n🚨 2. Ошибки закупщика: -42 100 ₽ (Радиатор по дублю -22.5k, Фонари -10k, ГУР по дублю -9.6k)\n📉 3. Дефицит ходовых: риск 50 616 ₽/мес (Стартер 0 шт, Крестовина 0 шт, РЦС 0 шт)\n🤖 4. Ночной ИИ-бот: +15 650 ₽ (3 брони с 23:00 до 08:00)\n━━━━━━━━━━━━━━━━━━\n📊 Чистый баланс недели: +167 350 ₽\n📞 Поддержка: +7 (902) 802-82-46`;
       navigator.clipboard.writeText(text).then(() => {
         alert("✅ Текст утреннего дайджеста скопирован в буфер обмена для отправки в Telegram/WhatsApp:\n\n" + text);
       });
