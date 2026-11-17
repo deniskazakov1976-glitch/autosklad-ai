@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Модуль 4: ИИ-Продавец • Симулятор Чата Авито / WhatsApp • АВТОСКЛАД-ИИ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #090d16; color: #f1f5f9; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0b1120; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    @keyframes pulse-subtle {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .live-pulse { animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- ВЕРХНЯЯ ШАПКА -->
+  <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50 px-4 py-3">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <a href="dashboard.html" class="bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white px-3 py-1.5 rounded-xl border border-slate-700 text-xs font-bold transition flex items-center gap-1.5">
+          <span>←</span> В кабинет (ERP)
+        </a>
+        <div class="h-4 w-px bg-slate-800"></div>
+        <div class="flex items-center gap-2">
+          <span class="bg-orange-500/10 border border-orange-500/30 text-orange-400 font-black text-xs px-2.5 py-0.5 rounded-lg mono">МОДУЛЬ 4</span>
+          <h1 class="text-sm sm:text-base font-extrabold text-white">ИИ-Продавец (RAG + Tool Calling Zero Hallucination)</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 text-xs">
+        <span class="inline-flex items-center gap-1.5 bg-emerald-950/60 border border-emerald-800 text-emerald-400 px-3 py-1 rounded-full font-bold">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 live-pulse"></span>
+          24/7 Ночной режим активен (23:15)
+        </span>
+        <span class="hidden md:inline-flex bg-slate-900 border border-slate-800 text-slate-400 px-2.5 py-1 rounded-full font-semibold">
+          База склада: <b class="text-white ml-1">46 эталонов / 50 строк 1С</b>
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ОСНОВНОЙ КОНТЕНТ: ДВЕ КОЛОНКИ -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+    <!-- ЛЕВАЯ КОЛОНКА: СМАРТФОН АВИТО / WHATSAPP ЧАТ (col-span-5) -->
+    <div class="lg:col-span-5 flex flex-col items-center">
+      
+      <!-- РАМКА СМАРТФОНА -->
+      <div class="w-full max-w-sm bg-slate-950 border-[6px] border-slate-800 rounded-[42px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col h-[740px] relative">
+        
+        <!-- СТАТУС БАР ТЕЛЕФОНА -->
+        <div class="bg-slate-900 px-6 pt-3 pb-2 flex items-center justify-between text-[11px] text-slate-400 border-b border-slate-800/60 select-none">
+          <span class="font-bold text-white mono">23:15</span>
+          <div class="w-24 h-4 bg-slate-950 rounded-full mx-auto -mt-1 border border-slate-800"></div>
+          <div class="flex items-center gap-1.5 text-xs">
+            <span>4G</span>
+            <span>88% 🔋</span>
+          </div>
+        </div>
+
+        <!-- ШАПКА ЧАТА АВИТО -->
+        <div class="bg-gradient-to-r from-slate-900 to-slate-850 px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="relative">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center font-black text-slate-950 text-sm shadow">
+                АС
+              </div>
+              <span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-slate-900 rounded-full"></span>
+            </div>
+            <div>
+              <div class="font-bold text-white text-xs leading-tight">Автосклад ГАЗ / УАЗ</div>
+              <div class="text-[10px] text-emerald-400 flex items-center gap-1 mt-0.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 live-pulse"></span>
+                ИИ-консультант 24/7 • онлайн
+              </div>
+            </div>
+          </div>
+          <div class="text-[10px] bg-slate-800 text-slate-300 px-2 py-1 rounded-md font-semibold">
+            Пермь
+          </div>
+        </div>
+
+        <!-- КНОПКИ БЫСТРЫХ СЦЕНАРИЕВ ДЛЯ ПРОВЕРКИ -->
+        <div class="bg-slate-900/90 px-3 py-2 border-b border-slate-800 text-[11px]">
+          <div class="text-[10px] text-slate-400 font-bold uppercase mb-1.5 flex items-center justify-between">
+            <span>⚡ Быстрые сценарии тестирования:</span>
+            <span class="text-orange-400 text-[9px]">нажмите для теста</span>
+          </div>
+          <div class="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+            <button onclick="runScenario(1)" class="whitespace-nowrap bg-slate-800 hover:bg-orange-600/30 hover:border-orange-500 text-slate-200 border border-slate-700 px-2 py-1 rounded-lg text-[10px] font-semibold transition">
+              🔍 ГУР на 4216
+            </button>
+            <button onclick="runScenario(2)" class="whitespace-nowrap bg-slate-800 hover:bg-orange-600/30 hover:border-orange-500 text-slate-200 border border-slate-700 px-2 py-1 rounded-lg text-[10px] font-semibold transition">
+              ⚡ Кросс 5742.3708
+            </button>
+            <button onclick="runScenario(3)" class="whitespace-nowrap bg-slate-800 hover:bg-orange-600/30 hover:border-orange-500 text-slate-200 border border-slate-700 px-2 py-1 rounded-lg text-[10px] font-semibold transition">
+              ⏳ Колодки Next (0 шт)
+            </button>
+            <button onclick="runScenario(4)" class="whitespace-nowrap bg-slate-800 hover:bg-orange-600/30 hover:border-orange-500 text-slate-200 border border-slate-700 px-2 py-1 rounded-lg text-[10px] font-semibold transition">
+              🛠️ Свап 1JZ (кастом)
+            </button>
+            <button onclick="runScenario(5)" class="whitespace-nowrap bg-slate-800 hover:bg-orange-600/30 hover:border-orange-500 text-slate-200 border border-slate-700 px-2 py-1 rounded-lg text-[10px] font-semibold transition">
+              📦 Бронь стартера
+            </button>
+            <button onclick="runScenario(6)" class="whitespace-nowrap bg-slate-800 hover:bg-orange-600/30 hover:border-orange-500 text-slate-200 border border-slate-700 px-2 py-1 rounded-lg text-[10px] font-semibold transition">
+              ❄️ Радиатор 3302
+            </button>
+          </div>
+        </div>
+
+        <!-- ЛЕНТА СООБЩЕНИЙ ЧАТА -->
+        <div id="chatMessages" class="flex-1 p-3 overflow-y-auto space-y-3 bg-[#0d131f] text-xs">
+          <!-- Системный разделитель -->
+          <div class="text-center my-1">
+            <span class="bg-slate-900 border border-slate-800 text-slate-400 text-[10px] px-3 py-1 rounded-full font-medium">
+              Сегодня, 23:15 • Ночное обращение покупателя
+            </span>
+          </div>
+
+          <!-- Стартовое сообщение от ИИ -->
+          <div class="flex items-start gap-2 max-w-[88%]">
+            <div class="w-6 h-6 rounded-full bg-orange-500 flex-shrink-0 flex items-center justify-center text-[10px] font-black text-slate-950 mt-1">ИИ</div>
+            <div class="bg-slate-900 border border-slate-800 p-2.5 rounded-2xl rounded-tl-none text-slate-200 shadow-sm leading-relaxed">
+              Здравствуйте! Я ночной ИИ-консультант склада запчастей ГАЗ/УАЗ. 
+              Вижу точные остатки 1С и кросс-номера прямо сейчас. Напишите, какая деталь или артикул вас интересует?
+              <div class="text-[9px] text-slate-400 text-right mt-1 mono">23:15 ✓✓</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ПОЛЕ ВВОДА СООБЩЕНИЯ -->
+        <div class="p-2.5 bg-slate-900 border-t border-slate-800 flex items-center gap-2">
+          <input id="chatInput" type="text" placeholder="Напишите деталь или артикул..." 
+                 onkeydown="if(event.key==='Enter') sendMessage()"
+                 class="flex-1 bg-slate-950 border border-slate-700 focus:border-orange-500 focus:outline-none text-white text-xs px-3 py-2.5 rounded-xl transition">
+          <button onclick="sendMessage()" class="bg-orange-500 hover:bg-orange-600 text-slate-950 font-black px-3 py-2.5 rounded-xl text-xs flex items-center justify-center transition shadow">
+            ➤
+          </button>
+        </div>
+
+      </div>
+
+      <div class="text-[11px] text-slate-400 mt-2 text-center">
+        💡 Попробуйте ввести любой запрос или нажать одну из быстрых кнопок сверху.
+      </div>
+    </div>
+
+    <!-- ПРАВАЯ КОЛОНКА: РЕНТГЕН МОЗГА ИИ И СКЛАДА 1С В РЕАЛЬНОМ ВРЕМЕНИ (col-span-7) -->
+    <div class="lg:col-span-7 space-y-4">
+
+      <!-- ПАНЕЛЬ 1: АКТИВНЫЙ ВЫЗОВ ИНСТРУМЕНТА (TOOL CALL & EXECUTION) -->
+      <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 shadow-lg">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-orange-400 text-base">⚙️</span>
+            <span class="font-extrabold text-sm text-white">Вызов инструмента RAG (Tool Call)</span>
+          </div>
+          <div id="antiHallucinationBadge" class="bg-emerald-950/80 border border-emerald-600 text-emerald-400 text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5 mono">
+            <span>🛡️</span> Zero Hallucination: PASSED
+          </div>
+        </div>
+
+        <!-- ТЕЛО ВЫЗОВА -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div class="bg-slate-900 p-3 rounded-xl border border-slate-800">
+            <div class="text-[10px] text-slate-400 font-bold uppercase mono mb-1">Вызванная функция</div>
+            <div id="toolName" class="text-orange-400 font-black mono text-xs sm:text-sm">search_inventory()</div>
+            <div id="toolArgs" class="text-slate-300 text-[11px] mono mt-1 break-all">query: "ГУР на 4216"</div>
+          </div>
+          <div class="bg-slate-900 p-3 rounded-xl border border-slate-800">
+            <div class="text-[10px] text-slate-400 font-bold uppercase mono mb-1">Время отклика / Статус</div>
+            <div class="flex items-center gap-2 mt-0.5">
+              <span id="toolLatency" class="bg-blue-950 border border-blue-700 text-blue-300 font-bold px-2 py-0.5 rounded text-[11px] mono">32 ms</span>
+              <span id="toolStatusBadge" class="bg-emerald-950 border border-emerald-700 text-emerald-300 font-bold px-2 py-0.5 rounded text-[11px] mono">IN_STOCK</span>
+            </div>
+            <div id="toolExplanation" class="text-[11px] text-slate-400 mt-1">Проверено наличие по реальным строкам остатков 1С.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ПАНЕЛЬ 2: СОВПАДЕНИЯ В 1С И ДЕДУПЛИКАЦИЯ КАРТОЧКИ -->
+      <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 shadow-lg">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-blue-400 text-base">📊</span>
+            <span class="font-extrabold text-sm text-white">Рентген совпадения в каталоге и 1С</span>
+          </div>
+          <span id="matchesCountBadge" class="text-xs bg-slate-900 text-slate-300 px-2 py-0.5 rounded-md font-bold mono">
+            Найдено: 1 карточка
+          </span>
+        </div>
+
+        <!-- ДЕТАЛИ НАЙДЕННОЙ КАРТОЧКИ -->
+        <div id="matchedCardDetails" class="bg-slate-900/90 border border-slate-800 rounded-xl p-3.5 space-y-2.5">
+          <div class="flex flex-wrap items-start justify-between gap-2">
+            <div>
+              <span id="cardMasterId" class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded mono font-bold">GAZ-STEER-001</span>
+              <h3 id="cardTitle" class="text-sm font-black text-white mt-1">Насос ГУР ГАЗель Бизнес, Next (УМЗ 4216) ШНКФ</h3>
+            </div>
+            <div class="text-right">
+              <div id="cardPrice" class="text-base font-black text-emerald-400 mono">6 950 ₽</div>
+              <div id="cardStockBadge" class="text-[10px] font-bold text-emerald-300 bg-emerald-950/80 border border-emerald-700 px-2 py-0.5 rounded-full inline-block mt-0.5">
+                ● В наличии: 4 шт.
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-[11px] pt-2 border-t border-slate-800">
+            <div>
+              <span class="text-slate-400 block font-semibold">Склеенные коды 1С (дубли):</span>
+              <span id="cardCodes1C" class="font-bold text-orange-400 mono">00-001041, 00-001042, 00-001043</span>
+            </div>
+            <div>
+              <span class="text-slate-400 block font-semibold">Основной артикул OEM:</span>
+              <span id="cardOem" class="font-bold text-cyan-300 mono">ШHKФ453471125</span>
+            </div>
+          </div>
+
+          <div class="text-[11px] pt-1">
+            <span class="text-slate-400 block font-semibold">Кросс-номера (аналоги):</span>
+            <div id="cardCrosses" class="flex flex-wrap gap-1 mt-1">
+              <span class="bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded mono text-[10px]">33023407010</span>
+              <span class="bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded mono text-[10px]">42163407010</span>
+              <span class="bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded mono text-[10px]">PP33024216</span>
+            </div>
+          </div>
+
+          <div class="text-[11px] pt-1">
+            <span class="text-slate-400 block font-semibold">Применяемость:</span>
+            <div id="cardApplicability" class="text-slate-300 text-[11px] mt-0.5">
+              ГАЗ-3302, ГАЗель Бизнес, ГАЗель Next, Соболь 2752; дв. УМЗ-4216, Evotech 2.7
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ПАНЕЛЬ 3: УТРЕННИЙ ЛИСТ ВЫДАЧИ ПРОДАВЦУ НА КАССЕ (БРОНИ С АВИТО) -->
+      <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 shadow-lg">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-emerald-400 text-base">📋</span>
+            <span class="font-extrabold text-sm text-white">Утренний лист выдачи продавцу на кассе (Бронирование)</span>
+          </div>
+          <span id="reservationsCountBadge" class="bg-emerald-950 border border-emerald-800 text-emerald-400 text-xs font-bold px-2.5 py-0.5 rounded-full mono">
+            Активных броней: 1
+          </span>
+        </div>
+
+        <div id="reservationsList" class="space-y-2.5 max-h-56 overflow-y-auto">
+          <!-- Карточка первой брони из бенчмарка -->
+          <div class="bg-slate-900 border border-emerald-500/40 p-3 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded mono">RES-20261117-001</span>
+                <span class="text-white font-black text-xs">Сергей • +7 (912) 345-67-89</span>
+              </div>
+              <div class="text-slate-300 text-xs font-medium mt-1">
+                Стартер редукторный ГАЗ, УАЗ дв. ЗМЗ 406, 405, 409 (1 шт.)
+              </div>
+              <div class="text-[11px] text-slate-400 mt-0.5">
+                Код списания в 1С: <b class="text-orange-400 mono">00-002004</b> • Сумма: <b class="text-white mono">6 850 ₽</b>
+              </div>
+            </div>
+            <button onclick="copyTelegramAlert('RES-20261117-001', 'Сергей', '+79123456789', 'Стартер редукторный ГАЗ, УАЗ дв. ЗМЗ 406/405/409', 6850, '00-002004')" 
+                    class="bg-sky-600 hover:bg-sky-700 text-white font-bold text-[11px] px-3 py-1.5 rounded-lg whitespace-nowrap transition flex items-center justify-center gap-1 shadow">
+              <span>✈️</span> Скопировать алерт в Telegram
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- МОДАЛЬНОЕ ОКНО БЫСТРОГО БРОНИРОВАНИЯ -->
+  <div id="bookingModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-slate-700 max-w-md w-full rounded-2xl p-5 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-black text-white text-base flex items-center gap-2">
+          <span>⚡</span> Оформление ночной брони на утро
+        </h3>
+        <button onclick="closeBookingModal()" class="text-slate-400 hover:text-white text-xl">✕</button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="text-slate-400 block mb-1 font-semibold">Выбранный товар:</label>
+          <div id="modalItemTitle" class="font-bold text-white bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+            Насос ГУР ГАЗель Бизнес (УМЗ 4216)
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-slate-400 block mb-1 font-semibold">Цена на кассе:</label>
+            <div id="modalItemPrice" class="font-black text-emerald-400 mono text-sm bg-slate-950 p-2 rounded-xl border border-slate-800">
+              6 950 ₽
+            </div>
+          </div>
+          <div>
+            <label class="text-slate-400 block mb-1 font-semibold">Код для 1С:</label>
+            <div id="modalItemCode" class="font-bold text-orange-400 mono text-xs bg-slate-950 p-2 rounded-xl border border-slate-800">
+              00-001041
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-slate-300 block mb-1 font-semibold">Ваше имя:</label>
+          <input id="modalClientName" type="text" placeholder="Например, Андрей" value="Алексей"
+                 class="w-full bg-slate-950 border border-slate-700 focus:border-orange-500 rounded-xl px-3 py-2 text-white">
+        </div>
+
+        <div>
+          <label class="text-slate-300 block mb-1 font-semibold">Номер телефона для подтверждения:</label>
+          <input id="modalClientPhone" type="text" placeholder="+7 (902) 802-82-46" value="+7 (902) 802-82-46"
+                 class="w-full bg-slate-950 border border-slate-700 focus:border-orange-500 rounded-xl px-3 py-2 text-white">
+        </div>
+      </div>
+
+      <div class="flex gap-2 pt-2">
+        <button onclick="confirmModalBooking()" class="flex-1 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black py-2.5 px-4 rounded-xl transition text-xs shadow-lg">
+          ✅ Подтвердить бронь и отправить на кассу
+        </button>
+        <button onclick="closeBookingModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-2.5 px-3 rounded-xl transition text-xs">
+          Отмена
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ДАННЫЕ СКЛАДА 1С (JSON) И КЛИЕНТСКИЙ JS-ДВИЖОК -->
+  <script>
+    const WAREHOUSE_DATA = [{"master_id": "GAZ-STEER-001", "canonical_title": "Насос ГУР ГАЗель Бизнес, Next (УМЗ 4216) ШНКФ", "oem_number": "ШHKФ453471125", "cross_numbers": ["33023407010", "42163407010", "ШHKФ453471125", "45347112540", "PP33024216"], "brands_analogs": ["БЗАГУ (Борисов)", "Пекар", "АДС", "Автогидроусилитель", "Kraft"], "applicability": "ГАЗ-3302, ГАЗель Бизнес, ГАЗель Next, Соболь 2752, Баргузин; дв. УМЗ-4216, Evotech 2.7 (A274)", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Рулевое управление/Насосы ГУР", "image_urls": ["https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80"], "total_stock": 4.0, "price_retail": 6950.0, "source_1c_codes": ["00-001041", "00-001042", "00-001043"], "raw_names": ["ГУР 4216 борисов ориг", "Насос г/у Газель Бизнес УМЗ-4216 (БЗАГУ)", "Насос гидроусилителя руля 3302 дв.4216"]}, {"master_id": "GAZ-COOL-001", "canonical_title": "Радиатор охлаждения ГАЗ-3302 медный 3-х рядный", "oem_number": "3302130101033", "cross_numbers": ["3302130101033", "3302130101033", "LRC0302B", "TR33023R"], "brands_analogs": ["Оренбургский радиаторный завод", "ШААЗ", "Luzar", "Tadashi"], "applicability": "ГАЗ-3302, 2705, 3221 ГАЗель Бизнес; дв. УМЗ-4216, ЗМЗ-405, ЗМЗ-406", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Система охлаждения/Радиаторы", "image_urls": ["https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80"], "total_stock": 2.0, "price_retail": 14500.0, "source_1c_codes": ["00-001088", "00-001089"], "raw_names": ["Радиатор охлаждения Газель Бизнес 3-х рядный медный", "Радиатор охл 3302 медн 3х ряд Оренбург"]}, {"master_id": "GAZ-CLUTCH-001", "canonical_title": "Цилиндр сцепления рабочий (РЦС) ГАЗ-3302, Соболь", "oem_number": "33021602510", "cross_numbers": ["33021602510", "31101602510", "CSC3302", "3302160251001"], "brands_analogs": ["ГАЗ (Оригинал)", "Fenox", "Пекар", "Kraft", "TRIALLI"], "applicability": "ГАЗ-3302, Соболь 2752, ГАЗ-31105 Волга; дв. ЗМЗ-405, ЗМЗ-406, УМЗ-4216", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Трансмиссия и привод/Сцепление", "image_urls": ["https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80"], "total_stock": 6.0, "price_retail": 1280.0, "source_1c_codes": ["00-001150", "00-001151"], "raw_names": ["рцс газель соболь под лепестковую корзину", "рабочий цилиндр сцепления 3302 чугун"]}, {"master_id": "GAZ-BRAKE-001", "canonical_title": "Колодки тормозные передние ГАЗель Next, Бизнес", "oem_number": "A21R233501170", "cross_numbers": ["A21R233501170", "3302350117001", "BPA21R23", "TIIR299"], "brands_analogs": ["ТИИР (Оригинал конвейер)", "Allied Nippon", "Маркон", "Kotl"], "applicability": "ГАЗель Next (A21R23, A21R33), ГАЗель Бизнес, Соболь Next; все типы дв.", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Тормозная система/Тормозные колодки", "image_urls": ["https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80"], "total_stock": 0.0, "price_retail": 1850.0, "source_1c_codes": ["00-002001"], "raw_names": ["Колодки тормозные передние Газель Next / Бизнес (компл 4шт)"]}, {"master_id": "GAZ-CLUTCH-002", "canonical_title": "Комплект сцепления ГАЗель Бизнес, Next Cummins 2.8", "oem_number": "3000950503", "cross_numbers": ["3000950503", "3000950503", "201878005456", "3400700645"], "brands_analogs": ["Sachs (ZF)", "Luk", "KraftTech", "HOLA"], "applicability": "ГАЗель Бизнес, ГАЗель Next, Соболь; двигатель Cummins ISF 2.8 дизель", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Трансмиссия и привод/Сцепление", "image_urls": ["https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80"], "total_stock": 0.0, "price_retail": 24800.0, "source_1c_codes": ["00-002002"], "raw_names": ["Сцепление комплект Газель Бизнес Cummins ISF 2.8 Sachs"]}, {"master_id": "UAZ-DRIVE-001", "canonical_title": "Крестовина карданного вала УАЗ Патриот, Хантер", "oem_number": "31602201025", "cross_numbers": ["31602201025", "3160220102501", "CR3160", "UJ3160"], "brands_analogs": ["АДС-Эксперт", "Чернянка", "HOLA", "RedBTR", "MetalPart"], "applicability": "УАЗ 3163 Патриот, УАЗ Пикап, УАЗ 31519 Хантер, УАЗ 452 Буханка", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Трансмиссия и привод/Карданные валы", "image_urls": ["https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80"], "total_stock": 1.0, "price_retail": 1150.0, "source_1c_codes": ["00-002003"], "raw_names": ["Крестовина карданного вала УАЗ Патриот усиленная"]}, {"master_id": "GAZ-ELEC-001", "canonical_title": "Стартер редукторный ГАЗ, УАЗ дв. ЗМЗ 406, 405, 409", "oem_number": "57323708", "cross_numbers": ["57323708", "57323708000", "4063708000", "ST5732", "60023708", "57423708", "57423708000", "КЗАТЭ57423708"], "brands_analogs": ["КЗАТЭ (Самара)", "БАТЭ", "Пекар", "СтартВОЛЬТ", "Прамо"], "applicability": "ГАЗ-3302 ГАЗель, Волга 3110, 31105, УАЗ Патриот, Хантер; дв. ЗМЗ-406, 405, 409", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Электрооборудование/Стартеры", "image_urls": ["https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80"], "total_stock": 3.0, "price_retail": 6850.0, "source_1c_codes": ["00-002004"], "raw_names": ["Стартер редукторный УАЗ, ГАЗ дв. 409, 405, 406 КЗАТЭ"]}, {"master_id": "GAZ-IGNIT-001", "canonical_title": "Свечи зажигания А17ДВРМ блистер 4 шт. ЗМЗ, УМЗ, ВАЗ", "oem_number": "A17ДBPM", "cross_numbers": ["A17DVRM", "WR7DC", "LR15YC", "A17ДBPM10", "0242235663"], "brands_analogs": ["ЭЗ (Энгельс / Bosch)", "Brisk", "NGK", "Finwhale"], "applicability": "ГАЗель, Волга, УАЗ, ВАЗ 2108-2115, Приора 8 кл; дв. ЗМЗ-405, 406, УМЗ-4216", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Система зажигания/Свечи", "image_urls": ["https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80"], "total_stock": 1.0, "price_retail": 420.0, "source_1c_codes": ["00-002005"], "raw_names": ["Свечи зажигания А17ДВРМ блистер 4 шт Энгельс"]}, {"master_id": "GAZ-FILT-001", "canonical_title": "Фильтр масляный ГАЗ, УАЗ дв. ЗМЗ-406, 405, 409 Ливны", "oem_number": "4061012005", "cross_numbers": ["4061012005", "2101C1012005", "W92021", "OF406", "OC384"], "brands_analogs": ["Автоагрегат (Ливны)", "Mann-Filter", "BIG Filter", "Невский фильтр", "SCT"], "applicability": "ГАЗ-3302, Соболь, Волга, УАЗ Патриот, Хантер; дв. ЗМЗ-406, 405, 409", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Масляная система/Масляные фильтры", "image_urls": ["https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80"], "total_stock": 0.0, "price_retail": 380.0, "source_1c_codes": ["00-002006"], "raw_names": ["Фильтр масляный дв. 406, 405, 409 Ливны"]}, {"master_id": "GAZ-AXLE-001", "canonical_title": "Редуктор заднего моста ГАЗ-3302 ГП 8х41 (4.3)", "oem_number": "3302240201010", "cross_numbers": ["3302240201010", "33022402010", "RD330243"], "brands_analogs": ["ГАЗ (Оригинал завод)", "Русские Узоры", "АвтоТех"], "applicability": "ГАЗ-3302 ГАЗель, ГАЗель Бизнес, ГАЗ-2705; задний ведущий мост", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Трансмиссия и привод/Редукторы", "image_urls": ["https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80"], "total_stock": 4.0, "price_retail": 28500.0, "source_1c_codes": ["00-003001"], "raw_names": ["Редуктор заднего моста ГАЗ-3302 Волга ГП 8х41"]}, {"master_id": "GAZ-TRANS-001", "canonical_title": "Коробка передач (КПП) ГАЗ-3309, 33081 дизель 5-ст", "oem_number": "33091700010", "cross_numbers": ["33091700010", "3309170001002", "GB3309"], "brands_analogs": ["ГАЗ (Нижний Новгород)"], "applicability": "ГАЗ-3309, ГАЗ-33081 Садко; дизельные двигатели ММЗ Д-245.7", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Трансмиссия и привод/Коробки передач", "image_urls": ["https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80"], "total_stock": 2.0, "price_retail": 92000.0, "source_1c_codes": ["00-003002"], "raw_names": ["КПП ГАЗ-3309 дизель 5-ступ в сборе"]}, {"master_id": "GAZ-ENG-001", "canonical_title": "Вал коленчатый (коленвал) УМЗ-4216 под сальник", "oem_number": "42161005011", "cross_numbers": ["42161005011", "42161005015", "CW4216"], "brands_analogs": ["УМЗ (Ульяновск оригинал)"], "applicability": "ГАЗ-3302 ГАЗель Бизнес, Соболь; дв. УМЗ-4216, УМЗ-42164 Евро-3, Евро-4", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Двигатель/Коленвалы", "image_urls": ["https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80"], "total_stock": 3.0, "price_retail": 34000.0, "source_1c_codes": ["00-003003"], "raw_names": ["Вал коленчатый УМЗ-4216 под сальник с вкладышами"]}, {"master_id": "GAZ-ENG-002", "canonical_title": "Блок цилиндров ЗМЗ-405 Евро-3 голый (d=95.5)", "oem_number": "405241002010", "cross_numbers": ["405241002010", "405221002010", "EB405"], "brands_analogs": ["ЗМЗ (Заволжский моторный завод)"], "applicability": "ГАЗель, Соболь, Волга 31105; дв. ЗМЗ-40524 Евро-3, ЗМЗ-40522 Евро-2", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Двигатель/Блоки цилиндров", "image_urls": ["https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80"], "total_stock": 1.0, "price_retail": 68000.0, "source_1c_codes": ["00-003004"], "raw_names": ["Блок цилиндров ЗМЗ-405 Евро-3 голый"]}, {"master_id": "UAZ-TRANS-001", "canonical_title": "Раздаточная коробка УАЗ 31519 Хантер косозубая", "oem_number": "315191800020", "cross_numbers": ["315191800020", "315121800020", "TC31519"], "brands_analogs": ["УАЗ (Ульяновск)"], "applicability": "УАЗ 31519 Хантер, УАЗ 469, 3151; мелкомодульная косозубая РК", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Трансмиссия и привод/Раздаточные коробки", "image_urls": ["https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80"], "total_stock": 2.0, "price_retail": 47000.0, "source_1c_codes": ["00-003005"], "raw_names": ["Раздаточная коробка УАЗ Хантер косозубая"]}, {"master_id": "GAZ-SUSP-001", "canonical_title": "Балка передней подвески Соболь 2752, 2217 голая", "oem_number": "27522904012", "cross_numbers": ["27522904012", "27522904010"], "brands_analogs": ["ГАЗ (Нижний Новгород)"], "applicability": "ГАЗ-2752, 2217 Соболь, Баргузин (задний привод 4х2)", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Подвеска/Балки и подрамники", "image_urls": ["https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80"], "total_stock": 3.0, "price_retail": 24000.0, "source_1c_codes": ["00-003006"], "raw_names": ["Балка передней подвески Соболь 2752 голая"]}, {"master_id": "GAZ-SUSP-002", "canonical_title": "Рессора задняя ГАЗ-3302 5-листовая усиленная", "oem_number": "3302291201002", "cross_numbers": ["3302291201002", "33022912010", "LS33025L"], "brands_analogs": ["Чусовской металлургический завод (ЧМЗ)", "Белорецк"], "applicability": "ГАЗ-3302 ГАЗель, ГАЗель Бизнес, ГАЗель Next борт", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Подвеска/Рессоры", "image_urls": ["https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80"], "total_stock": 8.0, "price_retail": 7900.0, "source_1c_codes": ["00-003007"], "raw_names": ["Рессора задняя ГАЗ-3302 5-листовая усиленная Чусовая"]}, {"master_id": "UAZ-CLUTCH-001", "canonical_title": "Картер сцепления (колокол) УАЗ Патриот дв. ЗМЗ-409", "oem_number": "4091601015", "cross_numbers": ["4091601015", "409160101510", "BH409"], "brands_analogs": ["ЗМЗ", "УАЗ"], "applicability": "УАЗ Патриот, УАЗ Хантер, УАЗ Профи; дв. ЗМЗ-409 под КПП Dymos / АДС", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Трансмиссия и привод/Сцепление", "image_urls": ["https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80"], "total_stock": 3.0, "price_retail": 11500.0, "source_1c_codes": ["00-003008"], "raw_names": ["Картер сцепления УАЗ дв. 409 Патриот (колокол)"]}, {"master_id": "GAZ-BODY-001", "canonical_title": "Дверь передняя левая ГАЗель Бизнес катафорез", "oem_number": "33026100015", "cross_numbers": ["33026100015", "3302610001510"], "brands_analogs": ["ГАЗ (Заводской катафорезный грунт)"], "applicability": "ГАЗ-3302, 2705, 3221 ГАЗель Бизнес, Соболь 2752", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Кузов/Двери", "image_urls": ["https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80"], "total_stock": 4.0, "price_retail": 19500.0, "source_1c_codes": ["00-003009"], "raw_names": ["Дверь передняя левая ГАЗель Бизнес оригинальный катафорез"]}, {"master_id": "GAZ-LIGHT-001", "canonical_title": "Фонарь задний светодиодный ГАЗель Next борт", "oem_number": "A21R233716010", "cross_numbers": ["A21R233716010", "A21R233716010", "RLA21R23"], "brands_analogs": ["Руденск (Беларусь)", "Освар", "Формула Света"], "applicability": "ГАЗель Next борт, ГАЗон Next, каркас бортовой платформы", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Автосвет/Фонари", "image_urls": ["https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80"], "total_stock": 6.0, "price_retail": 3600.0, "source_1c_codes": ["00-003010"], "raw_names": ["Фонарь задний светодиодный ГАЗель Next борт"]}, {"master_id": "GAZ-ELEC-002", "canonical_title": "Генератор ГАЗель Next, Бизнес Cummins 2.8 (140A)", "oem_number": "5263795", "cross_numbers": ["5263795", "4990782", "JFZ2805", "LG0328", "A004TU5081"], "brands_analogs": ["Cummins", "Luzar", "СтартВОЛЬТ", "Krauf"], "applicability": "ГАЗель Бизнес, ГАЗель Next, Соболь; двигатель Cummins ISF 2.8", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Электрооборудование/Генераторы", "image_urls": ["https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80"], "total_stock": 3.0, "price_retail": 15800.0, "source_1c_codes": ["00-004001"], "raw_names": ["Генератор ГАЗель Next дв.Cummins 140A"]}, {"master_id": "GAZ-SUSP-003", "canonical_title": "Амортизатор передний ГАЗ-3302 масляный СААЗ", "oem_number": "33022905006", "cross_numbers": ["33022905006", "33022905004", "SA3302", "SH3302"], "brands_analogs": ["СААЗ (Скопин)", "Белмаг", "HOLA", "Fenox"], "applicability": "ГАЗ-3302, 2705 ГАЗель, ГАЗель Бизнес передняя подвеска", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Подвеска/Амортизаторы", "image_urls": ["https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80"], "total_stock": 12.0, "price_retail": 1650.0, "source_1c_codes": ["00-004002"], "raw_names": ["Амортизатор передний ГАЗ-3302 масляный СААЗ"]}, {"master_id": "GAZ-COOL-002", "canonical_title": "Насос водяной (помпа) ЗМЗ-405, 406 с эл/муфтой", "oem_number": "40624130701010", "cross_numbers": ["40624130701010", "406241307010", "LWP0306", "WP40624"], "brands_analogs": ["ЗМЗ", "Пекар", "Luzar", "Tza"], "applicability": "ГАЗель, Соболь, Волга; дв. ЗМЗ-40524, 40522, 406 с электромуфтой", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Система охлаждения/Помпы", "image_urls": ["https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80"], "total_stock": 4.0, "price_retail": 5400.0, "source_1c_codes": ["00-004003"], "raw_names": ["Насос водяной (помпа) ЗМЗ-405, 406 с электромагнитной муфтой"]}, {"master_id": "GAZ-STEER-002", "canonical_title": "Тяга рулевая продольная ГАЗ-2217 Соболь", "oem_number": "22173414010", "cross_numbers": ["22173414010", "TR2217", "22173414050"], "brands_analogs": ["ГАЗ (Оригинал)", "Белмаг", "Трек"], "applicability": "ГАЗ-2217, 2752 Соболь, Баргузин", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Рулевое управление/Тяги и наконечники", "image_urls": ["https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80"], "total_stock": 5.0, "price_retail": 2400.0, "source_1c_codes": ["00-004004"], "raw_names": ["Тяга рулевая продольная Соболь"]}, {"master_id": "UAZ-CLUTCH-002", "canonical_title": "Диск сцепления ведомый УАЗ Патриот дв. ЗМЗ-409", "oem_number": "31601601130", "cross_numbers": ["31601601130", "3160160113010", "CD3160", "1878002205"], "brands_analogs": ["ЗМЗ", "УАЗ", "Sachs", "TRIALLI", "Luk"], "applicability": "УАЗ 3163 Патриот, УАЗ Хантер, УАЗ Карго; дв. ЗМЗ-409", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Трансмиссия и привод/Сцепление", "image_urls": ["https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80"], "total_stock": 6.0, "price_retail": 3200.0, "source_1c_codes": ["00-004005"], "raw_names": ["Диск сцепления ведомый УАЗ Патриот дв. 409"]}, {"master_id": "GAZ-COOL-003", "canonical_title": "Термостат 82С УМЗ-4216, Evotech 2.7 ПРАМО", "oem_number": "TA107130610004", "cross_numbers": ["TA107130610004", "1071306100", "LT0321", "TH10782"], "brands_analogs": ["Прамо (Элтра)", "Luzar", "Пекар", "Metal-Incar"], "applicability": "ГАЗель Бизнес, Next; дв. УМЗ-4216, Evotech 2.7 (A274, A275)", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Система охлаждения/Термостаты", "image_urls": ["https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80"], "total_stock": 10.0, "price_retail": 650.0, "source_1c_codes": ["00-004006"], "raw_names": ["Термостат 82С УМЗ-4216, Evotech ПРАМО"]}, {"master_id": "GAZ-SENS-001", "canonical_title": "Датчик положения коленвала (ДПКВ) ЗМЗ 406/405/409 Bosch", "oem_number": "0261210302", "cross_numbers": ["0261210302", "0261210302", "4063847050", "233847"], "brands_analogs": ["Bosch", "Автотрейд (Калуга)", "Пекар", "СОАТЭ"], "applicability": "ГАЗель, Соболь, Волга, УАЗ Патриот; дв. ЗМЗ-406, 405, 409", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Электрооборудование/Датчики", "image_urls": ["https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80"], "total_stock": 7.0, "price_retail": 1850.0, "source_1c_codes": ["00-004007"], "raw_names": ["Датчик коленвала ГАЗ, УАЗ дв. 406, 405, 409 Бош"]}, {"master_id": "GAZ-IGNIT-002", "canonical_title": "Модуль катушка зажигания дв. УМЗ-4216 Евро-3 СОАТЭ", "oem_number": "483705", "cross_numbers": ["483705", "483705000", "IC483705", "42163705010"], "brands_analogs": ["СОАТЭ (Старый Оскол)", "Пекар", "Север", "HOLA"], "applicability": "ГАЗ-3302 ГАЗель Бизнес, Соболь; дв. УМЗ-4216 Евро-3", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Система зажигания/Катушки", "image_urls": ["https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80"], "total_stock": 4.0, "price_retail": 2900.0, "source_1c_codes": ["00-004008"], "raw_names": ["Модуль зажигания дв. 4216 Евро-3 СОАТЭ"]}, {"master_id": "GAZ-EXH-001", "canonical_title": "Глушитель основной ГАЗ-3302 Евро-3 закатной", "oem_number": "3302120100820", "cross_numbers": ["3302120100820", "33021201008", "MUF3302E3"], "brands_analogs": ["Арзамасский завод глушителей", "Фобос", "CBD", "Экрис"], "applicability": "ГАЗ-3302, 33023 ГАЗель Бизнес удлиненная база; Евро-3, Евро-4", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Выхлопная система/Глушители", "image_urls": ["https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80"], "total_stock": 3.0, "price_retail": 3950.0, "source_1c_codes": ["00-004009"], "raw_names": ["Глушитель основной ГАЗ-3302 Евро-3 закатной Арзамас"]}, {"master_id": "GAZ-FUEL-001", "canonical_title": "Бензонасос модуль погружной ГАЗель Бизнес дв. 4216", "oem_number": "9П2960035", "cross_numbers": ["9П2960035", "9P2960035", "9P2960035", "FP4216UTES"], "brands_analogs": ["Утёс (Ульяновск)", "СОАТЭ", "Bosch", "Пекар"], "applicability": "ГАЗ-3302 ГАЗель Бизнес; инжекторные дв. УМЗ-4216", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Топливная система/Топливные насосы", "image_urls": ["https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80"], "total_stock": 2.0, "price_retail": 4800.0, "source_1c_codes": ["00-004010"], "raw_names": ["Бензонасос погружной модуль Газель Бизнес дв. 4216 Утёс"]}, {"master_id": "GAZ-DRIVE-002", "canonical_title": "Опора промежуточная (подвесной) ГАЗель Бизнес в сб.", "oem_number": "3302220109001", "cross_numbers": ["3302220109001", "33022201090", "CB3302", "532201090"], "brands_analogs": ["ГАЗ (Оригинал)", "БРТ (Балаково)", "Белмаг", "HOLA"], "applicability": "ГАЗ-3302, 2705 ГАЗель Бизнес; карданный вал с промежуточной опорой", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Трансмиссия и привод/Подшипники", "image_urls": ["https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80"], "total_stock": 9.0, "price_retail": 1350.0, "source_1c_codes": ["00-004011"], "raw_names": ["Подвесной подшипник карданного вала Газель Бизнес с опорой"]}, {"master_id": "GAZ-COOL-004", "canonical_title": "Патрубки радиатора силикон синий ГАЗель Бизнес 4216", "oem_number": "33021303000CИЛ", "cross_numbers": ["33021303000CИЛ", "33021303010", "SIL33024216"], "brands_analogs": ["Хорт Силикон", "Salers", "CS-20", "БРТ"], "applicability": "ГАЗ-3302 ГАЗель Бизнес; двигатель УМЗ-4216", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Система охлаждения/Патрубки", "image_urls": ["https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80"], "total_stock": 5.0, "price_retail": 2600.0, "source_1c_codes": ["00-004012"], "raw_names": ["Комплект патрубков радиатора силикон синий Газель Бизнес 4216"]}, {"master_id": "GAZ-SUSP-004", "canonical_title": "Комплект шкворней с подшипниками ГАЗель Бизнес", "oem_number": "33023000100", "cross_numbers": ["33023000100", "KP3302BRG", "33023001019"], "brands_analogs": ["ГАЗ (Нижний Новгород)", "Белмаг", "Чернянка", "Трек"], "applicability": "ГАЗ-3302, 2705 ГАЗель, ГАЗель Бизнес передняя ось", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Подвеска/Ремкомплекты", "image_urls": ["https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80"], "total_stock": 6.0, "price_retail": 3100.0, "source_1c_codes": ["00-004013"], "raw_names": ["Шкворень к-кт с подшипниками Газель Бизнес"]}, {"master_id": "GAZ-BRAKE-002", "canonical_title": "Цилиндр тормозной главный (ГТЦ) ГАЗель Бизнес Bosch", "oem_number": "0204123730", "cross_numbers": ["0204123730", "0204123730", "33023505010BOSCH"], "brands_analogs": ["Bosch (Оригинал конвейер)"], "applicability": "ГАЗель Бизнес (с вакуумным усилителем Bosch)", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Тормозная система/Главные цилиндры", "image_urls": ["https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80"], "total_stock": 3.0, "price_retail": 7900.0, "source_1c_codes": ["00-004014"], "raw_names": ["Цилиндр тормозной главный с бачком Газель Бизнес Bosch"]}, {"master_id": "GAZ-SUSP-005", "canonical_title": "Ступица колеса передняя ГАЗ-3302 в сборе", "oem_number": "33023103015", "cross_numbers": ["33023103015", "33023103012", "HUB3302F"], "brands_analogs": ["ГАЗ (Оригинал завод)", "АвтоТех", "Красная Этна"], "applicability": "ГАЗ-3302, 2705 ГАЗель Бизнес; передняя ось", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Подвеска/Ступицы", "image_urls": ["https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80"], "total_stock": 4.0, "price_retail": 4200.0, "source_1c_codes": ["00-004015"], "raw_names": ["Ступица передняя в сборе с подшипником Газель Бизнес"]}, {"master_id": "GAZ-BODY-002", "canonical_title": "Зеркало боковое левое ГАЗель Бизнес с обогревом", "oem_number": "33028201021", "cross_numbers": ["33028201021", "33028201051", "MR3302L"], "brands_analogs": ["Автокомпонент", "Политех", "Салют"], "applicability": "ГАЗ-3302, Соболь 2752 ГАЗель Бизнес; левая сторона", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Кузов/Зеркала", "image_urls": ["https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80"], "total_stock": 5.0, "price_retail": 2850.0, "source_1c_codes": ["00-004016"], "raw_names": ["Зеркало боковое левое Газель Бизнес с обогревом и повторителем"]}, {"master_id": "GAZ-BRAKE-003", "canonical_title": "Трос стояночного тормоза задний длинный ГАЗ-3302", "oem_number": "33023508180", "cross_numbers": ["33023508180", "33023508068", "HBC3302L"], "brands_analogs": ["Автопартнер (Димитровград)", "Тросики.ру", "Белмаг"], "applicability": "ГАЗ-3302 ГАЗель стандартная и удлиненная база", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Тормозная система/Тросы ручника", "image_urls": ["https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80"], "total_stock": 8.0, "price_retail": 850.0, "source_1c_codes": ["00-004017"], "raw_names": ["Трос ручника длинный Газель 3302"]}, {"master_id": "GAZ-FUEL-002", "canonical_title": "Форсунка топливная инжектор ЗМЗ-405, 409 Siemens", "oem_number": "ZMZ6354", "cross_numbers": ["ZMZ6354", "ZMZ6354", "4061132010", "A2C53099415"], "brands_analogs": ["Siemens DEKA", "Continental", "Bosch", "СОАТЭ"], "applicability": "ГАЗель, Волга, УАЗ Патриот; дв. ЗМЗ-40522, ЗМЗ-409 Евро-2, Евро-3", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Топливная система/Форсунки", "image_urls": ["https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80"], "total_stock": 12.0, "price_retail": 1750.0, "source_1c_codes": ["00-004018"], "raw_names": ["Форсунка топливная дв. ЗМЗ-405, 409 Siemens DEKA"]}, {"master_id": "GAZ-ENG-003", "canonical_title": "Прокладка ГБЦ металлопакет ЗМЗ-405 Евро-3 (d=95.5)", "oem_number": "405241003020", "cross_numbers": ["405241003020", "4051003020", "HG40524"], "brands_analogs": ["БРТ (Балаково)", "Фритекс", "ВАТИ", "Espra"], "applicability": "ГАЗель, Соболь, Волга 31105; дв. ЗМЗ-40524 Евро-3, Евро-4", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Двигатель/Прокладки ГБЦ", "image_urls": ["https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80"], "total_stock": 15.0, "price_retail": 1450.0, "source_1c_codes": ["00-004019"], "raw_names": ["Прокладка ГБЦ металлопакет ЗМЗ-405 Евро-3 БРТ"]}, {"master_id": "GAZ-IGNIT-003", "canonical_title": "Катушка зажигания индивидуальная ГАЗель Next Evotech", "oem_number": "2112370501013", "cross_numbers": ["2112370501013", "21123705010", "0221504473", "IC2112"], "brands_analogs": ["СОАТЭ", "Bosch", "ИТЭЛМА", "Север"], "applicability": "ГАЗель Next, Бизнес; дв. УМЗ Evotech 2.7 (A274), ВАЗ 16V", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Система зажигания/Катушки", "image_urls": ["https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80"], "total_stock": 8.0, "price_retail": 1250.0, "source_1c_codes": ["00-004020"], "raw_names": ["Катушка зажигания индивидуальная ГАЗель Next Evotech 2.7"]}, {"master_id": "GAZ-SUSP-006", "canonical_title": "Втулки рессоры полиуретан ГАЗ-3302 комплект 12 шт.", "oem_number": "33022912028ПY", "cross_numbers": ["33022912028ПY", "33022912028", "PU330212"], "brands_analogs": ["Полиуретан.ру", "Точка Опоры", "Фортуна", "БРТ"], "applicability": "ГАЗ-3302 ГАЗель, ГАЗель Бизнес, Соболь передние и задние рессоры", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Подвеска/Сайлентблоки и втулки", "image_urls": ["https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80"], "total_stock": 10.0, "price_retail": 1100.0, "source_1c_codes": ["00-004021"], "raw_names": ["Втулка рессоры полиуретан ГАЗ-3302 (комплект 12 шт)"]}, {"master_id": "GAZ-ENG-004", "canonical_title": "Ремень генератора поликлиновой 6PK 1370 УМЗ-4216 с ГУР", "oem_number": "6PK1370", "cross_numbers": ["6PK1370", "6PK1370", "42161308020", "GATES6PK1368"], "brands_analogs": ["Gates", "ContiTech", "БРТ", "LynxAuto", "Dayco"], "applicability": "ГАЗель Бизнес; двигатель УМЗ-4216 с гидроусилителем руля (ГУР)", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Двигатель/Ремни приводные", "image_urls": ["https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80"], "total_stock": 14.0, "price_retail": 680.0, "source_1c_codes": ["00-004022"], "raw_names": ["Ремень генератора поликлиновой 6PK 1370 ГАЗель УМЗ-4216 с ГУР"]}, {"master_id": "GAZ-STEER-003", "canonical_title": "Наконечник рулевой тяги правый ГАЗ-3302 ГАЗель", "oem_number": "33023414056", "cross_numbers": ["33023414056", "3302341405601", "TRE3302R"], "brands_analogs": ["Белмаг", "ГАЗ", "Трек Мастер", "HOLA"], "applicability": "ГАЗ-3302, 2705 ГАЗель, ГАЗель Бизнес рулевая трапеция", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Рулевое управление/Тяги и наконечники", "image_urls": ["https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80"], "total_stock": 10.0, "price_retail": 850.0, "source_1c_codes": ["00-004023"], "raw_names": ["Наконечник рулевой тяги правый Газель"]}, {"master_id": "GAZ-ENG-005", "canonical_title": "Комплект ГРМ Евро-3 ЗМЗ 405, 406, 409 с башмаками БОН", "oem_number": "4061006040БOH", "cross_numbers": ["4061006040БOH", "4061006040", "TCZMZBON", "406241006040"], "brands_analogs": ["БОН (Челябинск)", "Прогресс", "ЗМЗ Золотая серия", "Русмаш"], "applicability": "ГАЗель, Соболь, УАЗ Патриот; дв. ЗМЗ-405, 406, 409 Евро-3 (цепи 70/90 звеньев)", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Двигатель/Ремкомплекты ГРМ", "image_urls": ["https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80"], "total_stock": 4.0, "price_retail": 7200.0, "source_1c_codes": ["00-004024"], "raw_names": ["Ремкомплект ГРМ Евро-3 ЗМЗ 405 406 409 с башмаками БОН"]}, {"master_id": "GAZ-ENG-006", "canonical_title": "Прокладка клапанной крышки ЗМЗ 406, 405 силикон", "oem_number": "4061007245CИЛ", "cross_numbers": ["4061007245CИЛ", "4061007245", "406100724501", "VCG406"], "brands_analogs": ["CS-20", "Хорт", "БРТ", "ВАТИ"], "applicability": "ГАЗель, Соболь, Волга, УАЗ; дв. ЗМЗ-406, 405 (алюминиевая крышка)", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Двигатель/Прокладки двигателя", "image_urls": ["https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80"], "total_stock": 16.0, "price_retail": 550.0, "source_1c_codes": ["00-004025"], "raw_names": ["Прокладка клапанной крышки ЗМЗ 406 405 силикон красная"]}, {"master_id": "GAZ-FILT-002", "canonical_title": "Фильтр топливный тонкой очистки ГАЗ под штуцер", "oem_number": "31101117010", "cross_numbers": ["31101117010", "3110111701001", "WK512", "FF3110"], "brands_analogs": ["Автоагрегат (Ливны)", "BIG Filter", "Mann", "Невский фильтр"], "applicability": "ГАЗ-3110 Волга, ГАЗ-3302 ГАЗель инжектор; штуцерное соединение", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Топливная система/Топливные фильтры", "image_urls": ["https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80"], "total_stock": 18.0, "price_retail": 320.0, "source_1c_codes": ["00-004026"], "raw_names": ["Фильтр топливный тонкой очистки ГАЗ под штуцер Ливны"]}, {"master_id": "GAZ-SENS-002", "canonical_title": "Датчик положения дроссельной заслонки (ДПДЗ) ЗМЗ-406 Рикор", "oem_number": "406113000001", "cross_numbers": ["406113000001", "4061130000", "0280122001", "TPS406"], "brands_analogs": ["Рикор Электроникс", "Bosch", "Автотрейд", "Пекар"], "applicability": "ГАЗель, Волга, УАЗ; инжекторные двигатели ЗМЗ-406, 405, 409", "avito_category": "Запчасти и аксессуары/Запчасти/Для автомобилей/Электрооборудование/Датчики", "image_urls": ["https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80"], "total_stock": 6.0, "price_retail": 1150.0, "source_1c_codes": ["00-004027"], "raw_names": ["Датчик дроссельной заслонки бесконтактный 406 дв Рикор"]}];
+
+    const SLANG = {
+      "гур": "насос гидроусилителя руля гур",
+      "радик": "радиатор охлаждения",
+      "сцепа": "сцепление",
+      "рцс": "цилиндр сцепления",
+      "колодки": "колодки тормозные",
+      "стартер": "стартер редукторный",
+      "гена": "генератор"
+    };
+
+    let currentPendingItem = null;
+    let reservationsHistory = [
+      {
+        id: "RES-20261117-001",
+        name: "Сергей",
+        phone: "+7 (912) 345-67-89",
+        title: "Стартер редукторный ГАЗ, УАЗ дв. ЗМЗ 406, 405, 409",
+        price: 6850,
+        code: "00-002004"
+      }
+    ];
+
+    function cleanArt(raw) {
+      if (!raw) return "";
+      return String(raw).toUpperCase().replace(/[.\-_/\s\\]/g, "")
+        .replace(/А/g, "A").replace(/В/g, "B").replace(/Е/g, "E")
+        .replace(/К/g, "K").replace(/М/g, "M").replace(/Н/g, "H")
+        .replace(/О/g, "O").replace(/Р/g, "P").replace(/С/g, "C")
+        .replace(/Т/g, "T").replace(/Х/g, "X").replace(/У/g, "Y");
+    }
+
+    // Сценарии быстрого клика
+    function runScenario(num) {
+      const scenarios = {
+        1: "Здравствуйте! Нужен ГУР на 4216, есть в наличии и какая цена?",
+        2: "Проверьте кросс КЗАТЭ 5742.3708, подойдет на 406 мотор?",
+        3: "Есть передние тормозные колодки на Газель Next?",
+        4: "Хочу поставить мотор от Тойоты 1JZ на Газель, есть установочный комплект?",
+        5: "Забронируйте стартер редукторный на утро, приеду к 10:00. Меня зовут Сергей, тел. 89123456789",
+        6: "Нужен медный 3-х рядный радиатор охлаждения на 3302"
+      };
+      document.getElementById('chatInput').value = scenarios[num] || "";
+      sendMessage();
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = "";
+
+      // 1. Добавляем сообщение покупателя в чат
+      appendMessage('user', text);
+
+      // 2. Имитируем быстрый вызов ИИ (30-60 мс)
+      const startTime = performance.now();
+      const response = processQuery(text);
+      const latency = Math.round(performance.now() - startTime + 28);
+
+      setTimeout(() => {
+        // Добавляем ответ ИИ
+        appendMessage('bot', response.reply, response.item);
+        // Обновляем панель рентгена
+        updateInspectionPanel(response, latency);
+      }, 350);
+    }
+
+    function appendMessage(sender, text, item = null) {
+      const container = document.getElementById('chatMessages');
+      const timeStr = "23:" + (new Date().getMinutes() < 10 ? "0" : "") + new Date().getMinutes();
+
+      if (sender === 'user') {
+        const div = document.createElement('div');
+        div.className = "flex items-start justify-end gap-2 max-w-[90%] ml-auto";
+        div.innerHTML = `
+          <div class="bg-orange-600 text-white p-2.5 rounded-2xl rounded-tr-none shadow-sm leading-relaxed text-xs">
+            ${escapeHtml(text)}
+            <div class="text-[9px] text-orange-200 text-right mt-1 mono">${timeStr} ✓✓</div>
+          </div>
+        `;
+        container.appendChild(div);
+      } else {
+        const div = document.createElement('div');
+        div.className = "flex items-start gap-2 max-w-[92%]";
+        
+        let bookBtnHtml = "";
+        if (item && item.total_stock > 0) {
+          bookBtnHtml = `
+            <div class="mt-2.5 pt-2 border-t border-slate-800 flex gap-1.5">
+              <button onclick="openBookingModal('${item.master_id}')" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black text-[11px] px-3 py-1.5 rounded-xl transition flex items-center gap-1 shadow">
+                <span>⚡</span> Забронировать на утро (0 ₽)
+              </button>
+            </div>
+          `;
+        }
+
+        div.innerHTML = `
+          <div class="w-6 h-6 rounded-full bg-orange-500 flex-shrink-0 flex items-center justify-center text-[10px] font-black text-slate-950 mt-1">ИИ</div>
+          <div class="bg-slate-900 border border-slate-800 p-2.5 rounded-2xl rounded-tl-none text-slate-200 shadow-sm leading-relaxed text-xs">
+            <div class="whitespace-pre-line">${escapeHtml(text)}</div>
+            ${bookBtnHtml}
+            <div class="text-[9px] text-slate-400 text-right mt-1 mono">${timeStr} ✓✓</div>
+          </div>
+        `;
+        container.appendChild(div);
+      }
+
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function processQuery(q) {
+      const qLower = q.toLowerCase();
+
+      // Escalation Guard
+      const customTriggers = ["1jz", "2jz", "toyota", "тойот", "свап", "swap", "переделк", "кастом", "v8"];
+      if (customTriggers.some(t => qLower.includes(t))) {
+        return {
+          status: "ESCALATED_CUSTOM",
+          tool: "search_inventory(query, engine_or_model)",
+          antiHallucination: "PASSED (Escalation Guard triggered)",
+          explanation: "Запрос на нестандартный свап мотора передан мастеру-агрегатчику.",
+          item: null,
+          count: 0,
+          reply: "⚠️ Здравствуйте! Запросы на нестандартную переделку или свап двигателя (Toyota 1JZ/2JZ / V8) требуют индивидуального инженерного подбора.
+Автоматический бот отключен, чтобы исключить ошибку в крепеже и переходных плитах. Ваш запрос передан нашему старшему мастеру-агрегатчику — он свяжется с вами утром с 09:00!"
+        };
+      }
+
+      // Проверка на бронирование
+      const isReservation = ["забронир", "бронь", "резерв", "отложи"].some(k => qLower.includes(k));
+      let clientName = "Клиент с Авито";
+      let clientPhone = "+7 (900) 000-00-00";
+
+      const nameMatch = q.match(/\b(?:меня\s+зовут|зовут|мое\s+имя|я)\s+([А-Яа-яA-Za-z]+)/i);
+      if (nameMatch) clientName = nameMatch[1];
+
+      const phoneMatch = q.match(/(\+?7|8)[\s\-(]?\d{3}[\s\-)]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}/);
+      if (phoneMatch) clientPhone = phoneMatch[0];
+
+      // Поиск подходящего товара
+      const matched = searchInternal(q);
+
+      if (isReservation && matched) {
+        // Выполняем бронь
+        const newResId = "RES-" + new Date().toISOString().slice(0,10).replace(/-/g,"") + "-" + Math.floor(100 + Math.random()*900);
+        reservationsHistory.unshift({
+          id: newResId,
+          name: clientName,
+          phone: clientPhone,
+          title: matched.canonical_title,
+          price: matched.price_retail,
+          code: matched.source_1c_codes[0] || "00-000000"
+        });
+        updateReservationsUI();
+
+        return {
+          status: "CONFIRMED",
+          tool: `create_reservation(client_name="${clientName}", phone="${clientPhone}", master_id="${matched.master_id}")`,
+          antiHallucination: "PASSED (Reservation recorded in SQLite)",
+          explanation: "Бронь зафиксирована в базе, уменьшен доступный остаток на складе.",
+          item: matched,
+          count: 1,
+          reply: `🎉 Отлично, ${clientName}! Бронь #${newResId} успешно оформлена!
+📦 Товар: ${matched.canonical_title} (1 шт.)
+💰 Стоимость: ${matched.price_retail.toLocaleString()} ₽ (зафиксирована на кассе)
+📍 Адрес выдачи: г. Пермь, ул. Промышленная, 8
+⏰ Деталь отложена на кассе до завтра 18:00 на ваше имя.
+Телефон магазина: +7 (902) 802-82-46. Ждем вас!`
+        };
+      }
+
+      if (matched) {
+        if (matched.total_stock > 0) {
+          return {
+            status: "IN_STOCK",
+            tool: `search_inventory(query="${q}")`,
+            antiHallucination: "PASSED (Real stock confirmed > 0)",
+            explanation: `Найдено точное совпадение на остатке 1С (${matched.total_stock} шт.).`,
+            item: matched,
+            count: 1,
+            reply: `✅ Да, есть в наличии! ${matched.canonical_title} (производитель ${matched.brands_analogs[0] || 'Оригинал'}).
+💰 Цена: ${matched.price_retail.toLocaleString()} ₽. Остаток на складе: ${matched.total_stock} шт.
+🚗 Применяемость: ${matched.applicability}.
+📍 Забрать можно сегодня до 20:00 или завтра с 08:30 по адресу: г. Пермь, ул. Промышленная, 8.
+Забронировать деталь на утро, чтобы не забрали?`
+          };
+        } else {
+          return {
+            status: "OUT_OF_STOCK",
+            tool: `search_inventory(query="${q}")`,
+            antiHallucination: "PASSED (Zero Stock detected, truthful answer)",
+            explanation: "Позиция есть в эталоне, но текущий остаток в 1С равен 0.",
+            item: matched,
+            count: 0,
+            reply: `⏳ Позиция «${matched.canonical_title}» есть в нашем каталоге, но прямо сейчас на полке остаток 0 шт. (дефицитная позиция).
+🚚 Мы можем привезти её со склада официального дистрибьютора завтра к 10:00 утра по цене ${matched.price_retail.toLocaleString()} ₽.
+Оформить резерв и перемещение под вас?`
+          };
+        }
+      }
+
+      return {
+        status: "NOT_FOUND",
+        tool: `search_inventory(query="${q}")`,
+        antiHallucination: "PASSED (No false items created)",
+        explanation: "Совпадений в каталоге не найдено, галлюцинация предотвращена.",
+        item: null,
+        count: 0,
+        reply: `🔍 По запросу «${q}» точных совпадений на нашем складе ГАЗ/УАЗ не найдено.
+Уточните каталожный номер детали либо VIN-код / модель двигателя, и я проверю кросс-базу!`
+      };
+    }
+
+    function searchInternal(q) {
+      const words = q.match(/[A-Za-zА-Яа-я0-9_.-]+/g) || [];
+      
+      // 1. Поиск по артикулам с цифрами
+      for (let w of words) {
+        if (/\d/.test(w)) {
+          const clean = cleanArt(w);
+          if (clean.length >= 4) {
+            for (let item of WAREHOUSE_DATA) {
+              if (clean === item.oem_number || item.cross_numbers.includes(clean)) {
+                return item;
+              }
+            }
+          }
+        }
+      }
+
+      // 2. Поиск по ключевым словам
+      const qLower = q.toLowerCase();
+      let bestItem = null;
+      let maxScore = 0;
+
+      for (let item of WAREHOUSE_DATA) {
+        const target = (item.canonical_title + " " + item.raw_names.join(" ") + " " + item.applicability).toLowerCase();
+        let score = 0;
+
+        if (qLower.includes("гур") && target.includes("гур")) score += 40;
+        if (qLower.includes("4216") && target.includes("4216")) score += 35;
+        if (qLower.includes("стартер") && target.includes("стартер")) score += 40;
+        if (qLower.includes("колодк") && target.includes("колодк")) score += 40;
+        if (qLower.includes("next") && target.includes("next")) score += 30;
+        if (qLower.includes("радиатор") && target.includes("радиатор")) score += 40;
+        if (qLower.includes("медн") && target.includes("медн")) score += 20;
+
+        for (let w of words) {
+          if (w.length > 3 && target.includes(w.toLowerCase())) {
+            score += 15;
+          }
+        }
+
+        if (score > maxScore) {
+          maxScore = score;
+          bestItem = item;
+        }
+      }
+
+      return maxScore >= 45 ? bestItem : null;
+    }
+
+    function updateInspectionPanel(res, latency) {
+      document.getElementById('toolLatency').textContent = latency + " ms";
+      document.getElementById('toolName').textContent = res.tool;
+      document.getElementById('toolStatusBadge').textContent = res.status;
+      document.getElementById('toolExplanation').textContent = res.explanation;
+      document.getElementById('antiHallucinationBadge').innerHTML = `<span>🛡️</span> ${res.antiHallucination}`;
+
+      if (res.item) {
+        const item = res.item;
+        document.getElementById('matchesCountBadge').textContent = "Найдено: 1 карточка";
+        document.getElementById('cardMasterId').textContent = item.master_id;
+        document.getElementById('cardTitle').textContent = item.canonical_title;
+        document.getElementById('cardPrice').textContent = item.price_retail.toLocaleString() + " ₽";
+        
+        const stockEl = document.getElementById('cardStockBadge');
+        if (item.total_stock > 0) {
+          stockEl.className = "text-[10px] font-bold text-emerald-300 bg-emerald-950/80 border border-emerald-700 px-2 py-0.5 rounded-full inline-block mt-0.5";
+          stockEl.textContent = `● В наличии: ${item.total_stock} шт.`;
+        } else {
+          stockEl.className = "text-[10px] font-bold text-red-300 bg-red-950/80 border border-red-700 px-2 py-0.5 rounded-full inline-block mt-0.5";
+          stockEl.textContent = `● Остаток: 0 шт. (Дефицит)`;
+        }
+
+        document.getElementById('cardCodes1C').textContent = item.source_1c_codes.join(", ");
+        document.getElementById('cardOem').textContent = item.oem_number;
+        document.getElementById('cardApplicability').textContent = item.applicability;
+
+        const crossesEl = document.getElementById('cardCrosses');
+        crossesEl.innerHTML = item.cross_numbers.slice(0, 5).map(c => `<span class="bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded mono text-[10px]">${c}</span>`).join("");
+      } else {
+        document.getElementById('matchesCountBadge').textContent = "Совпадений: 0";
+      }
+    }
+
+    function openBookingModal(masterId) {
+      const item = WAREHOUSE_DATA.find(x => x.master_id === masterId);
+      if (!item) return;
+      currentPendingItem = item;
+
+      document.getElementById('modalItemTitle').textContent = item.canonical_title;
+      document.getElementById('modalItemPrice').textContent = item.price_retail.toLocaleString() + " ₽";
+      document.getElementById('modalItemCode').textContent = item.source_1c_codes.join(", ");
+      document.getElementById('bookingModal').classList.remove('hidden');
+    }
+
+    function closeBookingModal() {
+      document.getElementById('bookingModal').classList.add('hidden');
+      currentPendingItem = null;
+    }
+
+    function confirmModalBooking() {
+      if (!currentPendingItem) return;
+      const name = document.getElementById('modalClientName').value.trim() || "Покупатель с Авито";
+      const phone = document.getElementById('modalClientPhone').value.trim() || "+7 (902) 802-82-46";
+
+      const newResId = "RES-" + new Date().toISOString().slice(0,10).replace(/-/g,"") + "-" + Math.floor(100 + Math.random()*900);
+      reservationsHistory.unshift({
+        id: newResId,
+        name: name,
+        phone: phone,
+        title: currentPendingItem.canonical_title,
+        price: currentPendingItem.price_retail,
+        code: currentPendingItem.source_1c_codes[0] || "00-000000"
+      });
+
+      // Уменьшаем остаток в модели
+      currentPendingItem.total_stock = Math.max(0, currentPendingItem.total_stock - 1);
+
+      updateReservationsUI();
+      closeBookingModal();
+
+      // Добавляем сообщение в чат
+      appendMessage('user', `Забронируйте на имя ${name}, тел. ${phone}`);
+      setTimeout(() => {
+        appendMessage('bot', `🎉 Отлично, ${name}! Бронь #${newResId} успешно оформлена на кассе!
+📦 ${currentPendingItem.canonical_title}
+💰 ${currentPendingItem.price_retail.toLocaleString()} ₽ отложены для вас до завтра 18:00.
+📍 Пермь, ул. Промышленная, 8.`);
+      }, 300);
+    }
+
+    function updateReservationsUI() {
+      const list = document.getElementById('reservationsList');
+      document.getElementById('reservationsCountBadge').textContent = `Активных броней: ${reservationsHistory.length}`;
+
+      list.innerHTML = reservationsHistory.map(r => `
+        <div class="bg-slate-900 border border-emerald-500/40 p-3 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded mono">${r.id}</span>
+              <span class="text-white font-black text-xs">${escapeHtml(r.name)} • ${escapeHtml(r.phone)}</span>
+            </div>
+            <div class="text-slate-300 text-xs font-medium mt-1">
+              ${escapeHtml(r.title)} (1 шт.)
+            </div>
+            <div class="text-[11px] text-slate-400 mt-0.5">
+              Код списания в 1С: <b class="text-orange-400 mono">${r.code}</b> • Сумма: <b class="text-white mono">${r.price.toLocaleString()} ₽</b>
+            </div>
+          </div>
+          <button onclick="copyTelegramAlert('${r.id}', '${r.name}', '${r.phone}', '${r.title}', ${r.price}, '${r.code}')" 
+                  class="bg-sky-600 hover:bg-sky-700 text-white font-bold text-[11px] px-3 py-1.5 rounded-lg whitespace-nowrap transition flex items-center justify-center gap-1 shadow">
+            <span>✈️</span> Скопировать алерт в Telegram
+          </button>
+        </div>
+      `).join("");
+    }
+
+    function copyTelegramAlert(id, name, phone, title, price, code) {
+      const text = `🔔 НОВАЯ НОЧНАЯ БРОНЬ С АВИТО:
+📦 ${title} (1 шт. по ${price.toLocaleString()} ₽)
+🏷️ Коды в 1С: ${code}
+👤 Клиент: ${name} (${phone})
+🆔 Номер брони: ${id}`;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("✅ Текст уведомления скопирован в буфер обмена для отправки в Telegram кассиру:
+
+" + text);
+      });
+    }
+
+    function escapeHtml(text) {
+      if (!text) return "";
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>
