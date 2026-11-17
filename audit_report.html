@@ -1,0 +1,521 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Отчет технической ревизии склада 1С • АВТОСКЛАД-ИИ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #0b0f19; color: #f1f5f9; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    @media print {
+      body { background-color: #ffffff; color: #0f172a; }
+      .no-print { display: none !important; }
+      .print-border { border: 1px solid #cbd5e1 !important; }
+      .print-text-dark { color: #0f172a !important; }
+    }
+  </style>
+</head>
+<body class="p-3 sm:p-8">
+
+  <div class="max-w-6xl mx-auto">
+    <!-- ПАНЕЛЬ УПРАВЛЕНИЯ -->
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-6 no-print">
+      <div class="flex items-center gap-3">
+        <span class="bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 text-xs font-black px-3 py-1.5 rounded-lg tracking-wider uppercase shadow">
+          ★ АВТОСКЛАД-ИИ
+        </span>
+        <span class="text-sm text-slate-400">Файл анализа: <b class="text-slate-200">sample_1c_gaz_uaz.xlsx</b></span>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition flex items-center gap-1.5">
+          🖨 Печать / Сохранить в PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- ТИТУЛЬНЫЙ БЛОК -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 mb-8 shadow-2xl relative overflow-hidden">
+      <div class="absolute -right-12 -top-12 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="flex flex-wrap items-start justify-between gap-4 border-b border-slate-800 pb-6 mb-6">
+        <div>
+          <div class="text-xs font-black uppercase tracking-widest text-orange-400 mb-1">
+            Конфиденциально • Технический аудит склада 1С
+          </div>
+          <h1 class="text-xl sm:text-3xl font-black text-white">
+            Отчет ревизии складских остатков и упущенной выгоды
+          </h1>
+          <p class="text-slate-400 text-sm mt-1">
+            Специфика учета: автозапчасти ГАЗ / Волга / УАЗ / LCV • Найдено дублей, неликвидов и дефицита
+          </p>
+        </div>
+        <div class="text-right text-xs text-slate-400">
+          <div class="font-bold text-slate-200 text-sm">Система «АВТОСКЛАД-ИИ»</div>
+          <div>Прямой контакт: <b class="text-orange-400">+7 (902) 802-82-46</b></div>
+          <div>Telegram: <a href="https://t.me/dkazak1999" target="_blank" class="text-sky-400 hover:underline">@dkazak1999</a></div>
+        </div>
+      </div>
+
+      <!-- 4 КЛЮЧЕВЫХ KPI В ДЕНЬГАХ -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- KPI 1 -->
+        <div class="bg-slate-950 p-4 rounded-xl border border-red-500/30">
+          <div class="text-[11px] font-bold text-red-400 uppercase tracking-wider mb-1">Заморожено в неликвиде</div>
+          <div class="text-2xl font-black text-red-400 mono">623 900 ₽</div>
+          <div class="text-xs text-slate-400 mt-1">По закупочной цене (65.2% от склада)</div>
+        </div>
+
+        <!-- KPI 2 -->
+        <div class="bg-slate-950 p-4 rounded-xl border border-amber-500/30">
+          <div class="text-[11px] font-bold text-amber-400 uppercase tracking-wider mb-1">Скрытые дубли в 1С</div>
+          <div class="text-2xl font-black text-amber-400 mono">3 кластеров</div>
+          <div class="text-xs text-slate-400 mt-1">2 групп с риском лишнего закупа</div>
+        </div>
+
+        <!-- KPI 3 -->
+        <div class="bg-slate-950 p-4 rounded-xl border border-emerald-500/30">
+          <div class="text-[11px] font-bold text-emerald-400 uppercase tracking-wider mb-1">Упущенная касса в мес.</div>
+          <div class="text-2xl font-black text-emerald-400 mono">162 767 ₽</div>
+          <div class="text-xs text-slate-400 mt-1">6 ходовых позиций в нуле</div>
+        </div>
+
+        <!-- KPI 4 -->
+        <div class="bg-slate-950 p-4 rounded-xl border border-cyan-500/30">
+          <div class="text-[11px] font-bold text-cyan-400 uppercase tracking-wider mb-1">Весь склад в себестоимости</div>
+          <div class="text-2xl font-black text-white mono">957 080 ₽</div>
+          <div class="text-xs text-slate-400 mt-1">50 SKU / 260 шт. деталей</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- РАЗДЕЛ 1: СКРЫТЫЕ ДУБЛИ В 1С -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 mb-8 shadow-xl">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">Дыра в учете №1</span>
+          <h2 class="text-lg sm:text-xl font-bold text-white">Скрытые дубли в 1С (Опасность ложного дефицита)</h2>
+        </div>
+        <span class="bg-amber-500/20 text-amber-300 font-bold text-xs px-3 py-1 rounded-full">
+          Найдено: 3 групп
+        </span>
+      </div>
+      <p class="text-xs text-slate-400 mb-6">
+        Одна и та же деталь заведена в 1С под разными названиями или с опечатками в артикуле. Когда на одной карточке остаток становится 0, закупщик видит дефицит и заказывает деталь снова, хотя на соседнем складе или дубле лежит остаток!
+      </p>
+
+      <div class="space-y-4">
+        
+        <div class="bg-slate-950 border border-red-500/50 rounded-xl p-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-2 mb-3">
+            <div class="flex items-center gap-2">
+              <span class="bg-slate-800 text-slate-300 text-[10px] font-mono px-2 py-0.5 rounded">Артикул (точное совпадение)</span>
+              <span class="text-xs font-bold text-slate-200">Кластер ART-3302130101033</span>
+              
+              <span class="bg-red-500/20 text-red-400 text-[10px] font-bold px-2 py-0.5 rounded">⚠ РИСК ПЕРЕЗАКУПА: остаток 0 + >0</span>
+              
+            </div>
+            <div class="text-xs text-slate-400 font-mono">
+              Суммарный остаток: <b class="text-emerald-400">2 шт.</b>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="text-slate-400 border-b border-slate-900">
+                  <th class="py-1 px-2">Код 1С</th>
+                  <th class="py-1 px-2">Наименование в базе</th>
+                  <th class="py-1 px-2">Артикул 1С</th>
+                  <th class="py-1 px-2 text-right">Остаток</th>
+                  <th class="py-1 px-2 text-right">Розница</th>
+                  <th class="py-1 px-2 text-right">Продажи (год)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-900 font-mono">
+                
+                <tr class="text-red-400/90">
+                  <td class="py-1 px-2 text-slate-400">00-001088</td>
+                  <td class="py-1 px-2 font-sans font-medium">Радиатор охлаждения Газель Бизнес 3-х рядный медный</td>
+                  <td class="py-1 px-2 text-slate-300">3302-1301010-33</td>
+                  <td class="py-1 px-2 text-right font-bold text-red-400">0 шт.</td>
+                  <td class="py-1 px-2 text-right text-slate-300">14,500 ₽</td>
+                  <td class="py-1 px-2 text-right text-slate-400">18 шт.</td>
+                </tr>
+                
+                <tr class="text-slate-200">
+                  <td class="py-1 px-2 text-slate-400">00-001089</td>
+                  <td class="py-1 px-2 font-sans font-medium">Радиатор охл 3302 медн 3х ряд Оренбург</td>
+                  <td class="py-1 px-2 text-slate-300">3302.1301.010-33</td>
+                  <td class="py-1 px-2 text-right font-bold text-emerald-400">2 шт.</td>
+                  <td class="py-1 px-2 text-right text-slate-300">14,200 ₽</td>
+                  <td class="py-1 px-2 text-right text-slate-400">16 шт.</td>
+                </tr>
+                
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <div class="bg-slate-950 border border-red-500/50 rounded-xl p-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-2 mb-3">
+            <div class="flex items-center gap-2">
+              <span class="bg-slate-800 text-slate-300 text-[10px] font-mono px-2 py-0.5 rounded">Артикул (точное совпадение)</span>
+              <span class="text-xs font-bold text-slate-200">Кластер ART-ШHKФ453471125</span>
+              
+              <span class="bg-red-500/20 text-red-400 text-[10px] font-bold px-2 py-0.5 rounded">⚠ РИСК ПЕРЕЗАКУПА: остаток 0 + >0</span>
+              
+            </div>
+            <div class="text-xs text-slate-400 font-mono">
+              Суммарный остаток: <b class="text-emerald-400">3 шт.</b>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="text-slate-400 border-b border-slate-900">
+                  <th class="py-1 px-2">Код 1С</th>
+                  <th class="py-1 px-2">Наименование в базе</th>
+                  <th class="py-1 px-2">Артикул 1С</th>
+                  <th class="py-1 px-2 text-right">Остаток</th>
+                  <th class="py-1 px-2 text-right">Розница</th>
+                  <th class="py-1 px-2 text-right">Продажи (год)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-900 font-mono">
+                
+                <tr class="text-red-400/90">
+                  <td class="py-1 px-2 text-slate-400">00-001041</td>
+                  <td class="py-1 px-2 font-sans font-medium">ГУР 4216 борисов ориг</td>
+                  <td class="py-1 px-2 text-slate-300">ШНКФ 453471.125</td>
+                  <td class="py-1 px-2 text-right font-bold text-red-400">0 шт.</td>
+                  <td class="py-1 px-2 text-right text-slate-300">6,800 ₽</td>
+                  <td class="py-1 px-2 text-right text-slate-400">14 шт.</td>
+                </tr>
+                
+                <tr class="text-slate-200">
+                  <td class="py-1 px-2 text-slate-400">00-001042</td>
+                  <td class="py-1 px-2 font-sans font-medium">Насос г/у Газель Бизнес УМЗ-4216 (БЗАГУ)</td>
+                  <td class="py-1 px-2 text-slate-300">ШНКФ453471125</td>
+                  <td class="py-1 px-2 text-right font-bold text-emerald-400">3 шт.</td>
+                  <td class="py-1 px-2 text-right text-slate-300">6,950 ₽</td>
+                  <td class="py-1 px-2 text-right text-slate-400">22 шт.</td>
+                </tr>
+                
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-2 mb-3">
+            <div class="flex items-center gap-2">
+              <span class="bg-slate-800 text-slate-300 text-[10px] font-mono px-2 py-0.5 rounded">Автосленг и нечеткое совпадение</span>
+              <span class="text-xs font-bold text-slate-200">Кластер FUZZ-00-003008</span>
+              
+            </div>
+            <div class="text-xs text-slate-400 font-mono">
+              Суммарный остаток: <b class="text-emerald-400">9 шт.</b>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="text-slate-400 border-b border-slate-900">
+                  <th class="py-1 px-2">Код 1С</th>
+                  <th class="py-1 px-2">Наименование в базе</th>
+                  <th class="py-1 px-2">Артикул 1С</th>
+                  <th class="py-1 px-2 text-right">Остаток</th>
+                  <th class="py-1 px-2 text-right">Розница</th>
+                  <th class="py-1 px-2 text-right">Продажи (год)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-900 font-mono">
+                
+                <tr class="text-slate-200">
+                  <td class="py-1 px-2 text-slate-400">00-003008</td>
+                  <td class="py-1 px-2 font-sans font-medium">Картер сцепления УАЗ дв. 409 Патриот (колокол)</td>
+                  <td class="py-1 px-2 text-slate-300">409.1601015</td>
+                  <td class="py-1 px-2 text-right font-bold text-emerald-400">3 шт.</td>
+                  <td class="py-1 px-2 text-right text-slate-300">11,500 ₽</td>
+                  <td class="py-1 px-2 text-right text-slate-400">0 шт.</td>
+                </tr>
+                
+                <tr class="text-slate-200">
+                  <td class="py-1 px-2 text-slate-400">00-004005</td>
+                  <td class="py-1 px-2 font-sans font-medium">Диск сцепления ведомый УАЗ Патриот дв. 409</td>
+                  <td class="py-1 px-2 text-slate-300">3160-1601130</td>
+                  <td class="py-1 px-2 text-right font-bold text-emerald-400">6 шт.</td>
+                  <td class="py-1 px-2 text-right text-slate-300">3,200 ₽</td>
+                  <td class="py-1 px-2 text-right text-slate-400">30 шт.</td>
+                </tr>
+                
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+    <!-- РАЗДЕЛ 2: ТОП-30 НЕЛИКВИДОВ -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 mb-8 shadow-xl">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <span class="text-xs font-bold text-red-400 uppercase tracking-wider">Замороженные деньги</span>
+          <h2 class="text-lg sm:text-xl font-bold text-white">ТОП неликвидных позиций (Без движения > 270 дней)</h2>
+        </div>
+        <div class="text-right">
+          <span class="text-xs text-slate-400">Сумма в топе: </span>
+          <span class="text-sm font-bold text-red-400 mono">
+            623 900 ₽
+          </span>
+        </div>
+      </div>
+      <p class="text-xs text-slate-400 mb-6">
+        Эти запчасти годами лежат на стеллажах. В 1С их не ищут, но покупатели в соседних регионах прямо сейчас ищут их на Авито и Дроме через поиск по артикулу и модели.
+      </p>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="text-slate-400 border-b border-slate-800 pb-2">
+              <th class="py-2 px-3">Код</th>
+              <th class="py-2 px-3">Наименование</th>
+              <th class="py-2 px-3">Артикул</th>
+              <th class="py-2 px-3 text-right">Остаток</th>
+              <th class="py-2 px-3 text-right">Закупка</th>
+              <th class="py-2 px-3 text-right">Заморожено (Закуп)</th>
+              <th class="py-2 px-3 text-right">Простой</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800 font-mono">
+            
+            <tr class="hover:bg-slate-800/40 transition">
+              <td class="py-2 px-3 text-slate-400">00-003002</td>
+              <td class="py-2 px-3 font-sans font-medium text-slate-200">КПП ГАЗ-3309 дизель 5-ступ в сборе</td>
+              <td class="py-2 px-3 text-slate-300">3309-1700010</td>
+              <td class="py-2 px-3 text-right text-white font-bold">2 шт.</td>
+              <td class="py-2 px-3 text-right text-slate-400">71,000 ₽</td>
+              <td class="py-2 px-3 text-right font-bold text-red-400">142 000 ₽</td>
+              <td class="py-2 px-3 text-right text-amber-400">520 дн.</td>
+            </tr>
+            
+            <tr class="hover:bg-slate-800/40 transition">
+              <td class="py-2 px-3 text-slate-400">00-003001</td>
+              <td class="py-2 px-3 font-sans font-medium text-slate-200">Редуктор заднего моста ГАЗ-3302 Волга ГП 8х41</td>
+              <td class="py-2 px-3 text-slate-300">3302-2402010-10</td>
+              <td class="py-2 px-3 text-right text-white font-bold">4 шт.</td>
+              <td class="py-2 px-3 text-right text-slate-400">21,000 ₽</td>
+              <td class="py-2 px-3 text-right font-bold text-red-400">84 000 ₽</td>
+              <td class="py-2 px-3 text-right text-amber-400">410 дн.</td>
+            </tr>
+            
+            <tr class="hover:bg-slate-800/40 transition">
+              <td class="py-2 px-3 text-slate-400">00-003003</td>
+              <td class="py-2 px-3 font-sans font-medium text-slate-200">Вал коленчатый УМЗ-4216 под сальник с вкладышами</td>
+              <td class="py-2 px-3 text-slate-300">4216.1005011</td>
+              <td class="py-2 px-3 text-right text-white font-bold">3 шт.</td>
+              <td class="py-2 px-3 text-right text-slate-400">26,000 ₽</td>
+              <td class="py-2 px-3 text-right font-bold text-red-400">78 000 ₽</td>
+              <td class="py-2 px-3 text-right text-amber-400">340 дн.</td>
+            </tr>
+            
+            <tr class="hover:bg-slate-800/40 transition">
+              <td class="py-2 px-3 text-slate-400">00-003005</td>
+              <td class="py-2 px-3 font-sans font-medium text-slate-200">Раздаточная коробка УАЗ Хантер косозубая</td>
+              <td class="py-2 px-3 text-slate-300">31519-1800020</td>
+              <td class="py-2 px-3 text-right text-white font-bold">2 шт.</td>
+              <td class="py-2 px-3 text-right text-slate-400">36,000 ₽</td>
+              <td class="py-2 px-3 text-right font-bold text-red-400">72 000 ₽</td>
+              <td class="py-2 px-3 text-right text-amber-400">390 дн.</td>
+            </tr>
+            
+            <tr class="hover:bg-slate-800/40 transition">
+              <td class="py-2 px-3 text-slate-400">00-003009</td>
+              <td class="py-2 px-3 font-sans font-medium text-slate-200">Дверь передняя левая ГАЗель Бизнес оригинальный катафорез</td>
+              <td class="py-2 px-3 text-slate-300">3302-6100015</td>
+              <td class="py-2 px-3 text-right text-white font-bold">4 шт.</td>
+              <td class="py-2 px-3 text-right text-slate-400">14,200 ₽</td>
+              <td class="py-2 px-3 text-right font-bold text-red-400">56 800 ₽</td>
+              <td class="py-2 px-3 text-right text-amber-400">380 дн.</td>
+            </tr>
+            
+            <tr class="hover:bg-slate-800/40 transition">
+              <td class="py-2 px-3 text-slate-400">00-003006</td>
+              <td class="py-2 px-3 font-sans font-medium text-slate-200">Балка передней подвески Соболь 2752 голая</td>
+              <td class="py-2 px-3 text-slate-300">2752-2904012</td>
+              <td class="py-2 px-3 text-right text-white font-bold">3 шт.</td>
+              <td class="py-2 px-3 text-right text-slate-400">17,500 ₽</td>
+              <td class="py-2 px-3 text-right font-bold text-red-400">52 500 ₽</td>
+              <td class="py-2 px-3 text-right text-amber-400">295 дн.</td>
+            </tr>
+            
+            <tr class="hover:bg-slate-800/40 transition">
+              <td class="py-2 px-3 text-slate-400">00-003004</td>
+              <td class="py-2 px-3 font-sans font-medium text-slate-200">Блок цилиндров ЗМЗ-405 Евро-3 голый</td>
+              <td class="py-2 px-3 text-slate-300">40524.1002010</td>
+              <td class="py-2 px-3 text-right text-white font-bold">1 шт.</td>
+              <td class="py-2 px-3 text-right text-slate-400">52,000 ₽</td>
+              <td class="py-2 px-3 text-right font-bold text-red-400">52 000 ₽</td>
+              <td class="py-2 px-3 text-right text-amber-400">480 дн.</td>
+            </tr>
+            
+            <tr class="hover:bg-slate-800/40 transition">
+              <td class="py-2 px-3 text-slate-400">00-003007</td>
+              <td class="py-2 px-3 font-sans font-medium text-slate-200">Рессора задняя ГАЗ-3302 5-листовая усиленная Чусовая</td>
+              <td class="py-2 px-3 text-slate-300">3302-2912010-02</td>
+              <td class="py-2 px-3 text-right text-white font-bold">8 шт.</td>
+              <td class="py-2 px-3 text-right text-slate-400">5,800 ₽</td>
+              <td class="py-2 px-3 text-right font-bold text-red-400">46 400 ₽</td>
+              <td class="py-2 px-3 text-right text-amber-400">310 дн.</td>
+            </tr>
+            
+            <tr class="hover:bg-slate-800/40 transition">
+              <td class="py-2 px-3 text-slate-400">00-003008</td>
+              <td class="py-2 px-3 font-sans font-medium text-slate-200">Картер сцепления УАЗ дв. 409 Патриот (колокол)</td>
+              <td class="py-2 px-3 text-slate-300">409.1601015</td>
+              <td class="py-2 px-3 text-right text-white font-bold">3 шт.</td>
+              <td class="py-2 px-3 text-right text-slate-400">8,200 ₽</td>
+              <td class="py-2 px-3 text-right font-bold text-red-400">24 600 ₽</td>
+              <td class="py-2 px-3 text-right text-amber-400">365 дн.</td>
+            </tr>
+            
+            <tr class="hover:bg-slate-800/40 transition">
+              <td class="py-2 px-3 text-slate-400">00-003010</td>
+              <td class="py-2 px-3 font-sans font-medium text-slate-200">Фонарь задний светодиодный ГАЗель Next борт</td>
+              <td class="py-2 px-3 text-slate-300">A21R23-3716010</td>
+              <td class="py-2 px-3 text-right text-white font-bold">6 шт.</td>
+              <td class="py-2 px-3 text-right text-slate-400">2,600 ₽</td>
+              <td class="py-2 px-3 text-right font-bold text-red-400">15 600 ₽</td>
+              <td class="py-2 px-3 text-right text-amber-400">285 дн.</td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- РАЗДЕЛ 3: ДЕФИЦИТ ХОДОВЫХ ПОЗИЦИЙ -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 mb-8 shadow-xl">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Упущенная прибыль</span>
+          <h2 class="text-lg sm:text-xl font-bold text-white">Скрытый дефицит ходовых позиций (Out-of-Stock)</h2>
+        </div>
+        <div class="text-right">
+          <span class="text-xs text-slate-400">Упущенная выручка в месяц: </span>
+          <span class="text-sm font-bold text-emerald-400 mono">
+            + 162 767 ₽
+          </span>
+        </div>
+      </div>
+      <p class="text-xs text-slate-400 mb-6">
+        Товары с высоким годовым спросом, которые на складе подошли к нулю. Магазин ежедневно теряет постоянных клиентов и выручку из-за отсутствия базовых расходников.
+      </p>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="text-slate-400 border-b border-slate-800 pb-2">
+              <th class="py-2 px-3">Код</th>
+              <th class="py-2 px-3">Наименование</th>
+              <th class="py-2 px-3 text-right">Текущий остаток</th>
+              <th class="py-2 px-3 text-right">Спрос в мес.</th>
+              <th class="py-2 px-3 text-right">Упущенная выручка/мес</th>
+              <th class="py-2 px-3 text-right">Реком. заказ на 30 дн.</th>
+              <th class="py-2 px-3 text-right">Бюджет заказа</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800 font-mono">
+            
+            <tr class="hover:bg-slate-800/40 transition">
+              <td class="py-2 px-3 text-slate-400">00-002002</td>
+              <td class="py-2 px-3 font-sans font-medium text-slate-200">Сцепление комплект Газель Бизнес Cummins ISF 2.8 Sachs</td>
+              <td class="py-2 px-3 text-right font-bold text-red-400">0 шт.</td>
+              <td class="py-2 px-3 text-right text-slate-300">4.0 шт/мес</td>
+              <td class="py-2 px-3 text-right font-bold text-emerald-400">+ 99 200 ₽</td>
+              <td class="py-2 px-3 text-right text-white font-bold">5 шт.</td>
+              <td class="py-2 px-3 text-right text-slate-400">94 500 ₽</td>
+            </tr>
+            
+            <tr class="hover:bg-slate-800/40 transition">
+              <td class="py-2 px-3 text-slate-400">00-002004</td>
+              <td class="py-2 px-3 font-sans font-medium text-slate-200">Стартер редукторный УАЗ, ГАЗ дв. 409, 405, 406 КЗАТЭ</td>
+              <td class="py-2 px-3 text-right font-bold text-red-400">0 шт.</td>
+              <td class="py-2 px-3 text-right text-slate-300">4.3 шт/мес</td>
+              <td class="py-2 px-3 text-right font-bold text-emerald-400">+ 29 683 ₽</td>
+              <td class="py-2 px-3 text-right text-white font-bold">6 шт.</td>
+              <td class="py-2 px-3 text-right text-slate-400">29 400 ₽</td>
+            </tr>
+            
+            <tr class="hover:bg-slate-800/40 transition">
+              <td class="py-2 px-3 text-slate-400">00-002001</td>
+              <td class="py-2 px-3 font-sans font-medium text-slate-200">Колодки тормозные передние Газель Next / Бизнес (компл 4шт)</td>
+              <td class="py-2 px-3 text-right font-bold text-red-400">1 шт.</td>
+              <td class="py-2 px-3 text-right text-slate-300">8.0 шт/мес</td>
+              <td class="py-2 px-3 text-right font-bold text-emerald-400">+ 14 800 ₽</td>
+              <td class="py-2 px-3 text-right text-white font-bold">9 шт.</td>
+              <td class="py-2 px-3 text-right text-slate-400">11 250 ₽</td>
+            </tr>
+            
+            <tr class="hover:bg-slate-800/40 transition">
+              <td class="py-2 px-3 text-slate-400">00-002006</td>
+              <td class="py-2 px-3 font-sans font-medium text-slate-200">Фильтр масляный дв. 406, 405, 409 Ливны</td>
+              <td class="py-2 px-3 text-right font-bold text-red-400">0 шт.</td>
+              <td class="py-2 px-3 text-right text-slate-300">17.5 шт/мес</td>
+              <td class="py-2 px-3 text-right font-bold text-emerald-400">+ 6 650 ₽</td>
+              <td class="py-2 px-3 text-right text-white font-bold">21 шт.</td>
+              <td class="py-2 px-3 text-right text-slate-400">4 830 ₽</td>
+            </tr>
+            
+            <tr class="hover:bg-slate-800/40 transition">
+              <td class="py-2 px-3 text-slate-400">00-002005</td>
+              <td class="py-2 px-3 font-sans font-medium text-slate-200">Свечи зажигания А17ДВРМ блистер 4 шт Энгельс</td>
+              <td class="py-2 px-3 text-right font-bold text-red-400">1 шт.</td>
+              <td class="py-2 px-3 text-right text-slate-300">15.0 шт/мес</td>
+              <td class="py-2 px-3 text-right font-bold text-emerald-400">+ 6 300 ₽</td>
+              <td class="py-2 px-3 text-right text-white font-bold">17 шт.</td>
+              <td class="py-2 px-3 text-right text-slate-400">4 590 ₽</td>
+            </tr>
+            
+            <tr class="hover:bg-slate-800/40 transition">
+              <td class="py-2 px-3 text-slate-400">00-002003</td>
+              <td class="py-2 px-3 font-sans font-medium text-slate-200">Крестовина карданного вала УАЗ Патриот усиленная</td>
+              <td class="py-2 px-3 text-right font-bold text-red-400">1 шт.</td>
+              <td class="py-2 px-3 text-right text-slate-300">5.3 шт/мес</td>
+              <td class="py-2 px-3 text-right font-bold text-emerald-400">+ 6 133 ₽</td>
+              <td class="py-2 px-3 text-right text-white font-bold">6 шт.</td>
+              <td class="py-2 px-3 text-right text-slate-400">4 680 ₽</td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ПОДВАЛ С РЕШЕНИЕМ -->
+    <div class="bg-gradient-to-r from-slate-900 to-slate-950 border-2 border-orange-500/50 rounded-2xl p-6 sm:p-8 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="space-y-2">
+        <h3 class="text-lg sm:text-xl font-black text-white">Как вернуть эти деньги в кассу магазина?</h3>
+        <p class="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
+          Система «АВТОСКЛАД-ИИ» за 14 дней наводит порядок в справочнике 1С, склеивает дубли, привязывает кросс-номера и автоматически выгружает неликвиды на Авито и Дром с круглосуточным ИИ-продавцом в чатах.
+        </p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+        <a href="https://wa.me/79028028246" target="_blank" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black px-6 py-3.5 rounded-xl text-center text-xs sm:text-sm transition shadow-lg">
+          💬 Написать в WhatsApp
+        </a>
+        <a href="https://t.me/dkazak1999" target="_blank" class="bg-sky-500 hover:bg-sky-600 text-slate-950 font-black px-6 py-3.5 rounded-xl text-center text-xs sm:text-sm transition shadow-lg">
+          ✈️ Telegram: @dkazak1999
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
