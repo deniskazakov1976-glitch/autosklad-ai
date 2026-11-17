@@ -24,7 +24,7 @@
           <div class="flex items-center gap-2">
             <h1 class="text-xl sm:text-2xl font-black text-white">Кабинет производства «АВТОСКЛАД-ИИ»</h1>
             <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
-              Production ERP v1.3
+              Production ERP v1.4 • 5/5 Модулей Активны (100% Ready)
             </span>
           </div>
           <p class="text-xs text-slate-400">Внутренняя рабочая консоль управления модулями М1–М5</p>
@@ -49,7 +49,7 @@
       <div class="bg-slate-900/90 border border-slate-800 p-4 rounded-2xl shadow">
         <div class="text-[11px] font-bold text-slate-400 uppercase">Клиент в обработке</div>
         <div class="text-xl font-black text-white mono mt-1">client_main</div>
-        <div class="text-[11px] text-slate-400 mt-1">Иван Иванович (ГАЗ / УАЗ)</div>
+        <div class="text-[11px] text-slate-400 mt-1">Вячеслав Юрьевич (ГАЗ / УАЗ)</div>
       </div>
       <div class="bg-slate-900/90 border border-blue-500/30 p-4 rounded-2xl shadow">
         <div class="text-[11px] font-bold text-blue-400 uppercase">Эталонов в базе</div>
@@ -249,23 +249,51 @@
       </div>
 
       <!-- МОДУЛЬ 5: РАДАР СОБСТВЕННИКА -->
-      <div class="bg-slate-900/60 border border-slate-800/60 rounded-3xl p-6 sm:p-7 shadow relative overflow-hidden">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-7 shadow-xl hover:border-slate-700 transition">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
           <div class="flex items-center gap-3">
-            <span class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 font-mono font-black flex items-center justify-center text-sm border border-amber-500/30">
+            <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 font-mono font-black flex items-center justify-center text-sm border border-amber-500/40">
               М5
             </span>
             <div>
               <div class="flex items-center gap-2">
-                <h2 class="text-lg sm:text-xl font-bold text-slate-300">МОДУЛЬ 5: Еженедельный «Радар собственника» (`owner_radar.py`)</h2>
-                <span class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded">В ПЛАНЕ</span>
+                <h2 class="text-lg sm:text-xl font-black text-white">МОДУЛЬ 5: Еженедельный «Радар собственника» (`owner_radar.py`)</h2>
+                <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1.5 mono">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> АКТИВЕН (100% готов)
+                </span>
               </div>
-              <p class="text-xs text-slate-500">Контроль закупщика, поиск аномальных перезакупов и еженедельная сводка в Telegram-бот директору</p>
+              <p class="text-xs text-slate-400">Сравнение 1С неделя к неделе: разморозка неликвида (+240 800 ₽), анти-откат закупщика (-103 000 ₽), проспанный дефицит и Telegram-дайджест</p>
             </div>
           </div>
-          <button disabled class="bg-slate-800/50 text-slate-500 font-bold text-xs px-4 py-2.5 rounded-xl cursor-not-allowed">
-            В очереди разработки ➔
-          </button>
+          <div class="flex flex-wrap items-center gap-2">
+            <a href="owner_radar.html" target="_blank" class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl transition shadow-lg shadow-amber-500/30 flex items-center gap-2">
+              <span>🛡️</span> Открыть панель контроля директора ➔
+            </a>
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-4 gap-3 text-xs bg-slate-950 p-4 rounded-2xl border border-slate-800/80 mb-3">
+          <div>
+            <span class="text-slate-400">Разморожено кэша с Авито:</span>
+            <div class="text-sm font-bold text-emerald-400 mono mt-0.5">+240 800 ₽ (6 SKU)</div>
+          </div>
+          <div>
+            <span class="text-slate-400">Ошибки закупщика (анти-откат):</span>
+            <div class="text-sm font-bold text-red-400 mono mt-0.5">-103 000 ₽ (3 заказа)</div>
+          </div>
+          <div>
+            <span class="text-slate-400">Риск упущенного дефицита:</span>
+            <div class="text-sm font-bold text-amber-400 mono mt-0.5">47 722 ₽/мес (4 SKU)</div>
+          </div>
+          <div>
+            <span class="text-slate-400">Чистый финансовый эффект:</span>
+            <div class="text-sm font-bold text-white mono mt-0.5">+153 450 ₽ / нед</div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500 font-mono">
+          <span>CLI: <code>python owner_radar.py</code></span>
+          <span>Артефакты: week_prev.xlsx, week_curr.xlsx, owner_radar.html, radar_summary.json, telegram_digest.txt</span>
         </div>
       </div>
 
