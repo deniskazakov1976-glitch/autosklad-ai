@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Кабинет производства • Платформа АВТОСКЛАД-ИИ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #070a11; color: #f1f5f9; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body class="p-4 sm:p-8">
+
+  <div class="max-w-7xl mx-auto">
+    <!-- ВЕРХНИЙ ХЕДЕР ПАНЕЛИ УПРАВЛЕНИЯ -->
+    <header class="flex flex-wrap items-center justify-between gap-4 pb-6 mb-8 border-b border-slate-800">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center font-black text-slate-950 text-xl shadow-lg">
+          ⚙️
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl sm:text-2xl font-black text-white">Кабинет производства «АВТОСКЛАД-ИИ»</h1>
+            <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
+              Production ERP v1.3
+            </span>
+          </div>
+          <p class="text-xs text-slate-400">Внутренняя рабочая консоль управления модулями М1–М5</p>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3">
+        <div class="bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-1.5 text-xs flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-slate-400">База:</span>
+          <span class="text-white font-mono font-bold">master_catalog.db</span>
+        </div>
+        <a href="index.html" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-xs px-4 py-2 rounded-xl transition flex items-center gap-2 shadow">
+          <span>🌐 Открыть клиентский сайт</span>
+          <span>➔</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- СВОДНЫЕ СТАТУС-КАРТОЧКИ КОНВЕЙЕРА -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div class="bg-slate-900/90 border border-slate-800 p-4 rounded-2xl shadow">
+        <div class="text-[11px] font-bold text-slate-400 uppercase">Клиент в обработке</div>
+        <div class="text-xl font-black text-white mono mt-1">client_main</div>
+        <div class="text-[11px] text-slate-400 mt-1">Вячеслав Юрьевич (ГАЗ / УАЗ)</div>
+      </div>
+      <div class="bg-slate-900/90 border border-blue-500/30 p-4 rounded-2xl shadow">
+        <div class="text-[11px] font-bold text-blue-400 uppercase">Эталонов в базе</div>
+        <div class="text-xl font-black text-blue-400 mono mt-1">46 SKU</div>
+        <div class="text-[11px] text-slate-400 mt-1">ГАЗ, Соболь, УАЗ Патриот</div>
+      </div>
+      <div class="bg-slate-900/90 border border-emerald-500/30 p-4 rounded-2xl shadow">
+        <div class="text-[11px] font-bold text-emerald-400 uppercase">Склеено номенклатуры</div>
+        <div class="text-xl font-black text-emerald-400 mono mt-1">100.0 %</div>
+        <div class="text-[11px] text-slate-400 mt-1">50 из 50 позиций в кэше</div>
+      </div>
+      <div class="bg-slate-900/90 border border-orange-500/30 p-4 rounded-2xl shadow">
+        <div class="text-[11px] font-bold text-orange-400 uppercase">Активная витрина</div>
+        <div class="text-xl font-black text-orange-400 mono mt-1">1 309 030 ₽</div>
+        <div class="text-[11px] text-slate-400 mt-1">43 объявления (Авито/Дром)</div>
+      </div>
+    </div>
+
+    <!-- КАРТОЧКИ МОДУЛЕЙ СИСТЕМЫ (М1 - М5) -->
+    <div class="space-y-6">
+
+      <!-- МОДУЛЬ 1: АУДИТОР СКЛАДА -->
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-7 shadow-xl hover:border-slate-700 transition">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-lg bg-red-500/20 text-red-400 font-mono font-black flex items-center justify-center text-sm border border-red-500/40">
+              М1
+            </span>
+            <div>
+              <h2 class="text-lg sm:text-xl font-black text-white">МОДУЛЬ 1: Аудитор базы 1С (`auditor.py`)</h2>
+              <p class="text-xs text-slate-400">Техническая ревизия выгрузок 1С: поиск скрытых дублей, замороженного неликвида и дефицита</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 text-xs font-bold">● ГОТОВ К РАБОТЕ</span>
+            <a href="audit_report.html" target="_blank" class="bg-red-600 hover:bg-red-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition shadow">
+              Открыть отчет аудита ➔
+            </a>
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-3 gap-3 text-xs bg-slate-950 p-4 rounded-2xl border border-slate-800/80 mb-3">
+          <div>
+            <span class="text-slate-400">Найдено неликвида (>270 дн):</span>
+            <div class="text-sm font-bold text-red-400 mono mt-0.5">623 900 ₽ (65.2% склада)</div>
+          </div>
+          <div>
+            <span class="text-slate-400">Кластеров дублей в 1С:</span>
+            <div class="text-sm font-bold text-amber-400 mono mt-0.5">3 группы (риск перезакупа)</div>
+          </div>
+          <div>
+            <span class="text-slate-400">Упущенная выручка из-за дефицита:</span>
+            <div class="text-sm font-bold text-emerald-400 mono mt-0.5">+ 162 767 ₽ / мес</div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500 font-mono">
+          <span>CLI: <code>python auditor.py sample_1c_gaz_uaz.xlsx</code></span>
+          <span>Артефакты: audit_report.html, audit_summary.json</span>
+        </div>
+      </div>
+
+      <!-- МОДУЛЬ 2: МАТЧЕР И ЭТАЛОННАЯ БАЗА -->
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-7 shadow-xl hover:border-slate-700 transition">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 font-mono font-black flex items-center justify-center text-sm border border-blue-500/40">
+              М2
+            </span>
+            <div>
+              <h2 class="text-lg sm:text-xl font-black text-white">МОДУЛЬ 2: ИИ-Матчер номенклатуры (`matcher.py`)</h2>
+              <p class="text-xs text-slate-400">Трехкаскадная склейка: 1. Точный OEM & Кроссы (0 ₽) ➔ 2. Fuzzy + Автосленг (0 ₽) ➔ 3. LLM Batch</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 text-xs font-bold">● ГОТОВ К РАБОТЕ</span>
+            <a href="matching_report.html" target="_blank" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition shadow">
+              Открыть отчет матчера ➔
+            </a>
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-3 gap-3 text-xs bg-slate-950 p-4 rounded-2xl border border-slate-800/80 mb-3">
+          <div>
+            <span class="text-slate-400">Результативность склейки:</span>
+            <div class="text-sm font-bold text-emerald-400 mono mt-0.5">50 / 50 SKU (100.0%)</div>
+          </div>
+          <div>
+            <span class="text-slate-400">Детерминированно бесплатно (0 ₽):</span>
+            <div class="text-sm font-bold text-cyan-400 mono mt-0.5">49 SKU (OEM + Кроссы)</div>
+          </div>
+          <div>
+            <span class="text-slate-400">Кэш в SQLite (client_sku_mapping):</span>
+            <div class="text-sm font-bold text-white mono mt-0.5">50 связей (0 сек при повторе)</div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500 font-mono">
+          <span>CLI: <code>python matcher.py sample_1c_gaz_uaz.xlsx</code></span>
+          <span>Артефакты: master_catalog.db, matching_report.html, matching_summary.json</span>
+        </div>
+      </div>
+
+      <!-- МОДУЛЬ 3: ГЕНЕРАТОР ФИДОВ ДЛЯ МАРКЕТПЛЕЙСОВ -->
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-7 shadow-xl hover:border-slate-700 transition">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 font-mono font-black flex items-center justify-center text-sm border border-emerald-500/40">
+              М3
+            </span>
+            <div>
+              <h2 class="text-lg sm:text-xl font-black text-white">МОДУЛЬ 3: Генератор фидов Авито и Дром (`feed_generator.py`)</h2>
+              <p class="text-xs text-slate-400">Дедупликация дублей 1С в единые карточки, фильтрация нулевых остатков, расчет промо-цен на неликвид</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <a href="avito_feed.xml" download class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-emerald-400 font-mono text-xs px-3 py-2 rounded-xl transition">
+              📥 XML Авито
+            </a>
+            <a href="drom_feed.csv" download class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-sky-400 font-mono text-xs px-3 py-2 rounded-xl transition">
+              📥 CSV Дром
+            </a>
+            <a href="feeds_preview.html" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl transition shadow">
+              Открыть витрину объявлений ➔
+            </a>
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-3 gap-3 text-xs bg-slate-950 p-4 rounded-2xl border border-slate-800/80 mb-3">
+          <div>
+            <span class="text-slate-400">Сформировано объявлений:</span>
+            <div class="text-sm font-bold text-white mono mt-0.5">43 SKU (260 шт. деталей)</div>
+          </div>
+          <div>
+            <span class="text-slate-400">Склеено дублей в 1С:</span>
+            <div class="text-sm font-bold text-cyan-400 mono mt-0.5">3 группы (защита от бана Авито)</div>
+          </div>
+          <div>
+            <span class="text-slate-400">Неликвид на распродажу со скидкой 10%:</span>
+            <div class="text-sm font-bold text-orange-400 mono mt-0.5">10 SKU (36 шт. на слив)</div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500 font-mono">
+          <span>CLI: <code>python feed_generator.py sample_1c_gaz_uaz.xlsx</code></span>
+          <span>Артефакты: avito_feed.xml (Автозагрузка v3), drom_feed.csv (baza.drom.ru), feeds_preview.html</span>
+        </div>
+      </div>
+
+      <!-- МОДУЛЬ 4: ИИ-ПРОДАВЕЦ В ЧАТАХ -->
+      <div class="bg-slate-900/60 border border-slate-800/60 rounded-3xl p-6 sm:p-7 shadow relative overflow-hidden">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 font-mono font-black flex items-center justify-center text-sm border border-purple-500/30">
+              М4
+            </span>
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="text-lg sm:text-xl font-bold text-slate-300">МОДУЛЬ 4: Круглосуточный ИИ-Продавец 24/7 (`ai_sales_bot.py`)</h2>
+                <span class="bg-purple-500/20 text-purple-300 text-[10px] font-bold px-2 py-0.5 rounded">СЛЕДУЮЩИЙ ШАГ</span>
+              </div>
+              <p class="text-xs text-slate-500">RAG + Tool Calling по базе 1С: `search_inventory()` и `create_reservation()` без галлюцинаций</p>
+            </div>
+          </div>
+          <button disabled class="bg-slate-800/50 text-slate-500 font-bold text-xs px-4 py-2.5 rounded-xl cursor-not-allowed">
+            В очереди разработки ➔
+          </button>
+        </div>
+      </div>
+
+      <!-- МОДУЛЬ 5: РАДАР СОБСТВЕННИКА -->
+      <div class="bg-slate-900/60 border border-slate-800/60 rounded-3xl p-6 sm:p-7 shadow relative overflow-hidden">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 font-mono font-black flex items-center justify-center text-sm border border-amber-500/30">
+              М5
+            </span>
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="text-lg sm:text-xl font-bold text-slate-300">МОДУЛЬ 5: Еженедельный «Радар собственника» (`owner_radar.py`)</h2>
+                <span class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded">В ПЛАНЕ</span>
+              </div>
+              <p class="text-xs text-slate-500">Контроль закупщика, поиск аномальных перезакупов и еженедельная сводка в Telegram-бот директору</p>
+            </div>
+          </div>
+          <button disabled class="bg-slate-800/50 text-slate-500 font-bold text-xs px-4 py-2.5 rounded-xl cursor-not-allowed">
+            В очереди разработки ➔
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ПОДВАЛ ПАНЕЛИ УПРАВЛЕНИЯ -->
+    <footer class="mt-12 pt-6 border-t border-slate-800 flex flex-wrap items-center justify-between text-xs text-slate-500 gap-4">
+      <div>
+        Платформа «АВТОСКЛАД-ИИ» • Репозиторий: <a href="https://github.com/deniskazakov1976-glitch/autosklad-ai" target="_blank" class="text-slate-400 hover:text-white underline">autosklad-ai</a>
+      </div>
+      <div>
+        Технический контакт: <b class="text-slate-300">+7 (902) 802-82-46</b> (Денис) • Telegram: <a href="https://t.me/dkazak1999" target="_blank" class="text-sky-400">@dkazak1999</a>
+      </div>
+    </footer>
+  </div>
+
+</body>
+</html>
