@@ -1,0 +1,3470 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Витрина объявлений Авито и Дром • АВТОСКЛАД-ИИ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #070a10; color: #f1f5f9; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body class="p-3 sm:p-8">
+
+  <div class="max-w-7xl mx-auto">
+    <!-- ШАПКА МОДУЛЯ -->
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+      <div class="flex items-center gap-3">
+        <span class="bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 text-xs font-black px-3 py-1.5 rounded-lg tracking-wider uppercase shadow">
+          ★ МОДУЛЬ 3: FEED_GENERATOR
+        </span>
+        <span class="text-sm text-slate-400">Форматы: <b class="text-white">Avito XML v3</b> + <b class="text-white">Drom CSV</b></span>
+      </div>
+      <div class="flex flex-wrap gap-2 text-xs">
+        <a href="avito_feed.xml" download class="bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black px-4 py-2 rounded-xl transition flex items-center gap-1.5 shadow">
+          📥 Скачать avito_feed.xml
+        </a>
+        <a href="drom_feed.csv" download class="bg-sky-600 hover:bg-sky-500 text-white font-black px-4 py-2 rounded-xl transition flex items-center gap-1.5 shadow">
+          📥 Скачать drom_feed.csv
+        </a>
+        <a href="index.html" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold px-4 py-2 rounded-xl transition">
+          Главная ➔
+        </a>
+      </div>
+    </div>
+
+    <!-- ТИТУЛЬНЫЙ БЛОК И KPI ВИТРИНЫ -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 mb-8 shadow-2xl relative overflow-hidden">
+      <div class="flex flex-wrap items-start justify-between gap-4 border-b border-slate-800 pb-6 mb-6">
+        <div>
+          <div class="text-xs font-black uppercase tracking-widest text-emerald-400 mb-1">
+            Защита от бана за дубли • Автоматическая дедупликация 1С
+          </div>
+          <h1 class="text-xl sm:text-3xl font-black text-white">
+            Интерактивная витрина готовых объявлений для Авито и Дрома
+          </h1>
+          <p class="text-slate-400 text-sm mt-1">
+            Все дубли 1С объединены в единые карточки с суммированием остатка и привязкой фото
+          </p>
+        </div>
+        <div class="text-right">
+          <div class="text-3xl sm:text-4xl font-black text-emerald-400 mono">
+            1 309 030 ₽
+          </div>
+          <div class="text-xs text-slate-400">Общая сумма товаров на витрине</div>
+        </div>
+      </div>
+
+      <!-- 4 КАРТОЧКИ KPI -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+          <div class="text-[11px] font-bold text-slate-400 uppercase">Готово объявлений к выгрузке</div>
+          <div class="text-2xl font-black text-white mono mt-1">43 SKU</div>
+          <div class="text-[11px] text-emerald-400 mt-1">260 шт. деталей на полках</div>
+        </div>
+
+        <div class="bg-slate-950 p-4 rounded-xl border border-cyan-500/40">
+          <div class="text-[11px] font-bold text-cyan-400 uppercase">Склеено дублей в 1С</div>
+          <div class="text-2xl font-black text-cyan-400 mono mt-1">3 групп</div>
+          <div class="text-[11px] text-slate-400 mt-1">Защита от бана Авито за дубли</div>
+        </div>
+
+        <div class="bg-slate-950 p-4 rounded-xl border border-orange-500/40">
+          <div class="text-[11px] font-bold text-orange-400 uppercase">Неликвиды на распродажу</div>
+          <div class="text-2xl font-black text-orange-400 mono mt-1">10 SKU</div>
+          <div class="text-[11px] text-slate-400 mt-1">36 шт. на слив со спецценой</div>
+        </div>
+
+        <div class="bg-slate-950 p-4 rounded-xl border border-red-500/30">
+          <div class="text-[11px] font-bold text-red-400 uppercase">Отсеяно фильтрами</div>
+          <div class="text-2xl font-black text-red-400 mono mt-1">3 SKU</div>
+          <div class="text-[11px] text-slate-400 mt-1">Остаток 0 шт. (не сжигает лимиты)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ВИТРИНА КАРТОЧЕК ОБЪЯВЛЕНИЙ -->
+    <div class="mb-8">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-lg sm:text-2xl font-black text-white">Превью карточек на витрине Авито</h2>
+          <p class="text-xs text-slate-400">Нажмите «Посмотреть текст Авито», чтобы раскрыть полное форматированное описание</p>
+        </div>
+        <div class="text-xs text-slate-400 font-mono">
+          Адрес: <b class="text-slate-200">г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)</b>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80" alt="Коробка передач (КПП) ГАЗ-3309, 33081 дизель 5-ст" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                  <span class="bg-orange-500 text-slate-950 font-black text-[10px] uppercase px-2.5 py-1 rounded-md shadow">
+                    🔥 Распродажа запасов
+                  </span>
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">2 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">33091700010</b></span>
+                <span class="text-slate-400">ГАЗ (Нижний Новгород)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Коробка передач (КПП) ГАЗ-3309, 33081 дизель 5-ст
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  92 000 ₽
+                </span>
+                
+                  <span class="text-xs text-orange-400 mono font-bold line-through">
+                    82 800 ₽
+                  </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-3309, ГАЗ-33081 Садко; дизельные двигатели ММЗ Д-245.7</div>
+                <div class="truncate"><b>Кроссы:</b> 33091700010, 3309170001002, GB3309</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-003002</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-TRANS-001')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-TRANS-001" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Коробка передач (КПП) ГАЗ-3309, 33081 дизель 5-ст
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 2 шт.
+
+⚡ РАСПРОДАЖА СКЛАДСКИХ ЗАПАСОВ: Деталь из наличия по специальной сниженной цене!
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-3309, ГАЗ-33081 Садко; дизельные двигатели ММЗ Д-245.7
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 33091700010
+Кроссы и взаимозаменяемые номера: 33091700010, 3309170001002, GB3309
+Производители в наличии и под заказ: ГАЗ (Нижний Новгород)
+
+📌 Коды детали в учетной системе 1С: 00-003002
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80" alt="Блок цилиндров ЗМЗ-405 Евро-3 голый (d=95.5)" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                  <span class="bg-orange-500 text-slate-950 font-black text-[10px] uppercase px-2.5 py-1 rounded-md shadow">
+                    🔥 Распродажа запасов
+                  </span>
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">1 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">405241002010</b></span>
+                <span class="text-slate-400">ЗМЗ (Заволжский моторный завод)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Блок цилиндров ЗМЗ-405 Евро-3 голый (d=95.5)
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  68 000 ₽
+                </span>
+                
+                  <span class="text-xs text-orange-400 mono font-bold line-through">
+                    61 200 ₽
+                  </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗель, Соболь, Волга 31105; дв. ЗМЗ-40524 Евро-3, ЗМЗ-40522 Евро-2</div>
+                <div class="truncate"><b>Кроссы:</b> 405241002010, 405221002010, EB405</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-003004</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-ENG-002')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-ENG-002" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Блок цилиндров ЗМЗ-405 Евро-3 голый (d=95.5)
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 1 шт.
+
+⚡ РАСПРОДАЖА СКЛАДСКИХ ЗАПАСОВ: Деталь из наличия по специальной сниженной цене!
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗель, Соболь, Волга 31105; дв. ЗМЗ-40524 Евро-3, ЗМЗ-40522 Евро-2
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 405241002010
+Кроссы и взаимозаменяемые номера: 405241002010, 405221002010, EB405
+Производители в наличии и под заказ: ЗМЗ (Заволжский моторный завод)
+
+📌 Коды детали в учетной системе 1С: 00-003004
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80" alt="Раздаточная коробка УАЗ 31519 Хантер косозубая" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                  <span class="bg-orange-500 text-slate-950 font-black text-[10px] uppercase px-2.5 py-1 rounded-md shadow">
+                    🔥 Распродажа запасов
+                  </span>
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">2 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">315191800020</b></span>
+                <span class="text-slate-400">УАЗ (Ульяновск)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Раздаточная коробка УАЗ 31519 Хантер косозубая
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  47 000 ₽
+                </span>
+                
+                  <span class="text-xs text-orange-400 mono font-bold line-through">
+                    42 300 ₽
+                  </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> УАЗ 31519 Хантер, УАЗ 469, 3151; мелкомодульная косозубая РК</div>
+                <div class="truncate"><b>Кроссы:</b> 315191800020, 315121800020, TC31519</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-003005</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('UAZ-TRANS-001')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-UAZ-TRANS-001" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Раздаточная коробка УАЗ 31519 Хантер косозубая
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 2 шт.
+
+⚡ РАСПРОДАЖА СКЛАДСКИХ ЗАПАСОВ: Деталь из наличия по специальной сниженной цене!
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+УАЗ 31519 Хантер, УАЗ 469, 3151; мелкомодульная косозубая РК
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 315191800020
+Кроссы и взаимозаменяемые номера: 315191800020, 315121800020, TC31519
+Производители в наличии и под заказ: УАЗ (Ульяновск)
+
+📌 Коды детали в учетной системе 1С: 00-003005
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80" alt="Вал коленчатый (коленвал) УМЗ-4216 под сальник" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                  <span class="bg-orange-500 text-slate-950 font-black text-[10px] uppercase px-2.5 py-1 rounded-md shadow">
+                    🔥 Распродажа запасов
+                  </span>
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">3 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">42161005011</b></span>
+                <span class="text-slate-400">УМЗ (Ульяновск оригинал)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Вал коленчатый (коленвал) УМЗ-4216 под сальник
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  34 000 ₽
+                </span>
+                
+                  <span class="text-xs text-orange-400 mono font-bold line-through">
+                    30 600 ₽
+                  </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-3302 ГАЗель Бизнес, Соболь; дв. УМЗ-4216, УМЗ-42164 Евро-3, Евро-4</div>
+                <div class="truncate"><b>Кроссы:</b> 42161005011, 42161005015, CW4216</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-003003</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-ENG-001')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-ENG-001" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Вал коленчатый (коленвал) УМЗ-4216 под сальник
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 3 шт.
+
+⚡ РАСПРОДАЖА СКЛАДСКИХ ЗАПАСОВ: Деталь из наличия по специальной сниженной цене!
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-3302 ГАЗель Бизнес, Соболь; дв. УМЗ-4216, УМЗ-42164 Евро-3, Евро-4
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 42161005011
+Кроссы и взаимозаменяемые номера: 42161005011, 42161005015, CW4216
+Производители в наличии и под заказ: УМЗ (Ульяновск оригинал)
+
+📌 Коды детали в учетной системе 1С: 00-003003
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80" alt="Редуктор заднего моста ГАЗ-3302 ГП 8х41 (4.3)" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                  <span class="bg-orange-500 text-slate-950 font-black text-[10px] uppercase px-2.5 py-1 rounded-md shadow">
+                    🔥 Распродажа запасов
+                  </span>
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">4 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">3302240201010</b></span>
+                <span class="text-slate-400">ГАЗ (Оригинал завод)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Редуктор заднего моста ГАЗ-3302 ГП 8х41 (4.3)
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  28 500 ₽
+                </span>
+                
+                  <span class="text-xs text-orange-400 mono font-bold line-through">
+                    25 650 ₽
+                  </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-3302 ГАЗель, ГАЗель Бизнес, ГАЗ-2705; задний ведущий мост</div>
+                <div class="truncate"><b>Кроссы:</b> 3302240201010, 33022402010, RD330243</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-003001</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-AXLE-001')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-AXLE-001" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Редуктор заднего моста ГАЗ-3302 ГП 8х41 (4.3)
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 4 шт.
+
+⚡ РАСПРОДАЖА СКЛАДСКИХ ЗАПАСОВ: Деталь из наличия по специальной сниженной цене!
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-3302 ГАЗель, ГАЗель Бизнес, ГАЗ-2705; задний ведущий мост
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 3302240201010
+Кроссы и взаимозаменяемые номера: 3302240201010, 33022402010, RD330243
+Производители в наличии и под заказ: ГАЗ (Оригинал завод), Русские Узоры, АвтоТех
+
+📌 Коды детали в учетной системе 1С: 00-003001
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80" alt="Балка передней подвески Соболь 2752, 2217 голая" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                  <span class="bg-orange-500 text-slate-950 font-black text-[10px] uppercase px-2.5 py-1 rounded-md shadow">
+                    🔥 Распродажа запасов
+                  </span>
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">3 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">27522904012</b></span>
+                <span class="text-slate-400">ГАЗ (Нижний Новгород)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Балка передней подвески Соболь 2752, 2217 голая
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  24 000 ₽
+                </span>
+                
+                  <span class="text-xs text-orange-400 mono font-bold line-through">
+                    21 600 ₽
+                  </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-2752, 2217 Соболь, Баргузин (задний привод 4х2)</div>
+                <div class="truncate"><b>Кроссы:</b> 27522904012, 27522904010</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-003006</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-SUSP-001')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-SUSP-001" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Балка передней подвески Соболь 2752, 2217 голая
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 3 шт.
+
+⚡ РАСПРОДАЖА СКЛАДСКИХ ЗАПАСОВ: Деталь из наличия по специальной сниженной цене!
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-2752, 2217 Соболь, Баргузин (задний привод 4х2)
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 27522904012
+Кроссы и взаимозаменяемые номера: 27522904012, 27522904010
+Производители в наличии и под заказ: ГАЗ (Нижний Новгород)
+
+📌 Коды детали в учетной системе 1С: 00-003006
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80" alt="Дверь передняя левая ГАЗель Бизнес катафорез" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                  <span class="bg-orange-500 text-slate-950 font-black text-[10px] uppercase px-2.5 py-1 rounded-md shadow">
+                    🔥 Распродажа запасов
+                  </span>
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">4 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">33026100015</b></span>
+                <span class="text-slate-400">ГАЗ (Заводской катафорезный грунт)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Дверь передняя левая ГАЗель Бизнес катафорез
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  19 500 ₽
+                </span>
+                
+                  <span class="text-xs text-orange-400 mono font-bold line-through">
+                    17 550 ₽
+                  </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-3302, 2705, 3221 ГАЗель Бизнес, Соболь 2752</div>
+                <div class="truncate"><b>Кроссы:</b> 33026100015, 3302610001510</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-003009</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-BODY-001')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-BODY-001" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Дверь передняя левая ГАЗель Бизнес катафорез
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 4 шт.
+
+⚡ РАСПРОДАЖА СКЛАДСКИХ ЗАПАСОВ: Деталь из наличия по специальной сниженной цене!
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-3302, 2705, 3221 ГАЗель Бизнес, Соболь 2752
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 33026100015
+Кроссы и взаимозаменяемые номера: 33026100015, 3302610001510
+Производители в наличии и под заказ: ГАЗ (Заводской катафорезный грунт)
+
+📌 Коды детали в учетной системе 1С: 00-003009
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80" alt="Картер сцепления (колокол) УАЗ Патриот дв. ЗМЗ-409" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                  <span class="bg-orange-500 text-slate-950 font-black text-[10px] uppercase px-2.5 py-1 rounded-md shadow">
+                    🔥 Распродажа запасов
+                  </span>
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">3 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">4091601015</b></span>
+                <span class="text-slate-400">ЗМЗ</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Картер сцепления (колокол) УАЗ Патриот дв. ЗМЗ-409
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  11 500 ₽
+                </span>
+                
+                  <span class="text-xs text-orange-400 mono font-bold line-through">
+                    10 350 ₽
+                  </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> УАЗ Патриот, УАЗ Хантер, УАЗ Профи; дв. ЗМЗ-409 под КПП Dymos / АДС</div>
+                <div class="truncate"><b>Кроссы:</b> 4091601015, 409160101510, BH409</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-003008</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('UAZ-CLUTCH-001')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-UAZ-CLUTCH-001" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Картер сцепления (колокол) УАЗ Патриот дв. ЗМЗ-409
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 3 шт.
+
+⚡ РАСПРОДАЖА СКЛАДСКИХ ЗАПАСОВ: Деталь из наличия по специальной сниженной цене!
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+УАЗ Патриот, УАЗ Хантер, УАЗ Профи; дв. ЗМЗ-409 под КПП Dymos / АДС
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 4091601015
+Кроссы и взаимозаменяемые номера: 4091601015, 409160101510, BH409
+Производители в наличии и под заказ: ЗМЗ, УАЗ
+
+📌 Коды детали в учетной системе 1С: 00-003008
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80" alt="Рессора задняя ГАЗ-3302 5-листовая усиленная" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                  <span class="bg-orange-500 text-slate-950 font-black text-[10px] uppercase px-2.5 py-1 rounded-md shadow">
+                    🔥 Распродажа запасов
+                  </span>
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">8 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">3302291201002</b></span>
+                <span class="text-slate-400">Чусовской металлургический завод (ЧМЗ)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Рессора задняя ГАЗ-3302 5-листовая усиленная
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  7 900 ₽
+                </span>
+                
+                  <span class="text-xs text-orange-400 mono font-bold line-through">
+                    7 110 ₽
+                  </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-3302 ГАЗель, ГАЗель Бизнес, ГАЗель Next борт</div>
+                <div class="truncate"><b>Кроссы:</b> 3302291201002, 33022912010, LS33025L</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-003007</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-SUSP-002')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-SUSP-002" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Рессора задняя ГАЗ-3302 5-листовая усиленная
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 8 шт.
+
+⚡ РАСПРОДАЖА СКЛАДСКИХ ЗАПАСОВ: Деталь из наличия по специальной сниженной цене!
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-3302 ГАЗель, ГАЗель Бизнес, ГАЗель Next борт
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 3302291201002
+Кроссы и взаимозаменяемые номера: 3302291201002, 33022912010, LS33025L
+Производители в наличии и под заказ: Чусовской металлургический завод (ЧМЗ), Белорецк
+
+📌 Коды детали в учетной системе 1С: 00-003007
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80" alt="Фонарь задний светодиодный ГАЗель Next борт" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                  <span class="bg-orange-500 text-slate-950 font-black text-[10px] uppercase px-2.5 py-1 rounded-md shadow">
+                    🔥 Распродажа запасов
+                  </span>
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">6 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">A21R233716010</b></span>
+                <span class="text-slate-400">Руденск (Беларусь)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Фонарь задний светодиодный ГАЗель Next борт
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  3 600 ₽
+                </span>
+                
+                  <span class="text-xs text-orange-400 mono font-bold line-through">
+                    3 240 ₽
+                  </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗель Next борт, ГАЗон Next, каркас бортовой платформы</div>
+                <div class="truncate"><b>Кроссы:</b> A21R233716010, A21R233716010, RLA21R23</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-003010</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-LIGHT-001')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-LIGHT-001" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Фонарь задний светодиодный ГАЗель Next борт
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 6 шт.
+
+⚡ РАСПРОДАЖА СКЛАДСКИХ ЗАПАСОВ: Деталь из наличия по специальной сниженной цене!
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗель Next борт, ГАЗон Next, каркас бортовой платформы
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: A21R233716010
+Кроссы и взаимозаменяемые номера: A21R233716010, A21R233716010, RLA21R23
+Производители в наличии и под заказ: Руденск (Беларусь), Освар, Формула Света
+
+📌 Коды детали в учетной системе 1С: 00-003010
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80" alt="Генератор ГАЗель Next, Бизнес Cummins 2.8 (140A)" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">3 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">5263795</b></span>
+                <span class="text-slate-400">Cummins</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Генератор ГАЗель Next, Бизнес Cummins 2.8 (140A)
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  15 800 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗель Бизнес, ГАЗель Next, Соболь; двигатель Cummins ISF 2.8</div>
+                <div class="truncate"><b>Кроссы:</b> 5263795, 4990782, JFZ2805, LG0328, A004TU5081</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004001</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-ELEC-002')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-ELEC-002" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Генератор ГАЗель Next, Бизнес Cummins 2.8 (140A)
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 3 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗель Бизнес, ГАЗель Next, Соболь; двигатель Cummins ISF 2.8
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 5263795
+Кроссы и взаимозаменяемые номера: 5263795, 4990782, JFZ2805, LG0328, A004TU5081
+Производители в наличии и под заказ: Cummins, Luzar, СтартВОЛЬТ, Krauf
+
+📌 Коды детали в учетной системе 1С: 00-004001
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80" alt="Радиатор охлаждения ГАЗ-3302 медный 3-х рядный" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+                  <span class="bg-cyan-500/90 text-slate-950 font-black text-[10px] uppercase px-2 py-0.5 rounded-md shadow">
+                    Склеено: 2 дубля 1С
+                  </span>
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">2 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">3302130101033</b></span>
+                <span class="text-slate-400">Оренбургский радиаторный завод</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Радиатор охлаждения ГАЗ-3302 медный 3-х рядный
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  14 500 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-3302, 2705, 3221 ГАЗель Бизнес; дв. УМЗ-4216, ЗМЗ-405, ЗМЗ-406</div>
+                <div class="truncate"><b>Кроссы:</b> 3302130101033, 3302130101033, LRC0302B, TR33023R</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-001088, 00-001089</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-COOL-001')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-COOL-001" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Радиатор охлаждения ГАЗ-3302 медный 3-х рядный
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 2 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-3302, 2705, 3221 ГАЗель Бизнес; дв. УМЗ-4216, ЗМЗ-405, ЗМЗ-406
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 3302130101033
+Кроссы и взаимозаменяемые номера: 3302130101033, 3302130101033, LRC0302B, TR33023R
+Производители в наличии и под заказ: Оренбургский радиаторный завод, ШААЗ, Luzar, Tadashi
+
+📌 Коды детали в учетной системе 1С: 00-001088, 00-001089
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80" alt="Цилиндр тормозной главный (ГТЦ) ГАЗель Бизнес Bosch" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">3 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">0204123730</b></span>
+                <span class="text-slate-400">Bosch (Оригинал конвейер)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Цилиндр тормозной главный (ГТЦ) ГАЗель Бизнес Bosch
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  7 900 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗель Бизнес (с вакуумным усилителем Bosch)</div>
+                <div class="truncate"><b>Кроссы:</b> 0204123730, 0204123730, 33023505010BOSCH</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004014</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-BRAKE-002')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-BRAKE-002" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Цилиндр тормозной главный (ГТЦ) ГАЗель Бизнес Bosch
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 3 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗель Бизнес (с вакуумным усилителем Bosch)
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 0204123730
+Кроссы и взаимозаменяемые номера: 0204123730, 0204123730, 33023505010BOSCH
+Производители в наличии и под заказ: Bosch (Оригинал конвейер)
+
+📌 Коды детали в учетной системе 1С: 00-004014
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80" alt="Комплект ГРМ Евро-3 ЗМЗ 405, 406, 409 с башмаками БОН" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">4 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">4061006040БOH</b></span>
+                <span class="text-slate-400">БОН (Челябинск)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Комплект ГРМ Евро-3 ЗМЗ 405, 406, 409 с башмаками БОН
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  7 200 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗель, Соболь, УАЗ Патриот; дв. ЗМЗ-405, 406, 409 Евро-3 (цепи 70/90 звеньев)</div>
+                <div class="truncate"><b>Кроссы:</b> 4061006040БOH, 4061006040, TCZMZBON, 406241006040</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004024</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-ENG-005')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-ENG-005" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Комплект ГРМ Евро-3 ЗМЗ 405, 406, 409 с башмаками БОН
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 4 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗель, Соболь, УАЗ Патриот; дв. ЗМЗ-405, 406, 409 Евро-3 (цепи 70/90 звеньев)
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 4061006040БOH
+Кроссы и взаимозаменяемые номера: 4061006040БOH, 4061006040, TCZMZBON, 406241006040
+Производители в наличии и под заказ: БОН (Челябинск), Прогресс, ЗМЗ Золотая серия, Русмаш
+
+📌 Коды детали в учетной системе 1С: 00-004024
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80" alt="Насос ГУР ГАЗель Бизнес, Next (УМЗ 4216) ШНКФ" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+                  <span class="bg-cyan-500/90 text-slate-950 font-black text-[10px] uppercase px-2 py-0.5 rounded-md shadow">
+                    Склеено: 3 дубля 1С
+                  </span>
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">4 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">ШHKФ453471125</b></span>
+                <span class="text-slate-400">БЗАГУ (Борисов)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Насос ГУР ГАЗель Бизнес, Next (УМЗ 4216) ШНКФ
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  6 950 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-3302, ГАЗель Бизнес, ГАЗель Next, Соболь 2752, Баргузин; дв. УМЗ-4216, Evotech 2.7 (A274)</div>
+                <div class="truncate"><b>Кроссы:</b> 33023407010, 42163407010, ШHKФ453471125, 45347112540, PP33024216</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-001041, 00-001042, 00-001043</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-STEER-001')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-STEER-001" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Насос ГУР ГАЗель Бизнес, Next (УМЗ 4216) ШНКФ
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 4 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-3302, ГАЗель Бизнес, ГАЗель Next, Соболь 2752, Баргузин; дв. УМЗ-4216, Evotech 2.7 (A274)
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: ШHKФ453471125
+Кроссы и взаимозаменяемые номера: 33023407010, 42163407010, ШHKФ453471125, 45347112540, PP33024216
+Производители в наличии и под заказ: БЗАГУ (Борисов), Пекар, АДС, Автогидроусилитель, Kraft
+
+📌 Коды детали в учетной системе 1С: 00-001041, 00-001042, 00-001043
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80" alt="Насос водяной (помпа) ЗМЗ-405, 406 с эл/муфтой" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">4 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">40624130701010</b></span>
+                <span class="text-slate-400">ЗМЗ</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Насос водяной (помпа) ЗМЗ-405, 406 с эл/муфтой
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  5 400 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗель, Соболь, Волга; дв. ЗМЗ-40524, 40522, 406 с электромуфтой</div>
+                <div class="truncate"><b>Кроссы:</b> 40624130701010, 406241307010, LWP0306, WP40624</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004003</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-COOL-002')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-COOL-002" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Насос водяной (помпа) ЗМЗ-405, 406 с эл/муфтой
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 4 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗель, Соболь, Волга; дв. ЗМЗ-40524, 40522, 406 с электромуфтой
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 40624130701010
+Кроссы и взаимозаменяемые номера: 40624130701010, 406241307010, LWP0306, WP40624
+Производители в наличии и под заказ: ЗМЗ, Пекар, Luzar, Tza
+
+📌 Коды детали в учетной системе 1С: 00-004003
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80" alt="Бензонасос модуль погружной ГАЗель Бизнес дв. 4216" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">2 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">9П2960035</b></span>
+                <span class="text-slate-400">Утёс (Ульяновск)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Бензонасос модуль погружной ГАЗель Бизнес дв. 4216
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  4 800 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-3302 ГАЗель Бизнес; инжекторные дв. УМЗ-4216</div>
+                <div class="truncate"><b>Кроссы:</b> 9П2960035, 9P2960035, 9P2960035, FP4216UTES</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004010</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-FUEL-001')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-FUEL-001" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Бензонасос модуль погружной ГАЗель Бизнес дв. 4216
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 2 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-3302 ГАЗель Бизнес; инжекторные дв. УМЗ-4216
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 9П2960035
+Кроссы и взаимозаменяемые номера: 9П2960035, 9P2960035, 9P2960035, FP4216UTES
+Производители в наличии и под заказ: Утёс (Ульяновск), СОАТЭ, Bosch, Пекар
+
+📌 Коды детали в учетной системе 1С: 00-004010
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80" alt="Ступица колеса передняя ГАЗ-3302 в сборе" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">4 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">33023103015</b></span>
+                <span class="text-slate-400">ГАЗ (Оригинал завод)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Ступица колеса передняя ГАЗ-3302 в сборе
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  4 200 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-3302, 2705 ГАЗель Бизнес; передняя ось</div>
+                <div class="truncate"><b>Кроссы:</b> 33023103015, 33023103012, HUB3302F</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004015</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-SUSP-005')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-SUSP-005" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Ступица колеса передняя ГАЗ-3302 в сборе
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 4 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-3302, 2705 ГАЗель Бизнес; передняя ось
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 33023103015
+Кроссы и взаимозаменяемые номера: 33023103015, 33023103012, HUB3302F
+Производители в наличии и под заказ: ГАЗ (Оригинал завод), АвтоТех, Красная Этна
+
+📌 Коды детали в учетной системе 1С: 00-004015
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80" alt="Глушитель основной ГАЗ-3302 Евро-3 закатной" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">3 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">3302120100820</b></span>
+                <span class="text-slate-400">Арзамасский завод глушителей</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Глушитель основной ГАЗ-3302 Евро-3 закатной
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  3 950 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-3302, 33023 ГАЗель Бизнес удлиненная база; Евро-3, Евро-4</div>
+                <div class="truncate"><b>Кроссы:</b> 3302120100820, 33021201008, MUF3302E3</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004009</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-EXH-001')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-EXH-001" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Глушитель основной ГАЗ-3302 Евро-3 закатной
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 3 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-3302, 33023 ГАЗель Бизнес удлиненная база; Евро-3, Евро-4
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 3302120100820
+Кроссы и взаимозаменяемые номера: 3302120100820, 33021201008, MUF3302E3
+Производители в наличии и под заказ: Арзамасский завод глушителей, Фобос, CBD, Экрис
+
+📌 Коды детали в учетной системе 1С: 00-004009
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80" alt="Диск сцепления ведомый УАЗ Патриот дв. ЗМЗ-409" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">6 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">31601601130</b></span>
+                <span class="text-slate-400">ЗМЗ</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Диск сцепления ведомый УАЗ Патриот дв. ЗМЗ-409
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  3 200 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> УАЗ 3163 Патриот, УАЗ Хантер, УАЗ Карго; дв. ЗМЗ-409</div>
+                <div class="truncate"><b>Кроссы:</b> 31601601130, 3160160113010, CD3160, 1878002205</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004005</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('UAZ-CLUTCH-002')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-UAZ-CLUTCH-002" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Диск сцепления ведомый УАЗ Патриот дв. ЗМЗ-409
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 6 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+УАЗ 3163 Патриот, УАЗ Хантер, УАЗ Карго; дв. ЗМЗ-409
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 31601601130
+Кроссы и взаимозаменяемые номера: 31601601130, 3160160113010, CD3160, 1878002205
+Производители в наличии и под заказ: ЗМЗ, УАЗ, Sachs, TRIALLI, Luk
+
+📌 Коды детали в учетной системе 1С: 00-004005
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80" alt="Комплект шкворней с подшипниками ГАЗель Бизнес" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">6 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">33023000100</b></span>
+                <span class="text-slate-400">ГАЗ (Нижний Новгород)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Комплект шкворней с подшипниками ГАЗель Бизнес
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  3 100 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-3302, 2705 ГАЗель, ГАЗель Бизнес передняя ось</div>
+                <div class="truncate"><b>Кроссы:</b> 33023000100, KP3302BRG, 33023001019</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004013</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-SUSP-004')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-SUSP-004" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Комплект шкворней с подшипниками ГАЗель Бизнес
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 6 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-3302, 2705 ГАЗель, ГАЗель Бизнес передняя ось
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 33023000100
+Кроссы и взаимозаменяемые номера: 33023000100, KP3302BRG, 33023001019
+Производители в наличии и под заказ: ГАЗ (Нижний Новгород), Белмаг, Чернянка, Трек
+
+📌 Коды детали в учетной системе 1С: 00-004013
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80" alt="Модуль катушка зажигания дв. УМЗ-4216 Евро-3 СОАТЭ" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">4 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">483705</b></span>
+                <span class="text-slate-400">СОАТЭ (Старый Оскол)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Модуль катушка зажигания дв. УМЗ-4216 Евро-3 СОАТЭ
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  2 900 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-3302 ГАЗель Бизнес, Соболь; дв. УМЗ-4216 Евро-3</div>
+                <div class="truncate"><b>Кроссы:</b> 483705, 483705000, IC483705, 42163705010</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004008</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-IGNIT-002')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-IGNIT-002" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Модуль катушка зажигания дв. УМЗ-4216 Евро-3 СОАТЭ
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 4 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-3302 ГАЗель Бизнес, Соболь; дв. УМЗ-4216 Евро-3
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 483705
+Кроссы и взаимозаменяемые номера: 483705, 483705000, IC483705, 42163705010
+Производители в наличии и под заказ: СОАТЭ (Старый Оскол), Пекар, Север, HOLA
+
+📌 Коды детали в учетной системе 1С: 00-004008
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80" alt="Зеркало боковое левое ГАЗель Бизнес с обогревом" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">5 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">33028201021</b></span>
+                <span class="text-slate-400">Автокомпонент</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Зеркало боковое левое ГАЗель Бизнес с обогревом
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  2 850 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-3302, Соболь 2752 ГАЗель Бизнес; левая сторона</div>
+                <div class="truncate"><b>Кроссы:</b> 33028201021, 33028201051, MR3302L</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004016</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-BODY-002')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-BODY-002" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Зеркало боковое левое ГАЗель Бизнес с обогревом
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 5 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-3302, Соболь 2752 ГАЗель Бизнес; левая сторона
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 33028201021
+Кроссы и взаимозаменяемые номера: 33028201021, 33028201051, MR3302L
+Производители в наличии и под заказ: Автокомпонент, Политех, Салют
+
+📌 Коды детали в учетной системе 1С: 00-004016
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80" alt="Патрубки радиатора силикон синий ГАЗель Бизнес 4216" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">5 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">33021303000CИЛ</b></span>
+                <span class="text-slate-400">Хорт Силикон</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Патрубки радиатора силикон синий ГАЗель Бизнес 4216
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  2 600 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-3302 ГАЗель Бизнес; двигатель УМЗ-4216</div>
+                <div class="truncate"><b>Кроссы:</b> 33021303000CИЛ, 33021303010, SIL33024216</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004012</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-COOL-004')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-COOL-004" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Патрубки радиатора силикон синий ГАЗель Бизнес 4216
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 5 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-3302 ГАЗель Бизнес; двигатель УМЗ-4216
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 33021303000CИЛ
+Кроссы и взаимозаменяемые номера: 33021303000CИЛ, 33021303010, SIL33024216
+Производители в наличии и под заказ: Хорт Силикон, Salers, CS-20, БРТ
+
+📌 Коды детали в учетной системе 1С: 00-004012
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80" alt="Тяга рулевая продольная ГАЗ-2217 Соболь" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">5 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">22173414010</b></span>
+                <span class="text-slate-400">ГАЗ (Оригинал)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Тяга рулевая продольная ГАЗ-2217 Соболь
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  2 400 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-2217, 2752 Соболь, Баргузин</div>
+                <div class="truncate"><b>Кроссы:</b> 22173414010, TR2217, 22173414050</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004004</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-STEER-002')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-STEER-002" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Тяга рулевая продольная ГАЗ-2217 Соболь
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 5 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-2217, 2752 Соболь, Баргузин
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 22173414010
+Кроссы и взаимозаменяемые номера: 22173414010, TR2217, 22173414050
+Производители в наличии и под заказ: ГАЗ (Оригинал), Белмаг, Трек
+
+📌 Коды детали в учетной системе 1С: 00-004004
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80" alt="Колодки тормозные передние ГАЗель Next, Бизнес" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">1 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">A21R233501170</b></span>
+                <span class="text-slate-400">ТИИР (Оригинал конвейер)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Колодки тормозные передние ГАЗель Next, Бизнес
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  1 850 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗель Next (A21R23, A21R33), ГАЗель Бизнес, Соболь Next; все типы дв.</div>
+                <div class="truncate"><b>Кроссы:</b> A21R233501170, 3302350117001, BPA21R23, TIIR299</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-002001</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-BRAKE-001')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-BRAKE-001" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Колодки тормозные передние ГАЗель Next, Бизнес
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 1 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗель Next (A21R23, A21R33), ГАЗель Бизнес, Соболь Next; все типы дв.
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: A21R233501170
+Кроссы и взаимозаменяемые номера: A21R233501170, 3302350117001, BPA21R23, TIIR299
+Производители в наличии и под заказ: ТИИР (Оригинал конвейер), Allied Nippon, Маркон, Kotl
+
+📌 Коды детали в учетной системе 1С: 00-002001
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80" alt="Датчик положения коленвала (ДПКВ) ЗМЗ 406/405/409 Bosch" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">7 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">0261210302</b></span>
+                <span class="text-slate-400">Bosch</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Датчик положения коленвала (ДПКВ) ЗМЗ 406/405/409 Bosch
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  1 850 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗель, Соболь, Волга, УАЗ Патриот; дв. ЗМЗ-406, 405, 409</div>
+                <div class="truncate"><b>Кроссы:</b> 0261210302, 0261210302, 4063847050, 233847</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004007</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-SENS-001')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-SENS-001" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Датчик положения коленвала (ДПКВ) ЗМЗ 406/405/409 Bosch
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 7 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗель, Соболь, Волга, УАЗ Патриот; дв. ЗМЗ-406, 405, 409
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 0261210302
+Кроссы и взаимозаменяемые номера: 0261210302, 0261210302, 4063847050, 233847
+Производители в наличии и под заказ: Bosch, Автотрейд (Калуга), Пекар, СОАТЭ
+
+📌 Коды детали в учетной системе 1С: 00-004007
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80" alt="Форсунка топливная инжектор ЗМЗ-405, 409 Siemens" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">12 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">ZMZ6354</b></span>
+                <span class="text-slate-400">Siemens DEKA</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Форсунка топливная инжектор ЗМЗ-405, 409 Siemens
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  1 750 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗель, Волга, УАЗ Патриот; дв. ЗМЗ-40522, ЗМЗ-409 Евро-2, Евро-3</div>
+                <div class="truncate"><b>Кроссы:</b> ZMZ6354, ZMZ6354, 4061132010, A2C53099415</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004018</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-FUEL-002')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-FUEL-002" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Форсунка топливная инжектор ЗМЗ-405, 409 Siemens
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 12 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗель, Волга, УАЗ Патриот; дв. ЗМЗ-40522, ЗМЗ-409 Евро-2, Евро-3
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: ZMZ6354
+Кроссы и взаимозаменяемые номера: ZMZ6354, ZMZ6354, 4061132010, A2C53099415
+Производители в наличии и под заказ: Siemens DEKA, Continental, Bosch, СОАТЭ
+
+📌 Коды детали в учетной системе 1С: 00-004018
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80" alt="Амортизатор передний ГАЗ-3302 масляный СААЗ" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">12 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">33022905006</b></span>
+                <span class="text-slate-400">СААЗ (Скопин)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Амортизатор передний ГАЗ-3302 масляный СААЗ
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  1 650 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-3302, 2705 ГАЗель, ГАЗель Бизнес передняя подвеска</div>
+                <div class="truncate"><b>Кроссы:</b> 33022905006, 33022905004, SA3302, SH3302</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004002</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-SUSP-003')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-SUSP-003" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Амортизатор передний ГАЗ-3302 масляный СААЗ
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 12 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-3302, 2705 ГАЗель, ГАЗель Бизнес передняя подвеска
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 33022905006
+Кроссы и взаимозаменяемые номера: 33022905006, 33022905004, SA3302, SH3302
+Производители в наличии и под заказ: СААЗ (Скопин), Белмаг, HOLA, Fenox
+
+📌 Коды детали в учетной системе 1С: 00-004002
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80" alt="Прокладка ГБЦ металлопакет ЗМЗ-405 Евро-3 (d=95.5)" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">15 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">405241003020</b></span>
+                <span class="text-slate-400">БРТ (Балаково)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Прокладка ГБЦ металлопакет ЗМЗ-405 Евро-3 (d=95.5)
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  1 450 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗель, Соболь, Волга 31105; дв. ЗМЗ-40524 Евро-3, Евро-4</div>
+                <div class="truncate"><b>Кроссы:</b> 405241003020, 4051003020, HG40524</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004019</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-ENG-003')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-ENG-003" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Прокладка ГБЦ металлопакет ЗМЗ-405 Евро-3 (d=95.5)
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 15 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗель, Соболь, Волга 31105; дв. ЗМЗ-40524 Евро-3, Евро-4
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 405241003020
+Кроссы и взаимозаменяемые номера: 405241003020, 4051003020, HG40524
+Производители в наличии и под заказ: БРТ (Балаково), Фритекс, ВАТИ, Espra
+
+📌 Коды детали в учетной системе 1С: 00-004019
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80" alt="Опора промежуточная (подвесной) ГАЗель Бизнес в сб." class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">9 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">3302220109001</b></span>
+                <span class="text-slate-400">ГАЗ (Оригинал)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Опора промежуточная (подвесной) ГАЗель Бизнес в сб.
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  1 350 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-3302, 2705 ГАЗель Бизнес; карданный вал с промежуточной опорой</div>
+                <div class="truncate"><b>Кроссы:</b> 3302220109001, 33022201090, CB3302, 532201090</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004011</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-DRIVE-002')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-DRIVE-002" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Опора промежуточная (подвесной) ГАЗель Бизнес в сб.
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 9 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-3302, 2705 ГАЗель Бизнес; карданный вал с промежуточной опорой
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 3302220109001
+Кроссы и взаимозаменяемые номера: 3302220109001, 33022201090, CB3302, 532201090
+Производители в наличии и под заказ: ГАЗ (Оригинал), БРТ (Балаково), Белмаг, HOLA
+
+📌 Коды детали в учетной системе 1С: 00-004011
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80" alt="Цилиндр сцепления рабочий (РЦС) ГАЗ-3302, Соболь" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+                  <span class="bg-cyan-500/90 text-slate-950 font-black text-[10px] uppercase px-2 py-0.5 rounded-md shadow">
+                    Склеено: 2 дубля 1С
+                  </span>
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">6 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">33021602510</b></span>
+                <span class="text-slate-400">ГАЗ (Оригинал)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Цилиндр сцепления рабочий (РЦС) ГАЗ-3302, Соболь
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  1 280 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-3302, Соболь 2752, ГАЗ-31105 Волга; дв. ЗМЗ-405, ЗМЗ-406, УМЗ-4216</div>
+                <div class="truncate"><b>Кроссы:</b> 33021602510, 31101602510, CSC3302, 3302160251001</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-001150, 00-001151</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-CLUTCH-001')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-CLUTCH-001" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Цилиндр сцепления рабочий (РЦС) ГАЗ-3302, Соболь
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 6 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-3302, Соболь 2752, ГАЗ-31105 Волга; дв. ЗМЗ-405, ЗМЗ-406, УМЗ-4216
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 33021602510
+Кроссы и взаимозаменяемые номера: 33021602510, 31101602510, CSC3302, 3302160251001
+Производители в наличии и под заказ: ГАЗ (Оригинал), Fenox, Пекар, Kraft, TRIALLI
+
+📌 Коды детали в учетной системе 1С: 00-001150, 00-001151
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80" alt="Катушка зажигания индивидуальная ГАЗель Next Evotech" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">8 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">2112370501013</b></span>
+                <span class="text-slate-400">СОАТЭ</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Катушка зажигания индивидуальная ГАЗель Next Evotech
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  1 250 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗель Next, Бизнес; дв. УМЗ Evotech 2.7 (A274), ВАЗ 16V</div>
+                <div class="truncate"><b>Кроссы:</b> 2112370501013, 21123705010, 0221504473, IC2112</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004020</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-IGNIT-003')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-IGNIT-003" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Катушка зажигания индивидуальная ГАЗель Next Evotech
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 8 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗель Next, Бизнес; дв. УМЗ Evotech 2.7 (A274), ВАЗ 16V
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 2112370501013
+Кроссы и взаимозаменяемые номера: 2112370501013, 21123705010, 0221504473, IC2112
+Производители в наличии и под заказ: СОАТЭ, Bosch, ИТЭЛМА, Север
+
+📌 Коды детали в учетной системе 1С: 00-004020
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80" alt="Крестовина карданного вала УАЗ Патриот, Хантер" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">1 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">31602201025</b></span>
+                <span class="text-slate-400">АДС-Эксперт</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Крестовина карданного вала УАЗ Патриот, Хантер
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  1 150 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> УАЗ 3163 Патриот, УАЗ Пикап, УАЗ 31519 Хантер, УАЗ 452 Буханка</div>
+                <div class="truncate"><b>Кроссы:</b> 31602201025, 3160220102501, CR3160, UJ3160</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-002003</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('UAZ-DRIVE-001')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-UAZ-DRIVE-001" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Крестовина карданного вала УАЗ Патриот, Хантер
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 1 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+УАЗ 3163 Патриот, УАЗ Пикап, УАЗ 31519 Хантер, УАЗ 452 Буханка
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 31602201025
+Кроссы и взаимозаменяемые номера: 31602201025, 3160220102501, CR3160, UJ3160
+Производители в наличии и под заказ: АДС-Эксперт, Чернянка, HOLA, RedBTR, MetalPart
+
+📌 Коды детали в учетной системе 1С: 00-002003
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80" alt="Датчик положения дроссельной заслонки (ДПДЗ) ЗМЗ-406 Рикор" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">6 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">406113000001</b></span>
+                <span class="text-slate-400">Рикор Электроникс</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Датчик положения дроссельной заслонки (ДПДЗ) ЗМЗ-406 Рикор
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  1 150 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗель, Волга, УАЗ; инжекторные двигатели ЗМЗ-406, 405, 409</div>
+                <div class="truncate"><b>Кроссы:</b> 406113000001, 4061130000, 0280122001, TPS406</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004027</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-SENS-002')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-SENS-002" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Датчик положения дроссельной заслонки (ДПДЗ) ЗМЗ-406 Рикор
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 6 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗель, Волга, УАЗ; инжекторные двигатели ЗМЗ-406, 405, 409
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 406113000001
+Кроссы и взаимозаменяемые номера: 406113000001, 4061130000, 0280122001, TPS406
+Производители в наличии и под заказ: Рикор Электроникс, Bosch, Автотрейд, Пекар
+
+📌 Коды детали в учетной системе 1С: 00-004027
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80" alt="Втулки рессоры полиуретан ГАЗ-3302 комплект 12 шт." class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">10 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">33022912028ПY</b></span>
+                <span class="text-slate-400">Полиуретан.ру</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Втулки рессоры полиуретан ГАЗ-3302 комплект 12 шт.
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  1 100 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-3302 ГАЗель, ГАЗель Бизнес, Соболь передние и задние рессоры</div>
+                <div class="truncate"><b>Кроссы:</b> 33022912028ПY, 33022912028, PU330212</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004021</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-SUSP-006')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-SUSP-006" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Втулки рессоры полиуретан ГАЗ-3302 комплект 12 шт.
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 10 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-3302 ГАЗель, ГАЗель Бизнес, Соболь передние и задние рессоры
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 33022912028ПY
+Кроссы и взаимозаменяемые номера: 33022912028ПY, 33022912028, PU330212
+Производители в наличии и под заказ: Полиуретан.ру, Точка Опоры, Фортуна, БРТ
+
+📌 Коды детали в учетной системе 1С: 00-004021
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80" alt="Трос стояночного тормоза задний длинный ГАЗ-3302" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">8 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">33023508180</b></span>
+                <span class="text-slate-400">Автопартнер (Димитровград)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Трос стояночного тормоза задний длинный ГАЗ-3302
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  850 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-3302 ГАЗель стандартная и удлиненная база</div>
+                <div class="truncate"><b>Кроссы:</b> 33023508180, 33023508068, HBC3302L</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004017</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-BRAKE-003')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-BRAKE-003" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Трос стояночного тормоза задний длинный ГАЗ-3302
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 8 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-3302 ГАЗель стандартная и удлиненная база
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 33023508180
+Кроссы и взаимозаменяемые номера: 33023508180, 33023508068, HBC3302L
+Производители в наличии и под заказ: Автопартнер (Димитровград), Тросики.ру, Белмаг
+
+📌 Коды детали в учетной системе 1С: 00-004017
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80" alt="Наконечник рулевой тяги правый ГАЗ-3302 ГАЗель" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">10 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">33023414056</b></span>
+                <span class="text-slate-400">Белмаг</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Наконечник рулевой тяги правый ГАЗ-3302 ГАЗель
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  850 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-3302, 2705 ГАЗель, ГАЗель Бизнес рулевая трапеция</div>
+                <div class="truncate"><b>Кроссы:</b> 33023414056, 3302341405601, TRE3302R</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004023</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-STEER-003')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-STEER-003" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Наконечник рулевой тяги правый ГАЗ-3302 ГАЗель
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 10 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-3302, 2705 ГАЗель, ГАЗель Бизнес рулевая трапеция
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 33023414056
+Кроссы и взаимозаменяемые номера: 33023414056, 3302341405601, TRE3302R
+Производители в наличии и под заказ: Белмаг, ГАЗ, Трек Мастер, HOLA
+
+📌 Коды детали в учетной системе 1С: 00-004023
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80" alt="Ремень генератора поликлиновой 6PK 1370 УМЗ-4216 с ГУР" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">14 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">6PK1370</b></span>
+                <span class="text-slate-400">Gates</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Ремень генератора поликлиновой 6PK 1370 УМЗ-4216 с ГУР
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  680 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗель Бизнес; двигатель УМЗ-4216 с гидроусилителем руля (ГУР)</div>
+                <div class="truncate"><b>Кроссы:</b> 6PK1370, 6PK1370, 42161308020, GATES6PK1368</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004022</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-ENG-004')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-ENG-004" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Ремень генератора поликлиновой 6PK 1370 УМЗ-4216 с ГУР
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 14 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗель Бизнес; двигатель УМЗ-4216 с гидроусилителем руля (ГУР)
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 6PK1370
+Кроссы и взаимозаменяемые номера: 6PK1370, 6PK1370, 42161308020, GATES6PK1368
+Производители в наличии и под заказ: Gates, ContiTech, БРТ, LynxAuto, Dayco
+
+📌 Коды детали в учетной системе 1С: 00-004022
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80" alt="Термостат 82С УМЗ-4216, Evotech 2.7 ПРАМО" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">10 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">TA107130610004</b></span>
+                <span class="text-slate-400">Прамо (Элтра)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Термостат 82С УМЗ-4216, Evotech 2.7 ПРАМО
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  650 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗель Бизнес, Next; дв. УМЗ-4216, Evotech 2.7 (A274, A275)</div>
+                <div class="truncate"><b>Кроссы:</b> TA107130610004, 1071306100, LT0321, TH10782</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004006</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-COOL-003')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-COOL-003" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Термостат 82С УМЗ-4216, Evotech 2.7 ПРАМО
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 10 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗель Бизнес, Next; дв. УМЗ-4216, Evotech 2.7 (A274, A275)
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: TA107130610004
+Кроссы и взаимозаменяемые номера: TA107130610004, 1071306100, LT0321, TH10782
+Производители в наличии и под заказ: Прамо (Элтра), Luzar, Пекар, Metal-Incar
+
+📌 Коды детали в учетной системе 1С: 00-004006
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=800&q=80" alt="Прокладка клапанной крышки ЗМЗ 406, 405 силикон" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">16 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">4061007245CИЛ</b></span>
+                <span class="text-slate-400">CS-20</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Прокладка клапанной крышки ЗМЗ 406, 405 силикон
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  550 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗель, Соболь, Волга, УАЗ; дв. ЗМЗ-406, 405 (алюминиевая крышка)</div>
+                <div class="truncate"><b>Кроссы:</b> 4061007245CИЛ, 4061007245, 406100724501, VCG406</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004025</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-ENG-006')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-ENG-006" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Прокладка клапанной крышки ЗМЗ 406, 405 силикон
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 16 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗель, Соболь, Волга, УАЗ; дв. ЗМЗ-406, 405 (алюминиевая крышка)
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 4061007245CИЛ
+Кроссы и взаимозаменяемые номера: 4061007245CИЛ, 4061007245, 406100724501, VCG406
+Производители в наличии и под заказ: CS-20, Хорт, БРТ, ВАТИ
+
+📌 Коды детали в учетной системе 1С: 00-004025
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=800&q=80" alt="Свечи зажигания А17ДВРМ блистер 4 шт. ЗМЗ, УМЗ, ВАЗ" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">1 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">A17ДBPM</b></span>
+                <span class="text-slate-400">ЭЗ (Энгельс / Bosch)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Свечи зажигания А17ДВРМ блистер 4 шт. ЗМЗ, УМЗ, ВАЗ
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  420 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗель, Волга, УАЗ, ВАЗ 2108-2115, Приора 8 кл; дв. ЗМЗ-405, 406, УМЗ-4216</div>
+                <div class="truncate"><b>Кроссы:</b> A17DVRM, WR7DC, LR15YC, A17ДBPM10, 0242235663</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-002005</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-IGNIT-001')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-IGNIT-001" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Свечи зажигания А17ДВРМ блистер 4 шт. ЗМЗ, УМЗ, ВАЗ
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 1 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗель, Волга, УАЗ, ВАЗ 2108-2115, Приора 8 кл; дв. ЗМЗ-405, 406, УМЗ-4216
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: A17ДBPM
+Кроссы и взаимозаменяемые номера: A17DVRM, WR7DC, LR15YC, A17ДBPM10, 0242235663
+Производители в наличии и под заказ: ЭЗ (Энгельс / Bosch), Brisk, NGK, Finwhale
+
+📌 Коды детали в учетной системе 1С: 00-002005
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl hover:border-slate-700 transition flex flex-col justify-between">
+          <div>
+            <!-- ФОТО ТОВАРА -->
+            <div class="relative h-48 bg-slate-950 overflow-hidden">
+              
+                <img src="https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80" alt="Фильтр топливный тонкой очистки ГАЗ под штуцер" class="w-full h-full object-cover" />
+              
+
+              <div class="absolute top-3 left-3 flex flex-col gap-1.5">
+                
+                
+              </div>
+
+              <div class="absolute bottom-3 right-3 bg-slate-950/90 backdrop-blur border border-slate-700 text-white font-mono text-xs px-2.5 py-1 rounded-lg">
+                Остаток: <b class="text-emerald-400 font-bold">18 шт.</b>
+              </div>
+            </div>
+
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="p-4">
+              <div class="text-[11px] text-slate-400 mb-1 flex justify-between">
+                <span>OEM: <b class="text-slate-200 font-mono">31101117010</b></span>
+                <span class="text-slate-400">Автоагрегат (Ливны)</span>
+              </div>
+
+              <h3 class="font-bold text-white text-sm sm:text-base mb-2 leading-snug line-clamp-2">
+                Фильтр топливный тонкой очистки ГАЗ под штуцер
+              </h3>
+
+              <div class="flex items-baseline gap-2 mb-3">
+                <span class="text-xl font-black text-white mono">
+                  320 ₽
+                </span>
+                
+              </div>
+
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 space-y-1 mb-3">
+                <div class="truncate"><b>Применяемость:</b> ГАЗ-3110 Волга, ГАЗ-3302 ГАЗель инжектор; штуцерное соединение</div>
+                <div class="truncate"><b>Кроссы:</b> 31101117010, 3110111701001, WK512, FF3110</div>
+                <div class="text-slate-500 text-[10px] truncate"><b>Коды 1С:</b> 00-004026</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- КНОПКА РАСКРЫТИЯ ОПИСАНИЯ -->
+          <div class="p-4 pt-0">
+            <button onclick="toggleDesc('GAZ-FILT-002')" class="w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold text-xs py-2 rounded-xl transition">
+              Посмотреть текст Авито ▼
+            </button>
+            <div id="desc-GAZ-FILT-002" class="hidden mt-3 bg-slate-950 border border-slate-800 p-3 rounded-xl text-[11px] text-slate-300 font-mono whitespace-pre-line leading-relaxed max-h-56 overflow-y-auto">
+              ✅ В НАЛИЧИИ: Фильтр топливный тонкой очистки ГАЗ под штуцер
+Состояние: Новое в заводской упаковке.
+Актуальный остаток на полке магазина: 18 шт.
+
+🔧 ПРИМЕНЯЕМОСТЬ (Автомобили и Двигатели):
+ГАЗ-3110 Волга, ГАЗ-3302 ГАЗель инжектор; штуцерное соединение
+
+🔎 ЗАВОДСКИЕ НОМЕРА И КРОСС-АРТИКУЛЫ (для поиска аналогов):
+Основной OEM: 31101117010
+Кроссы и взаимозаменяемые номера: 31101117010, 3110111701001, WK512, FF3110
+Производители в наличии и под заказ: Автоагрегат (Ливны), BIG Filter, Mann, Невский фильтр
+
+📌 Коды детали в учетной системе 1С: 00-004026
+
+⚡ СВЯЗЬ И БРОНИРОВАНИЕ:
+Напишите нам в чат Авито прямо сейчас — наш автоматический помощник за 5 секунд проверит актуальный остаток на кассе, подберет проверенный аналог и забронирует товар до вашего приезда!
+
+📦 ДОСТАВКА И САМОВЫВОЗ:
+• Самовывоз: г. Пермь, ул. Промышленная, 8 (Магазин автозапчастей ГАЗ / УАЗ)
+• Авито-Доставка по всей России: СДЭК, Почта России, Boxberry, DPD, Яндекс Доставка.
+• Отправка Транспортными Компаниями (Деловые Линии, КИТ, ПЭК, Энергия) в день заказа.
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+    <!-- ПОДВАЛ И ССЫЛКИ -->
+    <div class="bg-gradient-to-r from-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
+      <div>
+        <h3 class="text-lg font-bold text-white">Фиды готовы к прямой автозагрузке в кабинеты Авито и Дром</h3>
+        <p class="text-xs text-slate-400 mt-1 max-w-xl">
+          При обновлении остатков на кассе 1С конвейер автоматически пересобирает фиды. Проданные товары мгновенно исчезают из рекламы, защищая магазин от жалоб и штрафов.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a href="avito_feed.xml" download class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black px-5 py-3 rounded-xl text-xs transition shadow-lg">
+          📥 avito_feed.xml (Автозагрузка v3)
+        </a>
+        <a href="drom_feed.csv" download class="bg-sky-500 hover:bg-sky-600 text-slate-950 font-black px-5 py-3 rounded-xl text-xs transition shadow-lg">
+          📥 drom_feed.csv (Прайс Дром)
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleDesc(id) {
+      const el = document.getElementById('desc-' + id);
+      if (el) el.classList.toggle('hidden');
+    }
+  </script>
+
+</body>
+</html>
