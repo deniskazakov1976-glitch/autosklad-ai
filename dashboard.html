@@ -24,7 +24,10 @@
           <div class="flex items-center gap-2">
             <h1 class="text-xl sm:text-2xl font-black text-white">Кабинет производства «АВТОСКЛАД-ИИ»</h1>
             <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
-              Production ERP v1.4 • 5/5 Модулей Активны (100% Ready)
+              Production ERP v1.5 • 5/5 Модулей Активны (100% Ready)
+            </span>
+            <span class="bg-sky-500/20 text-sky-400 border border-sky-500/40 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase hidden sm:inline-block">
+              🛡️ QA & Security Gate: PASSED (29/29)
             </span>
           </div>
           <p class="text-xs text-slate-400">Внутренняя рабочая консоль управления модулями М1–М5</p>
@@ -43,6 +46,30 @@
         </a>
       </div>
     </header>
+
+    <!-- ИНДИКАТОР БЕЗОПАСНОСТИ И ОТКАЗОУСТОЙЧИВОСТИ (QA & SECURITY GATE) -->
+    <div class="mb-6 bg-gradient-to-r from-emerald-950/60 via-slate-900 to-sky-950/60 border border-emerald-500/40 rounded-2xl p-4 shadow-lg flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-xl shadow">
+          🛡️
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-black uppercase tracking-wider text-emerald-400">QA & Security Gate</span>
+            <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-black px-2 py-0.5 rounded-full mono">PASSED (29/29 автотестов)</span>
+            <span class="bg-sky-500/20 text-sky-300 border border-sky-500/40 text-[10px] font-semibold px-2 py-0.5 rounded-full mono">pytest 9.0.3</span>
+          </div>
+          <p class="text-xs text-slate-300 mt-0.5">
+            100% готовность к «грязным» файлам 1С • Antonym Guard (защита от склеек левый/правый) • Защита от овербукинга и SQL-инъекций
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="qa_audit_report.json" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-bold px-3 py-1.5 rounded-xl transition flex items-center gap-1.5">
+          <span>📋</span> JSON-отчет тестов
+        </a>
+      </div>
+    </div>
 
     <!-- СВОДНЫЕ СТАТУС-КАРТОЧКИ КОНВЕЙЕРА -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">

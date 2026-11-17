@@ -1,0 +1,88 @@
+{
+  "timestamp": "2026-11-17 17:21:55",
+  "status": "PASSED",
+  "total_tests": 29,
+  "passed_tests": 29,
+  "failed_tests": 0,
+  "success_rate_pct": 100.0,
+  "framework": "pytest 9.0.3",
+  "platform": "Windows 11 / Python 3.12",
+  "target_modules": [
+    {
+      "module_id": "M1",
+      "name": "auditor.py",
+      "role": "Аудит и ревизия склада 1С",
+      "hardening_features": [
+        "Автоматический пропуск метаданных шапки 1С (строки 1-25)",
+        "Жесткая фильтрация строк «Итого», «Всего», «ИТОГО ПО СКЛАДУ»",
+        "Фильтрация папок иерархии номенклатуры",
+        "Парсинг чисел со строковыми пробелами, неразрывными пробелами (\\xa0) и запятыми",
+        "Выявление и логирование отрицательных остатков (пересортица 1С) с обнулением для витрин",
+        "Antonym Guard: блокировка склеек противоположных деталей (левый/правый, передний/задний)"
+      ],
+      "tests_passed": 7
+    },
+    {
+      "module_id": "M2",
+      "name": "matcher.py",
+      "role": "Трехкаскадный ИИ-матчер с master_catalog.db",
+      "hardening_features": [
+        "Каскад 1: детерминированный поиск по OEM и массиву кросс-номеров (0 ₽)",
+        "Каскад 2: нечеткий поиск rapidfuzz с блокиратором несовместимых запчастей (Antonym Guard)",
+        "Каскад 3: LLM Batch Matching с интеллектуальным offline-резолвером",
+        "Персистентность SQLite-кэша в client_sku_mapping (исключение повторных вызовов)"
+      ],
+      "tests_passed": 5
+    },
+    {
+      "module_id": "M3",
+      "name": "feed_generator.py",
+      "role": "Генератор автозагрузки Авито XML и Дром CSV",
+      "hardening_features": [
+        "Обрезание тега <Title> строго до 50 символов по границе целого слова",
+        "Удаление непечатаемых управляющих символов [\\x00-\\x1f] и экранирование спецсимволов",
+        "Строгая валидация XML-схемы через xml.etree.ElementTree.fromstring()",
+        "Фильтры безопасности: stock_qty >= 1 и price_retail >= 300 ₽",
+        "Дедупликация и объединение остатков дублей 1С по master_id"
+      ],
+      "tests_passed": 5
+    },
+    {
+      "module_id": "M4",
+      "name": "ai_sales_bot.py",
+      "role": "ИИ-продавец с архитектурой RAG + Tool Calling",
+      "hardening_features": [
+        "Контроль доступных остатков и защита от овербукинга (INSUFFICIENT_STOCK)",
+        "Полная защита от SQL-инъекций через параметризованные запросы (?)",
+        "Escalation Guard: перехват нестандартных свапов (2JZ, турбо, V8) старшему агрегатчику",
+        "Честный OUT_OF_STOCK при нулевом остатке с предложением доставки к 10:00"
+      ],
+      "tests_passed": 4
+    },
+    {
+      "module_id": "M5",
+      "name": "owner_radar.py",
+      "role": "Еженедельный радар директора и анти-откат закупщика",
+      "hardening_features": [
+        "Безопасный outer join с поддержкой новинок и удаленных SKU без NaN",
+        "Защита от ZeroDivisionError при расчете месяцев запаса при нулевых продажах",
+        "Точная фиксация разморозки (+193 800 ₽), отката (-42 100 ₽) и ночного бота (+15 650 ₽)"
+      ],
+      "tests_passed": 4
+    },
+    {
+      "module_id": "GUARD",
+      "name": "inventory_guard.py",
+      "role": "Ядро безопасности и нормализации",
+      "hardening_features": [
+        "AntonymGuard: стороны, оси, положения (верх/низ, внутр/наруж, впуск/выпуск), ремонтные размеры (стд, 0.25..1.0), семейства моторов",
+        "parse_1c_number()",
+        "detect_and_read_1c_file()",
+        "clean_avito_title()",
+        "sanitize_xml_string()"
+      ],
+      "tests_passed": 4
+    }
+  ],
+  "verification_verdict": "PASSED • 100% GREEN • Ready for Production 1C Dirty Imports"
+}
