@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Моушен-ролик для Ивана Ивановича • АВТОСКЛАД-ИИ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #05070b; color: #fff; user-select: none; overflow-x: hidden; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* Кинематографические движения камеры */
+    .camera-rig { transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1); }
+    .cam-zoom-left { transform: scale(1.035) translateX(1.2%); }
+    .cam-zoom-right { transform: scale(1.04) translateX(-1.2%); }
+    .cam-wide { transform: scale(1) translateX(0); }
+
+    /* Живая физика персонажа */
+    @keyframes breathe {
+      0%, 100% { transform: translateY(0px) scaleY(1); }
+      50% { transform: translateY(-4px) scaleY(1.012); }
+    }
+    @keyframes headTilt {
+      0%, 100% { transform: rotate(-1.5deg); }
+      50% { transform: rotate(2deg); }
+    }
+    @keyframes blink {
+      0%, 93%, 100% { transform: scaleY(1); }
+      96% { transform: scaleY(0.08); }
+    }
+    @keyframes talk {
+      0%, 100% { transform: scaleY(0.45); }
+      50% { transform: scaleY(1.3); }
+    }
+    @keyframes gestureRight {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(-12deg) translateY(-4px); }
+    }
+    @keyframes conveyorStream {
+      0% { transform: translateX(-120%) scale(0.85); opacity: 0; }
+      20% { opacity: 1; transform: translateX(-25%) scale(1); }
+      80% { opacity: 1; transform: translateX(55%) scale(1); }
+      100% { transform: translateX(135%) scale(0.9); opacity: 0; }
+    }
+    @keyframes floatLoss {
+      0% { transform: translateY(0) scale(0.9); opacity: 1; }
+      100% { transform: translateY(-70px) scale(1.2); opacity: 0; }
+    }
+
+    .char-body { animation: breathe 3s ease-in-out infinite; transform-origin: bottom center; }
+    .char-head { animation: headTilt 4.2s ease-in-out infinite; transform-origin: 130px 115px; }
+    .eyes-blink { animation: blink 4s infinite; transform-origin: center 78px; }
+    .mouth-talk { animation: talk 0.22s infinite; transform-origin: center 106px; }
+    .arm-gesture { animation: gestureRight 2s ease-in-out infinite; transform-origin: 185px 145px; }
+    .stream-card { animation: conveyorStream 2.9s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+    .loss-float { animation: floatLoss 2.3s ease-out infinite; }
+
+    .vignette { box-shadow: inset 0 0 95px rgba(0, 0, 0, 0.85); pointer-events: none; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-2 sm:p-5">
+
+  <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
+  <div class="w-full max-w-5xl flex flex-wrap items-center justify-between mb-3 px-2 gap-2">
+    <div class="flex items-center gap-3">
+      <span class="bg-gradient-to-r from-cyan-400 to-blue-600 text-slate-950 text-xs font-black px-3 py-1 rounded-md tracking-wider uppercase shadow">
+        ★ ПЕРСОНАЛЬНЫЙ РАЗБОР
+      </span>
+      <h1 class="text-sm sm:text-base font-bold text-slate-100">
+        Для Ивана Ивановича: Как превратить склад 1С в поток денег
+      </h1>
+    </div>
+    <div class="flex items-center gap-2">
+      <button id="soundBtn" onclick="toggleAudioEngine()" class="text-xs bg-orange-500 hover:bg-orange-600 text-slate-950 px-3.5 py-1.5 rounded-lg font-extrabold flex items-center gap-1.5 shadow-lg transition">
+        <span id="soundIcon">🔊</span> <span id="soundLabel">Звук + Голос: ВКЛ</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ГЛАВНЫЙ КИНОЭКРАН (16:9) -->
+  <div class="w-full max-w-5xl bg-[#0a0f18] border-2 border-slate-800 rounded-2xl overflow-hidden shadow-[0_25px_70px_rgba(0,0,0,0.9)] relative">
+
+    <!-- ХОЛСТ САЛЮТА -->
+    <canvas id="fxCanvas" class="absolute inset-0 pointer-events-none z-30 w-full h-full"></canvas>
+    <audio id="voiceoverAudio" src="stiva-music-1794906087467.mp3" preload="auto"></audio>
+
+    <!-- БОЛЬШАЯ КНОПКА СТАРТ (ЕСЛИ БРАУЗЕР ЗАБЛОКИРОВАЛ АВТОЗАПУСК СО ЗВУКОМ) -->
+    <div id="startOverlay" onclick="startPresentation()" class="absolute inset-0 z-40 bg-slate-950/80 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center cursor-pointer transition-opacity duration-300">
+      <div class="text-xs font-black uppercase tracking-widest text-cyan-400 mb-3">
+        ★ Персональный разбор • 5 магазинов ГАЗ / УАЗ
+      </div>
+      <h2 class="text-xl sm:text-3xl font-black text-white mb-6 max-w-xl">
+        Для Ивана Ивановича: Как превратить склад 1С в поток денег
+      </h2>
+      <button type="button" class="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-slate-950 font-black text-base sm:text-xl px-8 py-4 rounded-2xl shadow-[0_0_40px_rgba(249,115,22,0.55)] flex items-center gap-3 transform hover:scale-105 transition">
+        <span class="text-2xl">▶</span>
+        <span>СМОТРЕТЬ РАЗБОР СО ЗВУКОМ</span>
+      </button>
+      <p class="text-xs text-slate-400 mt-4">Длительность: 1 мин 12 сек • Нажмите для старта</p>
+    </div>
+
+    <!-- СЦЕНА С КАМЕРОЙ -->
+    <div id="cameraStage" class="camera-rig relative w-full h-[490px] sm:h-[545px] overflow-hidden bg-gradient-to-b from-[#131c2e] via-[#0d1422] to-[#080c14] flex flex-col justify-between p-4 sm:p-8 vignette">
+
+      <!-- ПАРАЛЛАКС-ФОН СКЛАДА АВТОЗАПЧАСТЕЙ -->
+      <svg class="absolute inset-0 w-full h-full opacity-25 pointer-events-none z-0" viewBox="0 0 1000 540" preserveAspectRatio="none">
+        <g stroke="#334155" stroke-width="4" fill="none">
+          <line x1="55" y1="55" x2="55" y2="465"/>
+          <line x1="275" y1="55" x2="275" y2="465"/>
+          <line x1="55" y1="145" x2="275" y2="145"/>
+          <line x1="55" y1="255" x2="275" y2="255"/>
+          <line x1="55" y1="365" x2="275" y2="365"/>
+        </g>
+        <rect x="75" y="100" width="58" height="42" rx="4" fill="#475569"/>
+        <rect x="148" y="92" width="72" height="50" rx="4" fill="#334155"/>
+        <rect x="85" y="210" width="82" height="42" rx="4" fill="#475569"/>
+        <rect x="182" y="215" width="62" height="37" rx="4" fill="#64748b"/>
+        <rect x="72" y="315" width="98" height="47" rx="4" fill="#334155"/>
+        <!-- Окно -->
+        <rect x="760" y="48" width="170" height="118" rx="8" id="windowSky" fill="#0f172a" stroke="#475569" stroke-width="5"/>
+        <circle id="celestialBody" cx="885" cy="88" r="18" fill="#fbbf24"/>
+        <line x1="845" y1="48" x2="845" y2="166" stroke="#475569" stroke-width="4"/>
+        <line x1="760" y1="107" x2="930" y2="107" stroke="#475569" stroke-width="4"/>
+        <line x1="0" y1="465" x2="1000" y2="465" stroke="#1e293b" stroke-width="6"/>
+      </svg>
+
+      <!-- ВЕРХНИЙ HUD -->
+      <div class="relative z-20 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <div id="sceneBadge" class="px-3.5 py-1 rounded-full bg-red-500/20 border border-red-500/50 text-red-300 text-xs font-extrabold uppercase tracking-wider">
+            Сцена 1/5 • Замороженный капитал
+          </div>
+          <span id="clockBadge" class="bg-slate-900/90 border border-slate-700 px-3 py-1 rounded-lg text-xs font-mono text-slate-300">
+            🕒 14:00 • Склад
+          </span>
+        </div>
+
+        <div class="bg-slate-950/90 border-2 border-slate-700 px-4 py-1.5 rounded-xl flex items-center gap-2.5 shadow-lg">
+          <span id="moneyLabel" class="text-[11px] font-bold text-slate-400 uppercase">Заморожено в железе:</span>
+          <span id="moneyCounter" class="mono text-sm sm:text-lg font-extrabold text-red-400">- 2 150 000 ₽</span>
+        </div>
+      </div>
+
+      <!-- ЦЕНТРАЛЬНАЯ ЗОНА: ИВАН ИВАНОВИЧ (ПОРТРЕТ ПО ФОТО) + ДЕКОРАЦИИ -->
+      <div class="relative z-10 flex-1 grid grid-cols-1 md:grid-cols-12 items-center gap-4 my-1">
+
+        <!-- ЛЕВАЯ КОЛОНКА: ХУДОЖЕСТВЕННАЯ 2.5D-МОДЕЛЬ ИВАНА ИВАНОВИЧА ПО ФОТО -->
+        <div class="md:col-span-5 flex flex-col items-center justify-center relative">
+          
+          <!-- Реплика -->
+          <div id="speechBubble" class="mb-1.5 bg-white text-slate-950 px-4 py-2 rounded-2xl rounded-bl-none font-extrabold text-xs sm:text-sm shadow-xl max-w-[295px] text-center border-2 border-cyan-400/60">
+            «Два миллиона лежат на полках мертвым грузом, а оборотных денег вечно не хватает!..»
+          </div>
+
+          <!-- ДЕТАЛИЗИРОВАННЫЙ SVG-ПОРТРЕТ ПО ФОТОГРАФИИ -->
+          <svg class="w-52 h-52 sm:w-64 sm:h-64 char-body drop-shadow-[0_18px_25px_rgba(0,0,0,0.75)]" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <!-- Градиенты кожи для объемного 3D-сходства -->
+              <linearGradient id="skinGrad" x1="130" y1="35" x2="130" y2="128" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#f5cdb6"/>
+                <stop offset="55%" stop-color="#eab69b"/>
+                <stop offset="100%" stop-color="#d89b7e"/>
+              </linearGradient>
+              <!-- Градиент фирменного темно-синего свитера -->
+              <linearGradient id="sweaterGrad" x1="50" y1="125" x2="210" y2="235" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#192132"/>
+                <stop offset="50%" stop-color="#111726"/>
+                <stop offset="100%" stop-color="#0b0f19"/>
+              </linearGradient>
+              <!-- Градиент серо-пепельных волос с проседью -->
+              <linearGradient id="hairGrad" x1="80" y1="22" x2="180" y2="68" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#64748b"/>
+                <stop offset="50%" stop-color="#94a3b8"/>
+                <stop offset="100%" stop-color="#cbd5e1"/>
+              </linearGradient>
+              <!-- Маска под свитер для фирменных полосок -->
+              <clipPath id="torsoClip">
+                <path d="M48 230 C42 152 72 128 130 128 C188 128 218 152 212 230 Z"/>
+              </clipPath>
+            </defs>
+
+            <!-- Тень под персонажем -->
+            <ellipse cx="130" cy="242" rx="78" ry="10" fill="#020408" opacity="0.8"/>
+
+            <!-- ДЖИНСЫ (Нижняя часть как на фото) -->
+            <path d="M62 215 L198 215 L192 242 L68 242 Z" fill="#4b729f"/>
+            <line x1="130" y1="218" x2="130" y2="242" stroke="#2c4c70" stroke-width="3"/>
+
+            <!-- ЛЕВАЯ РУКА В ПОЛОСАТОМ РУКАВЕ -->
+            <g>
+              <path d="M62 144 C35 162 34 195 54 212" stroke="#141b2b" stroke-width="26" stroke-linecap="round"/>
+              <!-- Полоски на рукаве -->
+              <path d="M35 168 L58 174" stroke="#ffffff" stroke-width="2.5"/>
+              <path d="M34 173 L57 179" stroke="#38bdf8" stroke-width="2.5"/>
+              <path d="M35 190 L58 195" stroke="#ffffff" stroke-width="2.5"/>
+              <path d="M36 195 L59 200" stroke="#38bdf8" stroke-width="2.5"/>
+              <!-- Кисть руки -->
+              <ellipse cx="58" cy="215" rx="13" ry="11" fill="#eab69b"/>
+            </g>
+
+            <!-- ПРАВАЯ РУКА (Анимированный жест) -->
+            <g class="arm-gesture">
+              <path d="M198 144 C224 160 225 192 204 210" stroke="#141b2b" stroke-width="26" stroke-linecap="round"/>
+              <path d="M202 170 L225 165" stroke="#ffffff" stroke-width="2.5"/>
+              <path d="M203 175 L226 170" stroke="#38bdf8" stroke-width="2.5"/>
+              <path d="M201 192 L223 188" stroke="#ffffff" stroke-width="2.5"/>
+              <path d="M202 197 L224 193" stroke="#38bdf8" stroke-width="2.5"/>
+              <!-- Кисть правой руки -->
+              <ellipse cx="201" cy="213" rx="13" ry="11" fill="#eab69b"/>
+            </g>
+
+            <!-- ТОРС: ТОТ САМЫЙ ТЕМНО-СИНИЙ СВИТЕР В БЕЛО-ГОЛУБУЮ ПОЛОСКУ С ФОТО -->
+            <g clip-path="url(#torsoClip)">
+              <path d="M48 230 C42 152 72 128 130 128 C188 128 218 152 212 230 Z" fill="url(#sweaterGrad)"/>
+              
+              <!-- Фирменные двойные бело-бирюзовые полоски (как на свитере с фото) -->
+              <g opacity="0.92">
+                <!-- Полоса 1 -->
+                <path d="M45 152 Q130 164 215 152" stroke="#ffffff" stroke-width="2.6" fill="none"/>
+                <path d="M45 156 Q130 168 215 156" stroke="#22d3ee" stroke-width="2.6" fill="none"/>
+                <!-- Полоса 2 -->
+                <path d="M42 176 Q130 189 218 176" stroke="#ffffff" stroke-width="2.6" fill="none"/>
+                <path d="M42 180 Q130 193 218 180" stroke="#22d3ee" stroke-width="2.6" fill="none"/>
+                <!-- Полоса 3 -->
+                <path d="M42 200 Q130 214 218 200" stroke="#ffffff" stroke-width="2.6" fill="none"/>
+                <path d="M42 204 Q130 218 218 204" stroke="#22d3ee" stroke-width="2.6" fill="none"/>
+                <!-- Полоса 4 -->
+                <path d="M45 222 Q130 234 215 222" stroke="#ffffff" stroke-width="2.4" fill="none"/>
+                <path d="M45 226 Q130 238 215 226" stroke="#22d3ee" stroke-width="2.4" fill="none"/>
+              </g>
+
+              <!-- Белая вышитая эмблема-монограмма на левой стороне груди (точь-в-точь как на фото) -->
+              <g transform="translate(154, 158) scale(0.85)">
+                <path d="M2 8 C6 0, 16 0, 18 8 C20 14, 8 18, 4 12 Z" stroke="#f8fafc" stroke-width="2.2" fill="none"/>
+                <path d="M6 4 L14 15 M14 4 L6 15" stroke="#cbd5e1" stroke-width="1.6"/>
+              </g>
+            </g>
+
+            <!-- ШЕЯ И V-ОБРАЗНЫЙ ВЫРЕЗ СВИТЕРА -->
+            <path d="M104 114 L104 138 L130 152 L156 138 L156 114 Z" fill="#dfa588"/>
+            <!-- Тень под подбородком -->
+            <ellipse cx="130" cy="122" rx="28" ry="9" fill="#b97d60" opacity="0.55"/>
+            <!-- V-воротник свитера -->
+            <path d="M98 127 L130 154 L162 127" stroke="#0f172a" stroke-width="7" stroke-linejoin="round" fill="none"/>
+            <path d="M101 127 L130 151 L159 127" stroke="#38bdf8" stroke-width="1.5" stroke-linejoin="round" fill="none" opacity="0.6"/>
+
+            <!-- ГОЛОВА ИВАНА ИВАНОВИЧА (СРИСОВАНА С ФОТО) -->
+            <g class="char-head">
+              <!-- Уши -->
+              <ellipse cx="77" cy="84" rx="8" ry="13" fill="#dfa588"/>
+              <ellipse cx="183" cy="84" rx="8" ry="13" fill="#dfa588"/>
+
+              <!-- Форма лица: крепкий овал с мягкими щеками и волевым подбородком -->
+              <path d="M80 56 C80 32 180 32 180 56 C183 84 181 106 164 118 C148 128 112 128 96 118 C79 106 77 84 80 56 Z" fill="url(#skinGrad)"/>
+
+              <!-- Легкий естественный румянец -->
+              <ellipse cx="96" cy="90" rx="12" ry="7" fill="#e11d48" opacity="0.13"/>
+              <ellipse cx="164" cy="90" rx="12" ry="7" fill="#e11d48" opacity="0.13"/>
+
+              <!-- Характерные носогубные складки (дают взрослое портретное сходство) -->
+              <path d="M110 88 Q101 98 103 107" stroke="#c5896b" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.7"/>
+              <path d="M150 88 Q159 98 157 107" stroke="#c5896b" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.7"/>
+
+              <!-- Ямочка/линия подбородка как на фото -->
+              <path d="M122 117 Q130 121 138 117" stroke="#c5896b" stroke-width="2" stroke-linecap="round" fill="none"/>
+
+              <!-- БРОВИ (Русо-седые, естественной дугой) -->
+              <path id="browL" d="M92 67 Q105 62 116 66" stroke="#64748b" stroke-width="4" stroke-linecap="round" fill="none"/>
+              <path id="browR" d="M144 66 Q155 62 168 67" stroke="#64748b" stroke-width="4" stroke-linecap="round" fill="none"/>
+
+              <!-- ГЛАЗА (Серо-голубые с живым бликом и веками, как на фото) -->
+              <g class="eyes-blink">
+                <!-- Белки глаз -->
+                <ellipse cx="105" cy="76" rx="9" ry="5.5" fill="#f8fafc"/>
+                <ellipse cx="155" cy="76" rx="9" ry="5.5" fill="#f8fafc"/>
+                <!-- Серо-голубая радужка -->
+                <circle cx="105" cy="76" r="4.8" fill="#4b7bec"/>
+                <circle cx="155" cy="76" r="4.8" fill="#4b7bec"/>
+                <circle cx="105" cy="76" r="4.8" fill="#64748b" opacity="0.45"/>
+                <circle cx="155" cy="76" r="4.8" fill="#64748b" opacity="0.45"/>
+                <!-- Зрачок и блик -->
+                <circle cx="105" cy="76" r="2.3" fill="#0f172a"/>
+                <circle cx="155" cy="76" r="2.3" fill="#0f172a"/>
+                <circle cx="106.8" cy="74.5" r="1.4" fill="#ffffff"/>
+                <circle cx="156.8" cy="74.5" r="1.4" fill="#ffffff"/>
+                <!-- Верхнее веко -->
+                <path d="M95 74 Q105 69 115 74" stroke="#8c583e" stroke-width="2" fill="none"/>
+                <path d="M145 74 Q155 69 165 74" stroke="#8c583e" stroke-width="2" fill="none"/>
+                <!-- Мягкие морщинки у глаз -->
+                <path d="M97 82 Q105 85 113 82" stroke="#c5896b" stroke-width="1.3" fill="none"/>
+                <path d="M147 82 Q155 85 163 82" stroke="#c5896b" stroke-width="1.3" fill="none"/>
+              </g>
+
+              <!-- НОС (Прямой, с аккуратными крыльями носа как на фото) -->
+              <path d="M130 68 L128 87" stroke="#d19477" stroke-width="2" stroke-linecap="round"/>
+              <path d="M120 89 C122 94, 138 94, 140 89" stroke="#b97d60" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+              <circle cx="123" cy="90" r="2" fill="#a3674b" opacity="0.6"/>
+              <circle cx="137" cy="90" r="2" fill="#a3674b" opacity="0.6"/>
+
+              <!-- ГУБЫ И РОТ (Гладко выбрит, естественная мужская линия губ) -->
+              <g id="mouthGroup">
+                <!-- Серьезный / задумчивый рот (Сцены 1-2) -->
+                <path id="mouthSad" d="M114 104 Q130 100 146 104" stroke="#9a5240" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+                <!-- Уверенная добрая улыбка (Сцены 3-5) -->
+                <path id="mouthHappy" class="hidden" d="M112 101 Q130 113 148 101 Q130 107 112 101 Z" fill="#ffffff" stroke="#9a5240" stroke-width="2.8" stroke-linejoin="round"/>
+              </g>
+
+              <!-- ПРИЧЕСКА С ФОТО: Серо-пепельные волосы с текстурными прядями на лоб и седыми висками -->
+              <g>
+                <!-- Виски с благородной сединой -->
+                <path d="M78 76 C75 56 80 42 88 38 L85 68 Z" fill="#cbd5e1"/>
+                <path d="M182 76 C185 56 180 42 172 38 L175 68 Z" fill="#cbd5e1"/>
+                <!-- Основная шапка волос -->
+                <path d="M78 58 C76 24 184 24 182 58 C174 38 155 34 130 34 C105 34 86 38 78 58 Z" fill="url(#hairGrad)"/>
+                <!-- Характерные пряди челки, слегка спадающие на лоб вправо-влево (как на фото) -->
+                <path d="M92 40 Q105 53 118 46" stroke="#94a3b8" stroke-width="4" stroke-linecap="round" fill="none"/>
+                <path d="M112 36 Q128 54 146 47" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round" fill="none"/>
+                <path d="M138 37 Q154 51 168 45" stroke="#94a3b8" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                <path d="M98 33 Q130 24 162 34" stroke="#475569" stroke-width="3" stroke-linecap="round" fill="none"/>
+              </g>
+            </g>
+          </svg>
+
+          <!-- Именной бейдж -->
+          <div class="text-center -mt-2 z-20">
+            <span class="bg-slate-900/95 border border-cyan-500/40 px-4 py-1 rounded-full text-xs font-extrabold text-cyan-300 shadow-lg">
+              Иван Иванович • Владелец (5 магазинов ГАЗ / УАЗ)
+            </span>
+          </div>
+        </div>
+
+        <!-- ПРАВАЯ КОЛОНКА: МОУШЕН-СЦЕНЫ (1–5) -->
+        <div class="md:col-span-7 flex items-center justify-center">
+
+          <!-- СЦЕНА 1 -->
+          <div id="stage-1" class="w-full bg-slate-900/90 backdrop-blur border-2 border-red-500/50 rounded-2xl p-5 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3 mb-3">
+              <span class="text-xs font-black text-red-400 uppercase tracking-wider">⚠ Диагностика склада в 1С</span>
+              <span class="text-xs bg-red-500/20 text-red-300 font-bold px-2.5 py-0.5 rounded">Без движения > 12 мес</span>
+            </div>
+
+            <div class="space-y-3 text-xs">
+              <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                <div class="flex justify-between font-bold mb-1">
+                  <span class="text-slate-200">⚙️ КПП, редукторы и кузовщина ГАЗ / Волга</span>
+                  <span class="text-red-400 mono">840 000 ₽ в пыли</span>
+                </div>
+                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                  <div class="bg-red-500 h-full w-[82%]"></div>
+                </div>
+              </div>
+
+              <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                <div class="flex justify-between font-bold mb-1">
+                  <span class="text-slate-200">🔧 Насосы ГУР, стартеры, генераторы УАЗ</span>
+                  <span class="text-red-400 mono">710 000 ₽ на полках</span>
+                </div>
+                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                  <div class="bg-amber-500 h-full w-[68%]"></div>
+                </div>
+              </div>
+
+              <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                <div class="flex justify-between font-bold mb-1">
+                  <span class="text-slate-200">📦 Мелкая ходовка, датчики, патрубки (680 SKU)</span>
+                  <span class="text-red-400 mono">600 000 ₽ спрятаны в 1С</span>
+                </div>
+                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                  <div class="bg-orange-500 h-full w-[55%]"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-3 text-xs text-slate-300 bg-red-950/40 border border-red-800/40 p-2.5 rounded-lg">
+              💡 <b>Парадокс:</b> Клиенты и СТО по всей России ищут эти детали на Авито и Дроме, но склад Ивана Ивановича для них <b>невидим</b>!
+            </div>
+          </div>
+
+          <!-- СЦЕНА 2 -->
+          <div id="stage-2" class="w-full bg-slate-900/90 backdrop-blur border-2 border-red-500/50 rounded-2xl p-5 shadow-2xl hidden relative">
+            <div class="absolute right-6 top-5 text-2xl font-extrabold text-red-400 loss-float">💸 -7 200 ₽</div>
+            
+            <div class="text-xs font-black text-red-400 uppercase mb-2">Дыра №1: Три дубля одной детали в 1С</div>
+            <div class="bg-slate-950 p-3 rounded-xl border border-red-900/60 mono text-[11px] space-y-1.5 mb-4">
+              <div class="flex justify-between text-slate-300">
+                <span>1. «Насос ГУР Газель Бизнес УМЗ»</span>
+                <span class="text-red-400 font-bold">Ост: 0 шт (Закупщик заказал еще!)</span>
+              </div>
+              <div class="flex justify-between text-slate-300">
+                <span>2. «ГУР ШНКФ 453471.125 Борисов»</span>
+                <span class="text-amber-400 font-bold">Ост: 4 шт (Пылятся на полке!)</span>
+              </div>
+              <div class="flex justify-between text-slate-300">
+                <span>3. «Гидроусилитель 4216 оригинал»</span>
+                <span class="text-amber-400 font-bold">Ост: 2 шт (Никто не видит!)</span>
+              </div>
+            </div>
+
+            <div class="text-xs font-black text-amber-400 uppercase mb-2">Дыра №2: Вечерний чат Авито (21:15)</div>
+            <div class="bg-slate-800 p-3 rounded-xl text-xs text-white mb-2 border-l-4 border-amber-400">
+              <b>Покупатель (СТО):</b> «Здравствуйте! Срочно нужен ГУР на Газель УМЗ-4216 и ремень. Есть в наличии? Утром в 8:30 заберем!»
+            </div>
+            <div class="text-xs text-red-400 font-bold flex items-center justify-between">
+              <span>❌ Магазин закрыт. Ответа нет.</span>
+              <span>Утром клиент купил у конкурентов →</span>
+            </div>
+          </div>
+
+          <!-- СЦЕНА 3 -->
+          <div id="stage-3" class="w-full bg-slate-900/90 backdrop-blur border-2 border-orange-500 rounded-2xl p-5 shadow-2xl hidden">
+            <div class="flex items-center justify-between mb-3">
+              <span class="bg-orange-500 text-slate-950 text-xs font-black px-3 py-1 rounded uppercase">Запускаем конвейер «АВТОСКЛАД-ИИ»</span>
+              <span class="text-xs text-emerald-400 font-extrabold">Без отрыва ваших продавцов!</span>
+            </div>
+
+            <div class="relative bg-slate-950 border-2 border-slate-800 rounded-xl p-4 h-36 flex items-center justify-between overflow-hidden">
+              <div class="z-20 mx-auto bg-gradient-to-b from-orange-500 to-amber-600 text-slate-950 font-black px-4 py-3 rounded-2xl shadow-[0_0_30px_rgba(249,115,22,0.7)] text-center text-xs">
+                ⚙️ ЭТАЛОННАЯ БАЗА ГАЗ / УАЗ<br>
+                <span class="text-[10px] font-bold">Склейка дублей + Кроссы + HD Фото</span>
+              </div>
+
+              <div class="stream-card absolute inset-y-4 left-4 flex items-center gap-3 bg-slate-900/95 border border-orange-400 px-4 py-2 rounded-xl text-xs z-10">
+                <span class="text-red-300 mono">Сырая 1С</span>
+                <span>➔</span>
+                <span class="text-emerald-300 font-bold">+8 кросс-номеров +3 Фото</span>
+                <span>➔</span>
+                <span class="bg-blue-600 text-white px-2.5 py-1 rounded font-extrabold">5 400 карточек на Авито и Дром!</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2.5 mt-3 text-xs">
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+                <div class="text-orange-400 font-extrabold">1. Склеили дубли</div>
+                <div class="text-slate-400 text-[11px] mt-0.5">Из 3 кривых строк собрали единый остаток 6 шт.</div>
+              </div>
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+                <div class="text-orange-400 font-extrabold">2. Пробили аналоги</div>
+                <div class="text-slate-400 text-[11px] mt-0.5">Добавили номера ШНКФ, Пекар, АДС, двигатели</div>
+              </div>
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+                <div class="text-orange-400 font-extrabold">3. Живой остаток</div>
+                <div class="text-slate-400 text-[11px] mt-0.5">Продали на кассе — само снялось с Авито/Дрома</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- СЦЕНА 4 -->
+          <div id="stage-4" class="w-full bg-slate-900/90 backdrop-blur border-2 border-emerald-500 rounded-2xl p-5 shadow-2xl hidden">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-black text-emerald-400 uppercase">🤖 Ночной ИИ-Продавец в чатах (Авито / WhatsApp / TG)</span>
+              <span class="bg-emerald-500/20 text-emerald-300 text-xs font-bold px-2.5 py-0.5 rounded">Ответ за 5 секунд</span>
+            </div>
+
+            <div class="space-y-2.5 text-xs mb-3">
+              <div class="bg-slate-800 p-2.5 rounded-xl text-slate-200 mr-8">
+                <b>Клиент (23:18):</b> «На Соболь с мотором Эвотек 2.7 этот насос ГУР подойдет? И сколько стоит?»
+              </div>
+              <div class="bg-emerald-950/70 border border-emerald-500/50 p-3 rounded-xl text-emerald-100 ml-6">
+                <b>ИИ-Бот магазина:</b> «Добрый вечер! Да, на Evotech 2.7 и УМЗ-4216 встает штатно. Сейчас на складе в наличии 6 шт: оригинал ШНКФ по 6 450 ₽ и аналог Пекар по 4 900 ₽. Поставить в резерв на утро под ваш телефон?»
+              </div>
+            </div>
+
+            <div class="bg-slate-950 p-3 rounded-xl border border-orange-500/40 flex items-center justify-between text-xs">
+              <div>
+                <span class="text-orange-400 font-extrabold block">📲 Плюс каждый понедельник — «Радар собственника» лично Ивану Ивановичу:</span>
+                <span class="text-slate-300 text-[11px]">Показывает, какие ходовые позиции закончились и где закупщик пытается заказать лишнее!</span>
+              </div>
+              <span class="text-2xl ml-2">🛡️</span>
+            </div>
+          </div>
+
+          <!-- СЦЕНА 5: ФИНАЛ С ВАШИМ НОМЕРОМ 89028028246 -->
+          <div id="stage-5" class="w-full bg-gradient-to-br from-slate-900 to-slate-950 border-2 border-orange-500 rounded-2xl p-5 shadow-2xl hidden">
+            <div class="flex items-center justify-between mb-2">
+              <span class="bg-orange-500 text-slate-950 text-xs font-black px-2.5 py-0.5 rounded uppercase">Итог через 2 месяца</span>
+              <span class="text-xs text-emerald-400 font-bold">Окупилось в первые 3 недели!</span>
+            </div>
+
+            <h3 class="text-lg sm:text-xl font-black text-white mb-3">
+              Иван Иванович вернул в кассу +480 000 ₽ из старых запасов и навел порядок в 1С
+            </h3>
+
+            <div class="grid grid-cols-2 gap-3 mb-3 text-xs">
+              <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                <div class="text-slate-400">Полный запуск «Под ключ» (14 дней):</div>
+                <div class="text-lg font-black text-orange-400 mono mt-0.5">65 000 ₽ <span class="text-[11px] font-normal text-slate-400">(разово)</span></div>
+              </div>
+              <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                <div class="text-slate-400">Поддержка бота, фидов и Радара:</div>
+                <div class="text-lg font-black text-emerald-400 mono mt-0.5">18 000 ₽ <span class="text-[11px] font-normal text-slate-400">/ мес</span></div>
+              </div>
+            </div>
+
+            <div class="bg-orange-500/15 border border-orange-500/40 rounded-xl p-3 text-xs text-slate-100 mb-3">
+              🎁 <b>Бесплатный тест (0 ₽):</b> Скиньте на WhatsApp <b>+7 (902) 802-82-46</b> таблицу из <b>20–30 любых позиций из вашей 1С</b> (без поставщиков и коммерческой тайны). Завтра покажем готовые карточки для Авито, кроссы и разбор дублей!
+            </div>
+
+            <div class="flex flex-wrap gap-2.5">
+              <a href="https://wa.me/79028028246?text=Здравствуйте!%20Посмотрел%20ролик%20про%20Ивана%20Ивановича.%20Хочу%20бесплатный%20тест%20на%2020%20позициях%20из%201С" target="_blank" class="flex-1 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black py-3 px-4 rounded-xl text-center text-xs sm:text-sm transition shadow-lg">
+                💬 Написать в WhatsApp: 8 (902) 802-82-46
+              </a>
+              <a href="tel:+79028028246" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white font-bold py-3 px-4 rounded-xl text-center text-xs sm:text-sm transition">
+                📞 Позвонить
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ДИКТОРСКИЕ СУБТИТРЫ -->
+      <div class="relative z-20 mt-auto flex justify-center">
+        <div id="subtitles" class="bg-black/90 border border-slate-700 px-5 py-2.5 rounded-xl text-center text-xs sm:text-base font-bold text-amber-300 max-w-4xl shadow-2xl">
+          «Знакомьтесь, это Иван Иванович. У него пять крепких магазинов запчастей на ГАЗ и УАЗ. Но больше двух миллионов рублей лежат на полках мертвым грузом...»
+        </div>
+      </div>
+
+    </div>
+
+    <!-- НИЖНИЙ ПУЛЬТ УПРАВЛЕНИЯ РОЛИКОМ -->
+    <div class="bg-[#070b12] border-t border-slate-800 px-4 py-3">
+      <div class="grid grid-cols-5 gap-2 mb-3">
+        <button onclick="switchScene(1)" class="text-left group">
+          <div class="h-1.5 w-full bg-slate-800 rounded overflow-hidden"><div id="tbar-1" class="h-full bg-red-500 transition-all" style="width:100%"></div></div>
+          <span class="text-[10px] text-slate-400 group-hover:text-white font-semibold">1. Заморозка 2 млн ₽</span>
+        </button>
+        <button onclick="switchScene(2)" class="text-left group">
+          <div class="h-1.5 w-full bg-slate-800 rounded overflow-hidden"><div id="tbar-2" class="h-full bg-red-500 transition-all" style="width:0%"></div></div>
+          <span class="text-[10px] text-slate-400 group-hover:text-white font-semibold">2. Дубли 1С и ночь</span>
+        </button>
+        <button onclick="switchScene(3)" class="text-left group">
+          <div class="h-1.5 w-full bg-slate-800 rounded overflow-hidden"><div id="tbar-3" class="h-full bg-orange-500 transition-all" style="width:0%"></div></div>
+          <span class="text-[10px] text-slate-400 group-hover:text-white font-semibold">3. Конвейер кроссов</span>
+        </button>
+        <button onclick="switchScene(4)" class="text-left group">
+          <div class="h-1.5 w-full bg-slate-800 rounded overflow-hidden"><div id="tbar-4" class="h-full bg-emerald-500 transition-all" style="width:0%"></div></div>
+          <span class="text-[10px] text-slate-400 group-hover:text-white font-semibold">4. Ночной ИИ-Бот</span>
+        </button>
+        <button onclick="switchScene(5)" class="text-left group">
+          <div class="h-1.5 w-full bg-slate-800 rounded overflow-hidden"><div id="tbar-5" class="h-full bg-amber-400 transition-all" style="width:0%"></div></div>
+          <span class="text-[10px] text-slate-400 group-hover:text-white font-semibold">5. +480 000 ₽ в кассе</span>
+        </button>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5">
+          <button id="playPauseBtn" onclick="togglePlay()" class="bg-red-600 hover:bg-red-700 text-white font-extrabold px-4 py-1.5 rounded-lg text-xs sm:text-sm flex items-center gap-1.5 transition">
+            <span id="playIcon">⏸</span> <span id="playText">Пауза</span>
+          </button>
+          <button onclick="prevScene()" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg text-slate-200 font-semibold">⏮ Назад</button>
+          <button onclick="nextScene()" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg text-slate-200 font-semibold">Вперед ⏭</button>
+        </div>
+        <div class="text-xs text-slate-300">
+          Прямая связь (WhatsApp / Тел): <a href="https://wa.me/79028028246" target="_blank" class="text-orange-400 font-extrabold hover:underline">+7 (902) 802-82-46</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const story = {
+      1: {
+        badge: "Сцена 1/5 • Замороженный капитал",
+        badgeClass: "px-3.5 py-1 rounded-full bg-red-500/20 border border-red-500/50 text-red-300 text-xs font-extrabold uppercase tracking-wider",
+        clock: "🕒 14:00 • Дальний склад",
+        camClass: "cam-zoom-left",
+        skyColor: "#1e293b", sunColor: "#fbbf24",
+        moneyLabel: "Заморожено в неликвиде:",
+        moneyStart: -1500000, moneyEnd: -2150000, moneyColor: "text-red-400",
+        speech: "«Два миллиона лежат на полках мертвым грузом, а оборотных денег вечно не хватает!..»",
+        subtitle: "Знакомьтесь, это Иван Иванович. У него пять крепких магазинов запчастей на ГАЗ и УАЗ. Но больше двух миллионов рублей лежат на полках мертвым грузом, потому что о них знает только его 1С.",
+        mood: "sad", sfx: "error"
+      },
+      2: {
+        badge: "Сцена 2/5 • Бардак в 1С и потерянные лиды",
+        badgeClass: "px-3.5 py-1 rounded-full bg-red-500/20 border border-red-500/50 text-red-300 text-xs font-extrabold uppercase tracking-wider",
+        clock: "🌙 21:15 • Магазин закрыт",
+        camClass: "cam-zoom-right",
+        skyColor: "#090d16", sunColor: "#e2e8f0",
+        moneyLabel: "Потери на дублях и отказах:",
+        moneyStart: -2150000, moneyEnd: -2290000, moneyColor: "text-red-400",
+        speech: "«Опять в 1С три дубля одного насоса ГУР! А вечерний клиент на Авито не дождался ответа и ушел...»",
+        subtitle: "В 1С годами копились дубли: одна деталь заведена трижды под разными именами. Закупщик заказывает лишнее. А когда вечером в чат Авито пишет клиент — магазин молчит и теряет живые деньги.",
+        mood: "sad", sfx: "error"
+      },
+      3: {
+        badge: "Сцена 3/5 • Конвейер «1С ➔ Кроссы ➔ Авито и Дром»",
+        badgeClass: "px-3.5 py-1 rounded-full bg-orange-500/20 border border-orange-500/50 text-orange-300 text-xs font-extrabold uppercase tracking-wider",
+        clock: "⚡ Запуск за 14 дней «Под ключ»",
+        camClass: "cam-wide",
+        skyColor: "#1e3a8a", sunColor: "#fbbf24",
+        moneyLabel: "Выгружено товаров на витрины:",
+        moneyStart: 120000, moneyEnd: 1850000, moneyColor: "text-orange-400",
+        speech: "«Отлично! Сами склеили дубли в 1С, подтянули кросс-номера с фотками и выложили 5 400 позиций!»",
+        subtitle: "Иван Иванович подключает нашу систему. Без отрыва продавцов мы прогоняем выгрузку 1С через эталонную базу ГАЗ и УАЗ, склеиваем дубли, подтягиваем все кросс-номера, фото и автоматом выгружаем склад на Авито и Дром!",
+        mood: "happy", sfx: "powerup"
+      },
+      4: {
+        badge: "Сцена 4/5 • Ночной ИИ-Продавец 24/7 + Радар",
+        badgeClass: "px-3.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 text-xs font-extrabold uppercase tracking-wider",
+        clock: "🌙 23:18 • Работает автопилот",
+        camClass: "cam-zoom-right",
+        skyColor: "#090d16", sunColor: "#cbd5e1",
+        moneyLabel: "Принято ночных и региональных заказов:",
+        moneyStart: 45000, moneyEnd: 310000, moneyColor: "text-emerald-400",
+        speech: "«Я спокойно отдыхаю дома, а умный бот сам проверил остаток в 1С, подобрал аналог и принял заказ!»",
+        subtitle: "Теперь даже ночью технический ИИ-продавец за 5 секунд отвечает в чатах Авито и WhatsApp: проверяет применимость, называет цену из 1С и бронирует товар. А по понедельникам директор получает сводку контроля закупщика.",
+        mood: "happy", sfx: "ping"
+      },
+      5: {
+        badge: "Сцена 5/5 • Живые деньги в кассе!",
+        badgeClass: "px-3.5 py-1 rounded-full bg-orange-500 text-slate-950 text-xs font-black uppercase tracking-wider",
+        clock: "☀️ 09:00 • Касса магазина",
+        camClass: "cam-wide",
+        skyColor: "#0284c7", sunColor: "#fde047",
+        moneyLabel: "Возвращено живых денег в кассу:",
+        moneyStart: 150000, moneyEnd: 480000, moneyColor: "text-emerald-400",
+        speech: "«Плюс 480 тысяч рублей живыми деньгами из старого склада! Протестируйте на 20 позициях бесплатно!»",
+        subtitle: "Итог: старые неликвиды продаются по всей стране, а запуск окупается уже в первые недели. Хотите увидеть такую же картину по своему складу? Пришлите 20 любых позиций из 1С на бесплатный тест прямо сейчас!",
+        mood: "happy", sfx: "cash"
+      }
+    };
+
+    let currentScene = 1;
+    let isPlaying = true;
+    let audioEnabled = true;
+    let sceneTimer = null;
+    let audioCtx = null;
+
+    function playSfx(type) {
+      if (!audioEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+        if (type === 'error') {
+          osc.type = 'sawtooth'; osc.frequency.setValueAtTime(135, now); osc.frequency.exponentialRampToValueAtTime(82, now + 0.35);
+          gain.gain.setValueAtTime(0.08, now); gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+          osc.start(now); osc.stop(now + 0.35);
+        } else if (type === 'powerup') {
+          osc.type = 'triangle'; osc.frequency.setValueAtTime(280, now); osc.frequency.exponentialRampToValueAtTime(620, now + 0.4);
+          gain.gain.setValueAtTime(0.1, now); gain.gain.linearRampToValueAtTime(0.01, now + 0.4);
+          osc.start(now); osc.stop(now + 0.4);
+        } else if (type === 'ping') {
+          osc.type = 'sine'; osc.frequency.setValueAtTime(780, now); osc.frequency.setValueAtTime(1050, now + 0.12);
+          gain.gain.setValueAtTime(0.1, now); gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
+          osc.start(now); osc.stop(now + 0.3);
+        } else if (type === 'cash') {
+          osc.type = 'sine'; osc.frequency.setValueAtTime(987, now); osc.frequency.setValueAtTime(1318, now + 0.1);
+          gain.gain.setValueAtTime(0.14, now); gain.gain.exponentialRampToValueAtTime(0.008, now + 0.55);
+          osc.start(now); osc.stop(now + 0.55);
+        }
+      } catch (e) {}
+    }
+
+    function animateMoney(start, end, colorClass) {
+      const el = document.getElementById('moneyCounter');
+      el.className = "mono text-sm sm:text-lg font-extrabold " + colorClass;
+      const duration = 1100;
+      const startTime = performance.now();
+      function tick(now) {
+        const progress = Math.min((now - startTime) / duration, 1);
+        const val = Math.round(start + (end - start) * progress);
+        const sign = val > 0 ? "+ " : "- ";
+        el.innerText = sign + Math.abs(val).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " ₽";
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    function updateCharacter(mood, talking) {
+      const mouthSad = document.getElementById('mouthSad');
+      const mouthHappy = document.getElementById('mouthHappy');
+      const browL = document.getElementById('browL');
+      const browR = document.getElementById('browR');
+
+      if (mood === 'sad') {
+        mouthSad.classList.remove('hidden');
+        mouthHappy.classList.add('hidden');
+        browL.setAttribute('d', 'M92 69 Q105 65 116 68');
+        browR.setAttribute('d', 'M144 68 Q155 65 168 69');
+      } else {
+        mouthSad.classList.add('hidden');
+        mouthHappy.classList.remove('hidden');
+        browL.setAttribute('d', 'M92 65 Q105 59 116 64');
+        browR.setAttribute('d', 'M144 64 Q155 59 168 65');
+      }
+
+      const mGroup = document.getElementById('mouthGroup');
+      if (talking) mGroup.classList.add('mouth-talk');
+      else mGroup.classList.remove('mouth-talk');
+    }
+
+    const sceneRatios = [0, 0.184, 0.368, 0.583, 0.796];
+
+    function getVoiceDuration() {
+      const audio = document.getElementById('voiceoverAudio');
+      return (audio && isFinite(audio.duration) && audio.duration > 0) ? audio.duration : 72;
+    }
+
+    function speakLine(text, mood) {
+      if (!audioEnabled) {
+        updateCharacter(mood, true);
+        setTimeout(() => updateCharacter(mood, false), 3500);
+        return;
+      }
+      const audio = document.getElementById('voiceoverAudio');
+      updateCharacter(mood, Boolean(audio && !audio.paused));
+    }
+
+    function fireConfetti() {
+      const canvas = document.getElementById('fxCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      const particles = Array.from({ length: 50 }, () => ({
+        x: canvas.width * 0.5,
+        y: canvas.height * 0.55,
+        vx: (Math.random() - 0.5) * 11,
+        vy: -Math.random() * 10 - 3,
+        size: Math.random() * 7 + 4,
+        color: ['#f97316', '#fbbf24', '#10b981', '#22d3ee'][Math.floor(Math.random() * 4)]
+      }));
+      let frame = 0;
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.x += p.vx; p.y += p.vy; p.vy += 0.28;
+          ctx.fillStyle = p.color;
+          ctx.fillRect(p.x, p.y, p.size, p.size);
+        });
+        frame++;
+        if (frame < 75) requestAnimationFrame(render);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      requestAnimationFrame(render);
+    }
+
+    function switchScene(num, fromAudio = false) {
+      currentScene = num;
+      const s = story[num];
+      const stage = document.getElementById('cameraStage');
+      stage.className = `camera-rig relative w-full h-[490px] sm:h-[545px] overflow-hidden bg-gradient-to-b from-[#131c2e] via-[#0d1422] to-[#080c14] flex flex-col justify-between p-4 sm:p-8 vignette ${s.camClass}`;
+
+      document.getElementById('windowSky').setAttribute('fill', s.skyColor);
+      document.getElementById('celestialBody').setAttribute('fill', s.sunColor);
+      document.getElementById('sceneBadge').innerText = s.badge;
+      document.getElementById('sceneBadge').className = s.badgeClass;
+      document.getElementById('clockBadge').innerText = s.clock;
+      document.getElementById('moneyLabel').innerText = s.moneyLabel;
+      document.getElementById('speechBubble').innerText = s.speech;
+      document.getElementById('subtitles').innerText = "«" + s.subtitle + "»";
+
+      animateMoney(s.moneyStart, s.moneyEnd, s.moneyColor);
+      playSfx(s.sfx);
+
+      const audio = document.getElementById('voiceoverAudio');
+      if (!fromAudio && audioEnabled && audio) {
+        audio.currentTime = sceneRatios[num - 1] * getVoiceDuration();
+        if (isPlaying && audio.paused) {
+          audio.play().catch(() => {});
+        }
+      }
+
+      speakLine(s.subtitle, s.mood);
+      if (num === 5) fireConfetti();
+
+      for (let i = 1; i <= 5; i++) {
+        const box = document.getElementById('stage-' + i);
+        const bar = document.getElementById('tbar-' + i);
+        if (i === num) {
+          box.classList.remove('hidden');
+          bar.style.width = '100%';
+        } else {
+          box.classList.add('hidden');
+          bar.style.width = i < num ? '100%' : '0%';
+        }
+      }
+    }
+
+    function nextScene() { switchScene(currentScene >= 5 ? 1 : currentScene + 1); }
+    function prevScene() { switchScene(currentScene <= 1 ? 5 : currentScene - 1); }
+
+    function toggleAudioEngine() {
+      audioEnabled = !audioEnabled;
+      document.getElementById('soundIcon').innerText = audioEnabled ? '🔊' : '🔇';
+      document.getElementById('soundLabel').innerText = audioEnabled ? 'Звук + Голос: ВКЛ' : 'Включить Звук + Голос';
+      const audio = document.getElementById('voiceoverAudio');
+      if (audioEnabled) {
+        if (sceneTimer) clearInterval(sceneTimer);
+        if (audio) {
+          audio.currentTime = sceneRatios[currentScene - 1] * getVoiceDuration();
+          if (isPlaying) audio.play().catch(() => {});
+        }
+        switchScene(currentScene, true);
+      } else {
+        if (audio) audio.pause();
+        updateCharacter(story[currentScene].mood, false);
+        if (isPlaying) startAutoTimer();
+      }
+    }
+
+    function togglePlay() {
+      isPlaying = !isPlaying;
+      document.getElementById('playIcon').innerText = isPlaying ? '⏸' : '▶';
+      document.getElementById('playText').innerText = isPlaying ? 'Пауза' : 'Играть';
+      const audio = document.getElementById('voiceoverAudio');
+      if (isPlaying) {
+        if (audioEnabled && audio) {
+          audio.play().catch(() => {});
+          updateCharacter(story[currentScene].mood, true);
+        } else {
+          startAutoTimer();
+        }
+      } else {
+        clearInterval(sceneTimer);
+        if (audio) audio.pause();
+        updateCharacter(story[currentScene].mood, false);
+      }
+    }
+
+    function startAutoTimer() {
+      if (sceneTimer) clearInterval(sceneTimer);
+      if (audioEnabled) return;
+      sceneTimer = setInterval(() => {
+        if (isPlaying && !audioEnabled) nextScene();
+      }, 9800);
+    }
+
+    function setupVoiceoverSync() {
+      const audio = document.getElementById('voiceoverAudio');
+      if (!audio) return;
+      audio.addEventListener('timeupdate', () => {
+        if (!audioEnabled || audio.paused) return;
+        const dur = getVoiceDuration();
+        const ratio = audio.currentTime / dur;
+        let targetScene = 1;
+        for (let i = sceneRatios.length - 1; i >= 0; i--) {
+          if (ratio >= sceneRatios[i]) {
+            targetScene = i + 1;
+            break;
+          }
+        }
+        if (targetScene !== currentScene) {
+          switchScene(targetScene, true);
+        }
+      });
+      audio.addEventListener('play', () => {
+        if (audioEnabled) updateCharacter(story[currentScene].mood, true);
+      });
+      audio.addEventListener('pause', () => {
+        updateCharacter(story[currentScene].mood, false);
+      });
+      audio.addEventListener('ended', () => {
+        updateCharacter(story[currentScene].mood, false);
+        if (isPlaying && audioEnabled) {
+          audio.currentTime = 0;
+          switchScene(1, true);
+          audio.play().catch(() => {});
+        }
+      });
+    }
+
+    function startPresentation() {
+      const overlay = document.getElementById('startOverlay');
+      if (overlay) overlay.classList.add('hidden');
+      audioEnabled = true;
+      isPlaying = true;
+      document.getElementById('soundIcon').innerText = '🔊';
+      document.getElementById('soundLabel').innerText = 'Звук + Голос: ВКЛ';
+      document.getElementById('playIcon').innerText = '⏸';
+      document.getElementById('playText').innerText = 'Пауза';
+      const audio = document.getElementById('voiceoverAudio');
+      if (audio) {
+        audio.currentTime = 0;
+        switchScene(1, true);
+        audio.play().catch(() => {});
+      }
+    }
+
+    window.addEventListener('message', (e) => {
+      if (e.data === 'startMotion') startPresentation();
+    });
+
+    window.onload = () => {
+      setupVoiceoverSync();
+      switchScene(1, true);
+      const isEmbedded = new URLSearchParams(window.location.search).get('embed') === '1';
+      if (isEmbedded) return;
+      const audio = document.getElementById('voiceoverAudio');
+      if (audio) {
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            const overlay = document.getElementById('startOverlay');
+            if (overlay) overlay.classList.add('hidden');
+          }).catch(() => {
+            // Браузер заблокировал автозапуск со звуком — показываем большую кнопку Старт
+          });
+        }
+      }
+    };
+  </script>
+</body>
+</html>
