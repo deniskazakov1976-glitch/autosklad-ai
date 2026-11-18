@@ -1,88 +1,157 @@
 {
-  "timestamp": "2026-11-17 17:21:55",
+  "timestamp": "2026-11-18 10:14:30",
   "status": "PASSED",
-  "total_tests": 29,
-  "passed_tests": 29,
+  "total_tests": 104,
+  "passed_tests": 104,
   "failed_tests": 0,
   "success_rate_pct": 100.0,
-  "framework": "pytest 9.0.3",
+  "code_coverage_pct": 87.0,
+  "total_statements": 1301,
+  "covered_statements": 1128,
+  "framework": "pytest 9.0.3 + pytest-cov 7.1.0",
   "platform": "Windows 11 / Python 3.12",
-  "target_modules": [
+  "owner_branding": {
+    "owner_name": "Вячеслав Юрьевич",
+    "support_phone": "+7 (902) 802-82-46",
+    "support_telegram": "@dkazak1999"
+  },
+  "deep_vulnerabilities_resolved": [
     {
-      "module_id": "M1",
-      "name": "auditor.py",
-      "role": "Аудит и ревизия склада 1С",
-      "hardening_features": [
-        "Автоматический пропуск метаданных шапки 1С (строки 1-25)",
-        "Жесткая фильтрация строк «Итого», «Всего», «ИТОГО ПО СКЛАДУ»",
-        "Фильтрация папок иерархии номенклатуры",
-        "Парсинг чисел со строковыми пробелами, неразрывными пробелами (\\xa0) и запятыми",
-        "Выявление и логирование отрицательных остатков (пересортица 1С) с обнулением для витрин",
-        "Antonym Guard: блокировка склеек противоположных деталей (левый/правый, передний/задний)"
-      ],
-      "tests_passed": 7
+      "id": "VULN-01",
+      "name": "Мульти-кодировки и «Конечный остаток» из 1С",
+      "module": "inventory_guard.py",
+      "solution": "Поддержка cp1251, utf-8-sig, utf-8, cp866 и разделителей (;, tab, ,). Приоритет «Конечный остаток» с жестким игнорированием «Начальный остаток» и суммированием мульти-складов.",
+      "status": "RESOLVED"
     },
     {
-      "module_id": "M2",
-      "name": "matcher.py",
-      "role": "Трехкаскадный ИИ-матчер с master_catalog.db",
-      "hardening_features": [
-        "Каскад 1: детерминированный поиск по OEM и массиву кросс-номеров (0 ₽)",
-        "Каскад 2: нечеткий поиск rapidfuzz с блокиратором несовместимых запчастей (Antonym Guard)",
-        "Каскад 3: LLM Batch Matching с интеллектуальным offline-резолвером",
-        "Персистентность SQLite-кэша в client_sku_mapping (исключение повторных вызовов)"
-      ],
-      "tests_passed": 5
+      "id": "VULN-02",
+      "name": "Симметричная нормализация артикулов (CYR <-> LAT homoglyphs)",
+      "module": "inventory_guard.py, matcher.py, seed_master_catalog.py",
+      "solution": "Единая функция clean_article() с транслитерацией 12 кириллических букв-двойников (А,В,С,Е,К,М,Н,О,Р,Т,Х,У -> A,B,C,E,K,M,H,O,P,T,X,Y).",
+      "status": "RESOLVED"
     },
     {
-      "module_id": "M3",
-      "name": "feed_generator.py",
-      "role": "Генератор автозагрузки Авито XML и Дром CSV",
-      "hardening_features": [
-        "Обрезание тега <Title> строго до 50 символов по границе целого слова",
-        "Удаление непечатаемых управляющих символов [\\x00-\\x1f] и экранирование спецсимволов",
-        "Строгая валидация XML-схемы через xml.etree.ElementTree.fromstring()",
-        "Фильтры безопасности: stock_qty >= 1 и price_retail >= 300 ₽",
-        "Дедупликация и объединение остатков дублей 1С по master_id"
-      ],
-      "tests_passed": 5
+      "id": "VULN-03",
+      "name": "KitGuard: защита от склеек штучных деталей с комплектами",
+      "module": "inventory_guard.py, matcher.py",
+      "solution": "KitGuard запрещает нечеткое сопоставление, если одна позиция штучная (штука, 1 шт), а вторая — комплект, набор, к-т, ремкомплект.",
+      "status": "RESOLVED"
     },
     {
-      "module_id": "M4",
-      "name": "ai_sales_bot.py",
-      "role": "ИИ-продавец с архитектурой RAG + Tool Calling",
-      "hardening_features": [
-        "Контроль доступных остатков и защита от овербукинга (INSUFFICIENT_STOCK)",
-        "Полная защита от SQL-инъекций через параметризованные запросы (?)",
-        "Escalation Guard: перехват нестандартных свапов (2JZ, турбо, V8) старшему агрегатчику",
-        "Честный OUT_OF_STOCK при нулевом остатке с предложением доставки к 10:00"
-      ],
-      "tests_passed": 4
+      "id": "VULN-04",
+      "name": "MarginFloorGuard: защита от продажи в минус",
+      "module": "feed_generator.py",
+      "solution": "Жесткий пол себестоимости: final_price >= ceil(cost * 1.10), промо-цена >= ceil(cost * 1.05) с выставлением флага margin_guard_triggered.",
+      "status": "RESOLVED"
     },
     {
-      "module_id": "M5",
-      "name": "owner_radar.py",
-      "role": "Еженедельный радар директора и анти-откат закупщика",
-      "hardening_features": [
-        "Безопасный outer join с поддержкой новинок и удаленных SKU без NaN",
-        "Защита от ZeroDivisionError при расчете месяцев запаса при нулевых продажах",
-        "Точная фиксация разморозки (+193 800 ₽), отката (-42 100 ₽) и ночного бота (+15 650 ₽)"
-      ],
-      "tests_passed": 4
+      "id": "VULN-05",
+      "name": "Строгая валидация qty и WAL-режим SQLite",
+      "module": "ai_sales_bot.py, matcher.py, feed_generator.py, owner_radar.py",
+      "solution": "create_reservation отклоняет qty <= 0, > 100 и не-целые числа с INVALID_QTY. Во всех соединениях включен PRAGMA journal_mode=WAL и timeout=30.0.",
+      "status": "RESOLVED"
     },
     {
-      "module_id": "GUARD",
-      "name": "inventory_guard.py",
-      "role": "Ядро безопасности и нормализации",
-      "hardening_features": [
-        "AntonymGuard: стороны, оси, положения (верх/низ, внутр/наруж, впуск/выпуск), ремонтные размеры (стд, 0.25..1.0), семейства моторов",
-        "parse_1c_number()",
-        "detect_and_read_1c_file()",
-        "clean_avito_title()",
-        "sanitize_xml_string()"
-      ],
-      "tests_passed": 4
+      "id": "VULN-06",
+      "name": "Обработка клиентских возвратов и дедупликация в радаре",
+      "module": "owner_radar.py",
+      "solution": "sales_12m < 0 обрабатывается как 0.0 месячного спроса (защита от отрицательного спроса). Розничные цены <= 0 заменяются на себестоимость * 1.25. Дедупликация по Коду перед слиянием.",
+      "status": "RESOLVED"
+    },
+    {
+      "id": "VULN-07",
+      "name": "XSS и JSON безопасность для тегов <script>",
+      "module": "inventory_guard.py, generate_radar_html.py, generate_simulator.py, auditor.py",
+      "solution": "safe_json_dumps() экранирует </script> -> <\\/script>, <!-- -> <\\!-- и разделители Unicode U+2028, U+2029.",
+      "status": "RESOLVED"
     }
   ],
-  "verification_verdict": "PASSED • 100% GREEN • Ready for Production 1C Dirty Imports"
+  "test_suite_breakdown": [
+    {
+      "file": "tests/test_autosklad_suite.py",
+      "tests": 29,
+      "status": "PASSED",
+      "focus": "Комплексные сквозные интеграционные сценарии всех 5 модулей"
+    },
+    {
+      "file": "tests/test_unit_guard.py",
+      "tests": 16,
+      "status": "PASSED",
+      "focus": "Модульные тесты inventory_guard (кодировки, остатки, KitGuard, AntonymGuard, clean_article)"
+    },
+    {
+      "file": "tests/test_unit_auditor.py",
+      "tests": 10,
+      "status": "PASSED",
+      "focus": "Модульные тесты auditor (KPI, неликвид, дубли, 72% себестоимость, экспорт)"
+    },
+    {
+      "file": "tests/test_unit_matcher.py",
+      "tests": 12,
+      "status": "PASSED",
+      "focus": "Модульные тесты matcher (Каскады 1-3, AntonymGuard, KitGuard, кэш SQLite)"
+    },
+    {
+      "file": "tests/test_unit_feeds.py",
+      "tests": 11,
+      "status": "PASSED",
+      "focus": "Модульные тесты feed_generator (MarginFloorGuard, дедупликация, Title<=50, ElementTree)"
+    },
+    {
+      "file": "tests/test_unit_bot.py",
+      "tests": 12,
+      "status": "PASSED",
+      "focus": "Модульные тесты ai_sales_bot (Zero Hallucination, Escalation, валидация qty, SQL-защита)"
+    },
+    {
+      "file": "tests/test_unit_radar.py",
+      "tests": 7,
+      "status": "PASSED",
+      "focus": "Модульные тесты owner_radar (4 бакета, возвраты, дедупликация, Telegram-дайджест)"
+    },
+    {
+      "file": "tests/test_unit_frontend_sync.py",
+      "tests": 7,
+      "status": "PASSED",
+      "focus": "Синхронизация всех 9 HTML-страниц, zero tolerance к старым именам, проверка контактов"
+    }
+  ],
+  "module_coverage": {
+    "owner_radar.py": {
+      "statements": 155,
+      "missed": 11,
+      "coverage_pct": 93.0
+    },
+    "inventory_guard.py": {
+      "statements": 321,
+      "missed": 26,
+      "coverage_pct": 92.0
+    },
+    "ai_sales_bot.py": {
+      "statements": 216,
+      "missed": 26,
+      "coverage_pct": 88.0
+    },
+    "auditor.py": {
+      "statements": 169,
+      "missed": 23,
+      "coverage_pct": 86.0
+    },
+    "feed_generator.py": {
+      "statements": 220,
+      "missed": 36,
+      "coverage_pct": 84.0
+    },
+    "matcher.py": {
+      "statements": 220,
+      "missed": 51,
+      "coverage_pct": 77.0
+    },
+    "TOTAL": {
+      "statements": 1301,
+      "missed": 173,
+      "coverage_pct": 87.0
+    }
+  },
+  "verification_verdict": "PASSED • 100% GREEN (104/104 tests) • 87% Code Coverage • Production Certified"
 }
