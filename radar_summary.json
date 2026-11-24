@@ -1,0 +1,179 @@
+{
+  "timestamp": "2026-11-24 17:08:50",
+  "owner_name": "Вячеслав Юрьевич",
+  "period": "Неделя 2 vs Неделя 1 (7 дней)",
+  "metrics": {
+    "unfrozen_cash_rub": 194800.0,
+    "overbuy_waste_rub": 52600.0,
+    "lost_revenue_risk_rub": 40030.0,
+    "night_bot_revenue_rub": 15650.0,
+    "net_financial_impact_rub": 157850.0
+  },
+  "dead_stock_sales": [
+    {
+      "code": "00-003002",
+      "name": "КПП ГАЗ-3309 дизель 5-ступ в сборе",
+      "canonical_title": "Коробка передач (КПП) ГАЗ-3309, 33081 дизель 5-ст",
+      "oem": "3309-1700010",
+      "days_no_movement": 520,
+      "stock_prev": 2.0,
+      "stock_curr": 1.0,
+      "qty_sold": 1.0,
+      "price_retail": 92000.0,
+      "cash_freed_rub": 92000.0
+    },
+    {
+      "code": "00-003005",
+      "name": "Раздаточная коробка УАЗ Хантер косозубая",
+      "canonical_title": "Раздаточная коробка УАЗ 31519 Хантер косозубая",
+      "oem": "31519-1800020",
+      "days_no_movement": 390,
+      "stock_prev": 2.0,
+      "stock_curr": 1.0,
+      "qty_sold": 1.0,
+      "price_retail": 47000.0,
+      "cash_freed_rub": 47000.0
+    },
+    {
+      "code": "00-003001",
+      "name": "Редуктор заднего моста ГАЗ-3302 Волга ГП 8х41",
+      "canonical_title": "Редуктор заднего моста ГАЗ-3302 ГП 8х41 (4.3)",
+      "oem": "3302-2402010-10",
+      "days_no_movement": 410,
+      "stock_prev": 4.0,
+      "stock_curr": 3.0,
+      "qty_sold": 1.0,
+      "price_retail": 28500.0,
+      "cash_freed_rub": 28500.0
+    },
+    {
+      "code": "00-003007",
+      "name": "Рессора задняя ГАЗ-3302 5-листовая усиленная Чусовая",
+      "canonical_title": "Рессора задняя ГАЗ-3302 5-листовая усиленная",
+      "oem": "3302-2912010-02",
+      "days_no_movement": 310,
+      "stock_prev": 8.0,
+      "stock_curr": 6.0,
+      "qty_sold": 2.0,
+      "price_retail": 7900.0,
+      "cash_freed_rub": 15800.0
+    },
+    {
+      "code": "00-003008",
+      "name": "Картер сцепления УАЗ дв. 409 Патриот (колокол)",
+      "canonical_title": "Картер сцепления (колокол) УАЗ Патриот дв. ЗМЗ-409",
+      "oem": "409.1601015",
+      "days_no_movement": 365,
+      "stock_prev": 3.0,
+      "stock_curr": 2.0,
+      "qty_sold": 1.0,
+      "price_retail": 11500.0,
+      "cash_freed_rub": 11500.0
+    }
+  ],
+  "overbuy_alerts": [
+    {
+      "code": "00-001088",
+      "name": "Радиатор охлаждения Газель Бизнес 3-х рядный медный",
+      "canonical_title": "Радиатор охлаждения ГАЗ-3302 медный 3-х рядный",
+      "oem": "3302-1301010-33",
+      "stock_prev": 0.0,
+      "stock_curr": 3.0,
+      "qty_added": 3.0,
+      "price_purchase": 10800.0,
+      "waste_cost_rub": 32400.0,
+      "reason": "Заказ по карточке 1С при наличии остатка 2 шт. по другим дублям номенклатуры"
+    },
+    {
+      "code": "00-003010",
+      "name": "Фонарь задний светодиодный ГАЗель Next борт",
+      "canonical_title": "Фонарь задний светодиодный ГАЗель Next борт",
+      "oem": "A21R23-3716010",
+      "stock_prev": 6.0,
+      "stock_curr": 10.0,
+      "qty_added": 4.0,
+      "price_purchase": 2600.0,
+      "waste_cost_rub": 10400.0,
+      "reason": "Аномальный перезакуп (текущий запас без движения превышает 72 мес. спроса)"
+    },
+    {
+      "code": "00-001041",
+      "name": "ГУР 4216 борисов ориг",
+      "canonical_title": "Насос ГУР ГАЗель Бизнес, Next (УМЗ 4216) ШНКФ",
+      "oem": "ШНКФ 453471.125",
+      "stock_prev": 0.0,
+      "stock_curr": 2.0,
+      "qty_added": 2.0,
+      "price_purchase": 4900.0,
+      "waste_cost_rub": 9800.0,
+      "reason": "Заказ по карточке 1С при наличии остатка 4 шт. по другим дублям номенклатуры"
+    }
+  ],
+  "new_deficits": [
+    {
+      "code": "00-002004",
+      "name": "Стартер редукторный УАЗ, ГАЗ дв. 409, 405, 406 КЗАТЭ",
+      "canonical_title": "Стартер редукторный ГАЗ, УАЗ дв. ЗМЗ 406, 405, 409",
+      "oem": "5732.3708",
+      "sales_12m": 52.0,
+      "monthly_demand": 4.3,
+      "stock_curr": 0.0,
+      "price_retail": 6850.0,
+      "monthly_lost_revenue_rub": 29455.0
+    },
+    {
+      "code": "00-002003",
+      "name": "Крестовина карданного вала УАЗ Патриот усиленная",
+      "canonical_title": "Крестовина карданного вала УАЗ Патриот, Хантер",
+      "oem": "3160-2201025",
+      "sales_12m": 64.0,
+      "monthly_demand": 5.3,
+      "stock_curr": 0.0,
+      "price_retail": 1150.0,
+      "monthly_lost_revenue_rub": 6095.0
+    },
+    {
+      "code": "00-001151",
+      "name": "рабочий цилиндр сцепления 3302 чугун",
+      "canonical_title": "Цилиндр сцепления рабочий (РЦС) ГАЗ-3302, Соболь",
+      "oem": "3302-1602510",
+      "sales_12m": 42.0,
+      "monthly_demand": 3.5,
+      "stock_curr": 0.0,
+      "price_retail": 1280.0,
+      "monthly_lost_revenue_rub": 4480.0
+    }
+  ],
+  "night_reservations": [
+    {
+      "res_id": "RES-20261117-001",
+      "created_at": "2026-11-17 23:22:15",
+      "client_name": "Сергей",
+      "client_phone": "+7 (912) 345-67-89",
+      "canonical_title": "Стартер редукторный ГАЗ, УАЗ дв. ЗМЗ 406, 405, 409",
+      "source_1c_codes": "00-002004",
+      "qty": 1,
+      "price": 6850.0
+    },
+    {
+      "res_id": "RES-20261117-003",
+      "created_at": "2026-11-17 04:45:10",
+      "client_name": "Дмитрий",
+      "client_phone": "+7 (950) 443-12-80",
+      "canonical_title": "Колодки тормозные передние ГАЗель Next, Бизнес",
+      "source_1c_codes": "00-002001",
+      "qty": 1,
+      "price": 1850.0
+    },
+    {
+      "res_id": "RES-20261117-002",
+      "created_at": "2026-11-17 01:14:40",
+      "client_name": "Алексей",
+      "client_phone": "+7 (908) 221-44-55",
+      "canonical_title": "Насос ГУР ГАЗель Бизнес, Next (УМЗ 4216) ШНКФ",
+      "source_1c_codes": "00-001041, 00-001042",
+      "qty": 1,
+      "price": 6950.0
+    }
+  ]
+}

@@ -144,39 +144,50 @@
 
 База данных содержит 3 основные таблицы:
 ```sql
--- Эталонный каталог запчастей
-CREATE TABLE master_items (
+-- 1. Эталонный каталог запчастей ГАЗ/УАЗ (с Dual-OEM архитектурой)
+CREATE TABLE master_catalog (
     master_id TEXT PRIMARY KEY,
+    oem_number TEXT,              -- Нормализованный артикул (индексный ключ)
+    oem_display TEXT,             -- Человекочитаемый артикул (для отображения и печати)
     canonical_title TEXT NOT NULL,
-    oem_number TEXT NOT NULL,
-    brand TEXT NOT NULL,
-    applicability TEXT,
     category TEXT,
-    base_retail_price REAL,
-    min_price REAL
+    unit TEXT DEFAULT 'шт',
+    applicability TEXT,
+    price_retail REAL,
+    cost_price REAL,
+    min_margin_price REAL,
+    cross_numbers TEXT,           -- Массив кросс-номеров через запятую
+    brands_analogs TEXT,          -- Список брендов-аналогов
+    is_active INTEGER DEFAULT 1
 );
 
--- Таблица кросс-номеров и аналогов
-CREATE TABLE master_crosses (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+-- 2. Таблица кэшированных привязок клиентской номенклатуры 1С
+CREATE TABLE client_sku_mapping (
+    mapping_id TEXT PRIMARY KEY,
+    client_id TEXT NOT NULL,
+    client_code TEXT,
+    client_article TEXT,
+    clean_article TEXT,
+    client_name TEXT NOT NULL,
     master_id TEXT NOT NULL,
-    cross_oem TEXT NOT NULL,
-    cross_brand TEXT,
-    note TEXT,
-    FOREIGN KEY(master_id) REFERENCES master_items(master_id)
+    match_source TEXT,            -- CASCADE_1_OEM, CASCADE_2_CROSS, CASCADE_3_FALLBACK
+    confidence REAL,
+    FOREIGN KEY(master_id) REFERENCES master_catalog(master_id)
 );
 
--- Таблица оперативных клиентских резервов
+-- 3. Таблица оперативных клиентских резервов (ИИ-продавец)
 CREATE TABLE reservations (
     res_id TEXT PRIMARY KEY,
+    created_at TEXT,
     client_name TEXT NOT NULL,
     client_phone TEXT NOT NULL,
     master_id TEXT NOT NULL,
-    quantity INTEGER NOT NULL,
-    status TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    comment TEXT,
-    FOREIGN KEY(master_id) REFERENCES master_items(master_id)
+    canonical_title TEXT NOT NULL,
+    source_1c_codes TEXT,         -- Исходные коды 1С для автоматического списания
+    qty INTEGER NOT NULL,
+    price_retail REAL NOT NULL,
+    status TEXT NOT NULL DEFAULT 'CONFIRMED',
+    FOREIGN KEY(master_id) REFERENCES master_catalog(master_id)
 );
 ```
 
@@ -185,18 +196,19 @@ CREATE TABLE reservations (
 ## 5. Качество кода и автоматизированное тестирование
 
 - **Тестовый фреймворк:** `pytest 9.0.3` + `pytest-cov 7.1.0`.
-- **Объем тестов:** **104 теста (100% GREEN, 0 failed, 0 errors)**.
-- **Покрытие кода (Coverage):** **87%** (1128 из 1301 statements).
+- **Объем тестов:** **109 тестов (100% GREEN, 0 failed, 0 errors)**.
+- **Изоляция тестов:** Фикстура `isolated_db` в `tests/conftest.py` гарантирует запуск всех тестов во временной БД (`tmp_path`) без загрязнения боевой базы.
+- **Покрытие кода (Coverage):** **83%** (ядро системы: `owner_radar.py` — 94%, `seed_master_catalog.py` — 92%, `inventory_guard.py` — 91%, `ai_sales_bot.py` — 88%, `feed_generator.py` — 84%, `auditor.py` — 80%).
 
-### Структура тестов в папке `tests/`:
+### Структура тестов в папке `tests/` (109 тестов):
 1. `test_autosklad_suite.py` (29 тестов): Сквозные интеграционные тесты М1–М5, цепочка данных от 1С до витрин.
-2. `test_unit_guard.py` (16 тестов): Проверка мульти-кодировок (UTF-8, CP1251, CP866), пропуск шапки, агрегация складов, отсечение «Итого», экранирование формул.
-3. `test_unit_auditor.py` (10 тестов): Расчет ABC/XYZ, висяки, дубли, генерация `audit_report.html`.
-4. `test_unit_matcher.py` (12 тестов): Все 3 уровня каскадного матчера, работа с опечатками, дефисами, транслитом.
-5. `test_unit_feeds.py` (11 тестов): Валидация XML для Avito, CSV для Drom, экранирование специальных символов.
-6. `test_unit_bot.py` (12 тестов): RAG-поиск, Tool Calling, создание резерва, защита от коллизий ID, обработка out-of-stock.
-7. `test_unit_radar.py` (7 тестов): Сравнение недельных слепков, расчет разморозки, детектор анти-отката, Telegram-дайджест.
-8. `test_unit_frontend_sync.py` (7 тестов): Синхронизация версий, брендинг (Вячеслав Юрьевич), XSS-безопасность JSON.
+2. `test_unit_guard.py` (19 тестов): Проверка мульти-кодировок (UTF-8, CP1251, CP866), пропуск шапки, агрегация складов, отсечение «Итого», защита от CSV Formula Injection, Path Traversal и AntonymGuard/KitGuard.
+3. `test_unit_auditor.py` (11 тестов): Расчет ABC/XYZ, висяки, дубли, исключение ложных склеек несовместимых узлов (колокол сцепления vs диск сцепления), генерация `audit_report.html`.
+4. `test_unit_matcher.py` (12 тестов): Все 3 уровня каскадного матчера, работа с опечатками, дефисами, транслитом, кэширование в SQLite.
+5. `test_unit_feeds.py` (11 тестов): Безопасная генерация XML (ElementTree) для Avito, CSV для Drom, уценка неликвида со скидкой и защитой MarginFloorGuard.
+6. `test_unit_bot.py` (13 тестов): RAG-поиск, Tool Calling, создание резерва, защита от race conditions, обработка out-of-stock без KeyError, Escalation Guard (1JZ/2JZ).
+7. `test_unit_radar.py` (7 тестов): Сравнение недельных слепков, реальный динамический расчет разморозки (+194 800 ₽), детектор анти-отката (-52 600 ₽), Telegram-дайджест.
+8. `test_unit_frontend_sync.py` (7 тестов): Синхронизация версий, строгий брендинг (Вячеслав Юрьевич), контакты (+7 (902) 802-82-46, @dkazak1999), XSS-безопасность JSON.
 
 ---
 
@@ -223,6 +235,7 @@ python owner_radar.py            # Запуск недельного радар�
 
 | Файл / Папка | Описание |
 | :--- | :--- |
+| `config.py` | Централизованная конфигурация путей, констант и параметров окружения |
 | `inventory_guard.py` | Защитный слой парсинга и валидации любых выгрузок 1С |
 | `auditor.py` | Модуль 1: Анализ склада, неликвида и дублей |
 | `matcher.py` | Модуль 2: 3-уровневый каскадный матчер автозапчастей |
@@ -245,7 +258,7 @@ python owner_radar.py            # Запуск недельного радар�
 | `bot_simulator.html` | Интерактивный веб-симулятор чат-бота продаж (М4) |
 | `owner_radar.html` | Интерактивный радар директора (М5) |
 | `telegram_digest.txt` | Готовый текст недельного дайджеста для Telegram |
-| `tests/` | 8 файлов тестовых наборов (104 юнит- и интеграционных теста) |
+| `tests/` | 8 файлов тестовых наборов (109 юнит- и интеграционных тестов) |
 | `requirements.txt` | Список Python-зависимостей с фиксированными версиями |
 
 ---
@@ -259,16 +272,16 @@ python owner_radar.py            # Запуск недельного радар�
 
 Перед тобой полный проект платформы «АВТОСКЛАД-ИИ» (версия 2.4.0-Enterprise).
 В архиве содержатся:
-1. Защитный слой inventory_guard.py (парсинг 1С, кодировки, санитизация).
+1. Защитный слой inventory_guard.py (парсинг 1С, кодировки, санитизация) и config.py.
 2. Модули М1–М5 (auditor.py, matcher.py, feed_generator.py, ai_sales_bot.py, owner_radar.py).
 3. База данных SQLite master_catalog.db и эталонные датасеты (sample_1c_gaz_uaz.xlsx, week_prev, week_curr).
-4. Набор из 104 автотестов в папке tests/ с 87% покрытием кода.
+4. Набор из 109 автотестов в папке tests/ с 83% покрытием кода и изоляцией БД.
 5. Интерактивные веб-интерфейсы и дашборды (index.html, dashboard.html, audit_report.html, etc.).
 
 Пожалуйста, проведи глубокий независимый аудит проекта по следующим направлениям:
 1. Архитектура и модульность: Насколько чисто разделены зоны ответственности, нет ли утечек абстракций между модулями.
 2. Отказоустойчивость и безопасность: Оцени защиту от грязных данных 1С (inventory_guard.py), обработку race conditions в ai_sales_bot.py, безопасность SQL и XML генерации.
 3. Бизнес-логика: Насколько точно решены задачи выявления неликвида, каскадного матчинга аналогов (OEM -> Cross -> Fuzzy), выгрузки фидов на Авито/Дром и радара директора (анти-откат).
-4. Качество тестового покрытия: Оцени полноту 8 тест-сьютов (104 теста). Есть ли критические граничные случаи, которые стоит добавить?
+4. Качество тестового покрытия: Оцени полноту 8 тест-сьютов (109 тестов). Есть ли критические граничные случаи, которые стоит добавить?
 5. Рекомендации по развитию: Что нужно доработать для масштабирования системы до highload SaaS (PostgreSQL, Celery/Redis, FastAPI, Telegram WebApps, интеграция с 1С через ComConnector / OData / Webhook)?
 ```
